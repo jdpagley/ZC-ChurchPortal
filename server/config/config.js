@@ -9,7 +9,7 @@ module.exports = {
     },
     production: {
         rootPath: rootPath,
-        db: 'mongodb://jdpagley:pagley1995@ds027729.mongolab.com:27729/zionconnect',
+        db: 'mongodb://joshpagley:joshpagley@ds027729.mongolab.com:27729/zionconnect',
         port: process.env.PORT || 80
     }
 }
