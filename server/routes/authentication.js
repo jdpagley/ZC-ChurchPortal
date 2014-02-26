@@ -17,7 +17,7 @@ module.exports = function(app, passport){
 
     //process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/profile',
+        successRedirect: '/portal',
         failureRedirect: '/signup',
         failureFlash: true
     }));
@@ -28,7 +28,7 @@ module.exports = function(app, passport){
     });
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile',
+        successRedirect: '/portal',
         failureRedirect: '/login',
         failureFlash: true
     }));
@@ -50,7 +50,7 @@ function isLoggedIn(req, res, next){
 
 function isAuthorizedToViewProfile(req, res, next){
     if(req.isAuthenticated()){
-        return res.redirect('/profile');
+        return res.redirect('/portal');
     }
 
     return next();
