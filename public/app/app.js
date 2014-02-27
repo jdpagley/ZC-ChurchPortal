@@ -15,6 +15,14 @@ zcApp.config(['$routeProvider',
                 templateUrl: 'partials/views/feed',
                 controller: 'FeedCtrl'
             }).
+            when('/sermons', {
+                templateUrl: 'partials/views/sermons',
+                controller: 'SermonsCtrl'
+            }).
+            when('/settings', {
+                templateUrl: 'partials/views/settings',
+                controller: 'SettingsCtrl'
+            }).
             otherwise({
                 redirectTo: '/feed'
             });

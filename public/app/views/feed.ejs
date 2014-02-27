@@ -1,5 +1,41 @@
 <!-- Created by Josh Pagley on 2/25/14.-->
 
 <div class="container">
-    This is the Feed Page.
+    <div class="jumbotron">
+        <h1><span class="glyphicon glyphicon-th-list"></span> Feed</h1>
+        <div class="col-sm-10">
+            <textarea class="form-control" rows="3"  placeholder="Post Something..."></textarea>
+            <button type="button" class="btn btn-primary">Primary</button>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="postBox">
+            <div data-ng-repeat="post in posts">
+                <div class="well">
+                    <h4>{{ post.user }} <span class="postDate">{{ post.date | date:short}}</span></h4>
+
+                    <p class="postMessage">
+                        {{ post.message }}
+                    </p>
+
+                    <div class="postComments">
+                        <div class="commentsBar"><span class="glyphicon glyphicon-comment">
+                    </span> Comments <span class="badge">{{post.comments.length}}</span>
+                            <div data-ng-hide="false" data-ng-repeat="comment in post.comments" class="comment">
+                                <h5>{{comment.user}}</h5>
+                                <p>{{comment.message}}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <textarea placeholder="Write a comment..." cols="80" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
