@@ -6,8 +6,16 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedCtrl', ['$scope',
-    function($scope){
+angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window',
+    function($scope, $window){
+
+        if(!!$window.churchObject) {
+            $scope.currentUser =  $window.churchObject;
+            console.log($scope.currentUser);
+        }
+
+
+
         $scope.posts = [{
             user: 'Josh Pagley',
             message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',

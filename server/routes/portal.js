@@ -6,9 +6,14 @@ module.exports = function(app) {
 
     app.get('/portal', isLoggedIn, function(req, res) {
         res.render('portal/index', {
-            user: req.user // get user out of session and pass to template
+            churchObject: req.user // get user out of session and pass to template
         });
     });
+
+    app.get('/church/information', isLoggedIn, function(req, res){
+        console.log(req.user);
+        res.json(200, {'information': req.user});
+    })
 
     app.get('/partials/*', isLoggedIn, function(req, res) {
         res.render('../../public/app/' + req.params);

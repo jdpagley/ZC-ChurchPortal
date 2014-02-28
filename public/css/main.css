@@ -1,30 +1,62 @@
-h1 {
-    color: deepskyblue;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    color:inherit;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-span.postDate {
-    color: dimgrey;
-    font-size: 15px;
+a:hover, a:focus, a:active {
+    color: inherit;
+    text-decoration:none;
 }
 
-.postMessage {
-    padding: 15px;
+h1, h2, h3, h4, h5, h6, p, a {
+    font-family: arial, sans-serif;
 }
 
-.commentsBar{
-    border-top: 1px solid black;
-    padding: 10px;
+.border1 {
+    border:1px red solid;
 }
 
-.comment p {
-    border: 1px solid darkgray;
-    border-radius: 5px;;
-    padding: 10px;
-    font-size: 12px;
+.border2 {
+    border:1px pink solid;
 }
 
-.postBox {
-    overflow: scroll;
-    height: 700px;
-    width: auto;
+/*portal news feed*********************************************************/
+
+/*portal news feed post*/
+
+.portal-news-feed-post {
+    margin-bottom:10px;
+}
+
+.portal-news-feed-post .btn-purple{
+    width:150px;
+    height:35px;
+}
+
+.portal-news-feed-post img {
+    height:30px;
+    margin:0px;
+    padding:0px;
+}
+
+/*portal news feed posting*/
+
+div {
+    padding:10px;
 }

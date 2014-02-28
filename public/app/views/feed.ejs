@@ -1,41 +1,42 @@
 <!-- Created by Josh Pagley on 2/25/14.-->
 
-<div class="container">
-    <div class="jumbotron">
-        <h1><span class="glyphicon glyphicon-th-list"></span> Feed</h1>
-        <div class="col-sm-10">
-            <textarea class="form-control" rows="3"  placeholder="Post Something..."></textarea>
-            <button type="button" class="btn btn-primary">Primary</button>
+<!--portal news feed------------------------------------------------------------------------>
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed border1">
+    <!--portal news feed post-->
+    <div class="col-lg-12 col-md-12 portal-news-feed-post border1">
+        <div class="col-lg-12 col-md-12 border1"><textarea class="col-lg-12 col-md-12" rows="5" name="textarea" placeholder="Write something..."></textarea></div>
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-1 col-md-1 border1"><a href="#"><img src="#" /></a></div>
+            <div class="col-lg-11 col-md-11 border1"><button class="btn btn-md btn-purple pull-right" type="submit">Post</button></div>
         </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div class="postBox">
-            <div data-ng-repeat="post in posts">
-                <div class="well">
-                    <h4>{{ post.user }} <span class="postDate">{{ post.date | date:short}}</span></h4>
-
-                    <p class="postMessage">
-                        {{ post.message }}
-                    </p>
-
-                    <div class="postComments">
-                        <div class="commentsBar"><span class="glyphicon glyphicon-comment">
-                    </span> Comments <span class="badge">{{post.comments.length}}</span>
-                            <div data-ng-hide="false" data-ng-repeat="comment in post.comments" class="comment">
-                                <h5>{{comment.user}}</h5>
-                                <p>{{comment.message}}</p>
-
-                            </div>
-                        </div>
-                    </div>
-                    <textarea placeholder="Write a comment..." cols="80" rows="5"></textarea>
-                </div>
+    </div>
+    <!--portal news feed posting-->
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-comments border1" data-ng-repeat="post in posts">
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-1 col-md-1 border1"><img src="#"/></div>
+            <div class="col-lg-11 col-md-11 border1">
+                <h4>{{post.user}}</h4>
+                <h6>{{post.date | date:short}}</h6>
             </div>
         </div>
-
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-12 col-md-12 border1"><p>{{post.message}}</p></div>
+        </div>
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-11 col-md-11 border1">
+                <span class="glyphicon glyphicon-comment"></span> Comments <span class="badge">{{post.comments.length}}</span>
+                    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border1" data-ng-repeat="comment in post.comments">
+                        <div class="col-lg-1 col-md-1 border1"><img src="#"/></div>
+                        <div class="col-lg-11 col-md-11 border1">
+                            <div class="col-lg-6 col-md-6 border1"><h4>{{comment.user}}</h4></div>
+                            <div class="col-lg-6 col-md-6 border1"><h6>{{comment.date | date:short}}</h6></div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 border1"><p>{{comment.message}}</p></div>
+                    </div>
+            </div>
+            <div class="col-lg-9 col-lg-offset-2 col-md-9 col-md-offset-2 border1"><textarea class="col-lg-12 col-md-12" rows="2" name="textarea" placeholder="Write a comment"></textarea></div>
+        </div>
     </div>
+    <br/>
+    <br/>
 </div>

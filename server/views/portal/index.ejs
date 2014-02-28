@@ -8,23 +8,29 @@
     <title>Zion Connect</title>
     <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
+
+<script>
+    window.churchObject = JSON.parse('<%-JSON.stringify(churchObject)%>');;
+</script>
+
 <ul class="nav nav-pills">
     <li class="active"><a href="#/feed">Feed</a></li>
     <li><a href="#/sermons">Sermons</a></li>
     <li><a href="#/settings">Settings</a></li>
 </ul>
 
-<div style="padding-left: 50px"><stong>name</stong>: <%= user.name%></div>
+<div style="padding-left: 50px"><stong>name</stong>: <%= churchObject.name%></div>
 
 <div class="content">
     <!-- This is where all the views will be inserted. -->
     <div data-ng-view></div>
 </div>
 
-<script type="text/javascript" src="/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/vendor/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="/vendor/bootstrap/dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="/vendor/toastr/toastr.js"></script>
 <script type="text/javascript" src="/vendor/angular/angular.js"></script>
