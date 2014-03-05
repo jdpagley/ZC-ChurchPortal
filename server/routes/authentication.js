@@ -4,12 +4,6 @@
 
 module.exports = function(app, passport){
 
-    app.get('/profile', isLoggedIn, function(req, res){
-        res.render('profile.ejs', {
-            user: req.user // get user out of session and pass to template
-        });
-    });
-
     // Signup ==============================
     app.get('/signup', isAuthorizedToViewProfile, function(req, res){
         res.render('website/signup.ejs', {message: req.flash('signupMessage')} );

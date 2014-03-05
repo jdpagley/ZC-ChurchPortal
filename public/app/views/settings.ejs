@@ -1,4 +1,52 @@
 <!-- Created by Josh Pagley on 2/25/14.-->
-<div class="container" style="border: 1px solid black; margin: 100px;">
-    This is the Settings Page.
+<div class="col-sm-6 col-sm-offset-3">
+    <h1><span class="glyphicon glyphicon-cog"></span> Settings</h1>
+
+    <!-- Login Form -->
+    <form data-ng-submit="updateChurch()">
+        <div class="form-group">
+            <label>Church Name</label>
+            <input type="text" class="form-control" name="name" placeholder="{{currentUser.name}}" data-ng-model="updateObject.name">
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" class="form-control" name="address" placeholder="{{currentUser.address.street}}" data-ng-model="updateObject.address">
+        </div>
+        <div class="form-group">
+            <label>City</label>
+            <input type="text" class="form-control" name="city" placeholder="{{currentUser.address.city}}" data-ng-model="updateObject.city">
+        </div>
+        <div class="form-group">
+            <label>State</label>
+            <select class="form-control" name="state" placeholder="{{currentUser.address.state}}" data-ng-model="updateObject.state">
+                <option>AL</option>
+                <option>AK</option>
+                <option>AZ</option>
+                <option>AR</option>
+                <option>CA</option>
+                <option>CO</option>
+                <option>CT</option>
+                <option>DE</option>
+                <option>FL</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Zip</label>
+            <input type="text" class="form-control" name="zip" placeholder="{{currentUser.address.zip}}" data-ng-model="updateObject.zip">
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" class="form-control" name="phone" placeholder="{{currentUser.phone}}" data-ng-model="updateObject.phone">
+        </div>
+        <div class="form-group">
+            <label>Bio</label>
+            <textarea name="bio" class="form-control" rows="6" placeholder="{{currentUser.bio}}" data-ng-model="updateObject.bio"></textarea>
+        </div>
+
+        <div style="border:2px solid green;padding:10px;margin:20px;color:green;" data-ng-show="updateSuccess">Successfully Updated Settings!</div>
+        <div style="border:2px solid red;padding:10px;margin:20px;color:red;" data-ng-show="updateFailure">Failure While Updating Settings!</div>
+
+        <button type="submit" class="btn btn-primary btn-lg">Update Settings</button>
+    </form>
+
 </div>

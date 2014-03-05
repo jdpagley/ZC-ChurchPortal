@@ -6,15 +6,17 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window',
-    function($scope, $window){
+angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window', 'zcIdentity',
+    function($scope, $window, zcIdentity){
 
-        if(!!$window.churchObject) {
-            $scope.currentUser =  $window.churchObject;
-            console.log($scope.currentUser);
-        }
+//        if(!!$window.churchObject) {
+//            $scope.currentUser =  $window.churchObject;
+//            console.log($scope.currentUser);
+//        }
 
+        $scope.currentUser = zcIdentity.getIdentityObject();
 
+        console.log($scope.currentUser);
 
         $scope.posts = [{
             user: 'Josh Pagley',
