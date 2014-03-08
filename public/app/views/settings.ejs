@@ -2,12 +2,13 @@
 <div class="col-sm-6 col-sm-offset-3">
     <h1><span class="glyphicon glyphicon-cog"></span> Settings</h1>
 
-    <!-- Login Form -->
+    <!-- Settings Form -->
     <form data-ng-submit="updateChurch()">
         <div class="form-group">
             <label>Church Name</label>
             <input type="text" class="form-control" name="name" placeholder="{{currentUser.name}}" data-ng-model="updateObject.name">
         </div>
+        <div>{{currentUser.name}}</div>
         <div class="form-group">
             <label>Address</label>
             <input type="text" class="form-control" name="address" placeholder="{{currentUser.address.street}}" data-ng-model="updateObject.address">
@@ -48,5 +49,50 @@
 
         <button type="submit" class="btn btn-primary btn-lg">Update Settings</button>
     </form>
+
+    <!--Reset Password Form-->
+    <hr />
+    <h2>Reset Password</h2>
+    <form data-ng-submit="resetPassword()">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" value="{{currentUser.email}}">
+        </div>
+        <div style="border:2px solid red;padding:10px;margin:20px;color:red;" data-ng-show="passwordMatchError">Passwords don't match.</div>
+        <div class="form-group">
+            <label>New Password</label>
+            <input type="password" class="form-control" data-ng-model="newPassword">
+        </div>
+        <div class="form-group">
+            <label>Retype New Password</label>
+            <input type="password" class="form-control" data-ng-model="newPasswordRetyped">
+        </div>
+        <button type="button" class="btn btn-danger btn-sm" data-ng-show="!resetConfirmationMessage" data-ng-click="resetConfirmationMessage = true">Reset Password</button>
+        <div style="border:2px solid red;padding:10px;margin:5px;color:red;" data-ng-show="resetConfirmationMessage">
+            Are you sure you want to reset your password?
+            You will be redirect to the login page and will be required to log back in with new password.
+            <br/>
+            <a href="/logout" class="btn btn-success btn-sm" data-ng-click="resetPassword()" data-ng-click="resetConfirmationMessage = false"> Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="resetConfirmationMessage = false">No</button>
+        </div>
+        <div style="border:2px solid green;padding:10px;margin:20px;color:green;" data-ng-show="resetSuccess">Successfully Reset Password</div>
+    </form>
+
+    <br/>
+
+    <h2>Delete Account</h2>
+    <p>If you delete your account all personal church information will be deleted.
+        Also all members will be kicked off of the social media immediately.</p>
+    <br />
+
+    <button type="button" class="btn btn-danger btn-lg" data-ng-click="deletionConfirmationMessage = true">Delete Account</button>
+
+    <div style="border:2px solid red;padding:10px;margin:5px;color:red;" data-ng-show="deletionConfirmationMessage">
+        Are you sure you want to delete your account and lose all your data
+        and kick all your church members off the social network?
+        <br/>
+        <a href="#" class="btn btn-success btn-sm" data-ng-click="deleteAccount()"> Yes</a>
+        <button type="button" class="btn btn-danger btn-sm" data-ng-click="deletionConfirmationMessage = false">No</button>
+    </div>
 
 </div>

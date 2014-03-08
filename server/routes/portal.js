@@ -23,10 +23,15 @@ module.exports = function(app) {
         res.render('../../public/app/' + req.params);
     });
 
-    //Route to update church profile information.
-    app.post('/church', isLoggedIn, function(req, res){
-        churchs.update(req, res);
-    });
+    //Church Routes.
+    app.post('/api/zionconnect/v1/church', isLoggedIn, churchs.update);
+    app.del('/api/zionconnect/v1/church', isLoggedIn, churchs.delete);
+
+    //Password Reset
+    app.post('/api/zionconnect/v1/church/reset', isLoggedIn, churchs.resetPassword);
+
+    //route to retrieve churchObject from session
+    app.get('/api/zionconnect/v1/church/session', isLoggedIn, churchs.retrieveFromSession);
 
 
 

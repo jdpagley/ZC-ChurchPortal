@@ -139,34 +139,99 @@ exports.update = function(req, res){
             } else if (!church){
                 res.json(404, {"error": "Account you are trying to update does not exist."});
             } else {
-                updateAccount(msgObj, res, church);
+                if(msgObj.name){ church.name = msgObj.name; }
+
+                if(msgObj.address){ church.address.street = msgObj.address; }
+
+                if(msgObj.city){ church.address.city = msgObj.city; }
+
+                if(msgObj.state){ church.address.state = msgObj.state; }
+
+                if(msgObj.zip){ church.address.zip = msgObj.zip; }
+
+                if(msgObj.phone){ church.phone = msgObj.phone; }
+
+                if(msgObj.bio){ church.bio = msgObj.bio; }
+
+                church.save(function(error, updatedChurch){
+                    if(error){
+                        return res.json(500, {"error": "Server error.", "mongoError": error});
+                    } else {
+                        return res.json(200, {"success": "Account Updated", "church": updatedChurch});
+                    }
+                });
             }
         })
     }
 };
 
-function updateAccount(msgObj, res, church){
+exports.delete = function(req, res){
+    console.log('church deletion method hit.');
+    var msgObj = req.query;
+    console.log(msgObj);
 
-    if(msgObj.name){ church.name = msgObj.name; }
-
-    if(msgObj.address){ church.address.street = msgObj.address; }
-
-    if(msgObj.city){ church.address.city = msgObj.city; }
-
-    if(msgObj.state){ church.address.state = msgObj.state; }
-
-    if(msgObj.zip){ church.address.zip = msgObj.zip; }
-
-    if(msgObj.phone){ church.phone = msgObj.phone; }
-
-    if(msgObj.bio){ church.bio = msgObj.bio; }
-
-    church.save(function(error, updatedChurch){
+    Church.findOne({'email': msgObj.email}, function(error, account){
         if(error){
-            return res.json(500, {"error": "Server error.", "mongoError": error});
+            return res.json(500, {'error': 'Server Error', 'mongoError': error});
+
+        } else if(!account){
+            return res.json(404, {'error': 'Account you are trying to delete does not exist.'});
+
         } else {
-            return res.json(200, {"success": "Account Updated", "church": updatedChurch});
+            account.remove(function(error){
+                if (error) {
+                    res.json(500, {"error": "Server error.", "mongoError": error});
+                } else {
+                    res.json(200, {"message": "Account Deactivated."});
+                }
+            });
         }
     });
-};
+}
 
+
+exports.retrieveFromSession = function(req, res){
+    if(req.user){
+        return res.json(200, {'success': 'Retrieved church from session', "church": req.user});
+    } else {
+        return res.json(400, {'error': 'No church in session.'});
+    }
+}
+
+//msgObj should contain:
+// {'email': email, 'password': oldPassword, 'newPassword': newPassword}
+exports.resetPassword = function(req, res){
+    var msgObj = req.body;
+
+    if(!msgObj.email){
+        return res.json(400, {"error": "Email required."});
+    }
+
+    if(!msgObj.password){
+        return res.json(400, {"error": "Password required."});
+    }
+
+    if(!msgObj.newPassword){
+        return res.json(400, {"error": "New password required."});
+    }
+
+    Church.findOne({'email': msgObj.email, 'password': msgObj.password}, function(error, account){
+        if(error){
+            return res.json(500, {'error': 'Server Error', 'mongoError': error});
+
+        } else if(!account){
+            return res.json(400, {'error': 'No account with that email and password combination'});
+
+        } else {
+            account.password = account.generateHash(msgObj.newPassword);
+            account.save(function(error){
+                if(error){
+                    return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                } else {
+                    return res.json(200, {'success': 'Successfully reset password'});
+                }
+            })
+        }
+    })
+
+}

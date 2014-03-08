@@ -9,13 +9,21 @@
 angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window', 'zcIdentity',
     function($scope, $window, zcIdentity){
 
-//        if(!!$window.churchObject) {
-//            $scope.currentUser =  $window.churchObject;
-//            console.log($scope.currentUser);
-//        }
+        //Current User Object
+        $scope.currentUser = {};
 
-        $scope.currentUser = zcIdentity.getIdentityObject();
 
+        if(!$scope.currentUser.email){
+            var defer;
+            defer = zcIdentity.getIdentityObject();
+            defer.then(function(result){
+                $scope.currentUser = result;
+            }, function(error){
+                console.log('Error: ' + error);
+            });
+        }
+
+        console.log('currentUser in FeedCtrl: ');
         console.log($scope.currentUser);
 
         $scope.posts = [{
