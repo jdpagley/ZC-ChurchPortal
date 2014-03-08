@@ -6,8 +6,26 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedCtrl', ['$scope',
-    function($scope){
+angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window', 'zcIdentity',
+    function($scope, $window, zcIdentity){
+
+        //Current User Object
+        $scope.currentUser = {};
+
+
+        if(!$scope.currentUser.email){
+            var defer;
+            defer = zcIdentity.getIdentityObject();
+            defer.then(function(result){
+                $scope.currentUser = result;
+            }, function(error){
+                console.log('Error: ' + error);
+            });
+        }
+
+        console.log('currentUser in FeedCtrl: ');
+        console.log($scope.currentUser);
+
         $scope.posts = [{
             user: 'Josh Pagley',
             message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
