@@ -10,6 +10,7 @@ var zcApp = angular.module('zcApp', ['ngRoute', 'ngResource']);
 
 zcApp.config(['$routeProvider',
     function($routeProvider){
+
         $routeProvider.
             when('/feed', {
                 templateUrl: 'partials/views/feed',

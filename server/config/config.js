@@ -9,7 +9,7 @@ module.exports = {
     development: {
         db: 'mongodb://localhost/zionconnect',
         rootPath: rootPath,
-        port: process.env.PORT || 3030
+        port: process.env.PORT || 3000
     },
     production: {
         rootPath: rootPath,
