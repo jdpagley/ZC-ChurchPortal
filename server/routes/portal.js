@@ -27,6 +27,9 @@ module.exports = function(app) {
     app.post('/api/zionconnect/v1/church', isLoggedIn, churchs.update);
     app.del('/api/zionconnect/v1/church', isLoggedIn, churchs.delete);
 
+    //Update Church Services
+    app.post('/api/zionconnect/v1/church/services', isLoggedIn, churchs.updateChurchServices);
+
     //Password Reset
     app.post('/api/zionconnect/v1/church/reset', isLoggedIn, churchs.resetPassword);
 
