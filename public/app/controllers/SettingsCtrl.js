@@ -14,7 +14,7 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
 
         var defer;
         if(!$scope.currentUser.email){
-            defer = zcIdentity.getIdentityObject();
+            defer = zcIdentity.getIdentity();
             defer.then(function(result){
                 $scope.currentUser = result;
             }, function(error){
@@ -23,32 +23,32 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
         }
 
         // Update User Settings =======================================================
-        //All Setting form fields are binding to this object.
-        //Object contains email and password by default so that
-        //it will be able to be authorized on the server.
-        $scope.updateObject = {
-            email: $scope.currentUser.email,
-            password: $scope.currentUser.password
-        };
 
         //Booleans to see if update was successful or failed.
         $scope.updateSuccess = false;
         $scope.updateFailure = false;
 
+        //Settings form fields are binding ot updateObject.
+        $scope.updateObject = {};
+
         //Function that gets called whenever user hits update church
         //settings button.
         $scope.updateChurch = function(){
-            //returns promise object to $scope.church.
-            $scope.church = zcSettings.updateChurchSettings($scope.updateObject);
+
+            $scope.updateObject.email = $scope.currentUser.email;
+            $scope.updateObject.password = $scope.currentUser.password;
+
+            console.log($scope.updateObject);
+            var promise = zcSettings.updateChurch($scope.updateObject);
 
             //Promise functions. First function is success, Second function is failure.
-            $scope.church.then(
+            promise.then(
                 function(churchObject){
                     console.log('Update Successful. New churchObject: ');
                     console.log(churchObject.church);
-                    //Updating church identity object with updated churchObj
-                    //that is returned by the server.
-                    zcIdentity.setIdentityObject(churchObject.church);
+
+                    //Set identity with updated churchObject.
+                    zcIdentity.setIdentity(churchObject.church);
 
                     //Sets the currentUser for this controller to the new
                     //updated churchObj that got returned by the server.
@@ -59,12 +59,56 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
                     $scope.updateFailure = false;
                 },
                 function(result){
+
                     console.log('Update failed.');
                     console.log(result);
+
                     //Update failed.
                     $scope.updateSuccess = false;
                     $scope.updateFailure = true;
                 });
+        }
+
+        // Add/Update/Remove Church Services =================================================
+
+        //The serviceObject is bond to the view and will be pushed onto $scope.currentUser.services
+        //when user adds new service. currentUser.services will be sent to the service to update services.
+        $scope.serviceObject = {};
+
+        $scope.updateChurchServices = function(){
+            $scope.currentUser.services.push($scope.serviceObject);
+            console.log('$scope.currentUser.services: ');
+            console.log($scope.currentUser.services);
+
+            //Reset serviceObject so that Angular doesn't bind to
+            //service in the list.
+            $scope.serviceObject = {};
+
+            var promise = zcSettings.updateChurchServices($scope.currentUser.email, $scope.currentUser.services);
+            promise.then(function(result){
+                console.log(result);
+            }, function(error){
+                console.log(error);
+            });
+        }
+
+        $scope.removeChurchService = function(index){
+
+            $scope.currentUser.services.splice(index, 1);
+
+            var servicesObject = [];
+            for(var i = 0; i < $scope.currentUser.services.length; i++){
+                if($scope.currentUser.services[i].day){
+                   servicesObject.push($scope.currentUser.services[i]);
+                }
+            }
+
+            $scope.currentUser.services = servicesObject;
+
+            console.log('$scope.currentUser services: ');
+            console.log($scope.currentUser.services);
+
+            zcSettings.updateChurchServices($scope.currentUser.email, $scope.currentUser.services);
         }
 
         // Reset Church Password =======================================================
@@ -76,12 +120,12 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
             if($scope.newPassword == $scope.newPasswordRetyped && $scope.newPassword != "" && $scope.newPasswordRetyped != ""){
                 $scope.passwordMatchError = false;
 
-                var defer = zcSettings.resetPassword({
+                var promise = zcSettings.resetPassword({
                     email: $scope.currentUser.email,
                     password: $scope.currentUser.password,
                     newPassword: $scope.newPassword});
 
-                defer.then(
+                promise.then(
                     function(result){
                         console.log(result);
                         $scope.resetSuccess = true;

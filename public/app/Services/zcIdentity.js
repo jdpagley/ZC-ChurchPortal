@@ -10,7 +10,7 @@ angular.module('zcApp').factory('zcIdentity', ['$window', '$resource', '$q', fun
 
     return {
         //Function to get the identity information out of zcIdentity.
-        getIdentityObject: function(){
+        getIdentity: function(){
             var promise = $q.defer();
             //if churchObject is populated with current account info
             // then return churchObject.
@@ -36,7 +36,7 @@ angular.module('zcApp').factory('zcIdentity', ['$window', '$resource', '$q', fun
         },
         //Set the churchObject with the new updated churchObject to make
         //it available to rest of the app.
-        setIdentityObject: function(updatedChurchObject){
+        setIdentity: function(updatedChurchObject){
             churchObject = updatedChurchObject;
             console.log('updated zcIdentity with new churchObject: ');
             console.log(churchObject);

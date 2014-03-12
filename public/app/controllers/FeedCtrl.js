@@ -15,7 +15,7 @@ angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window', 'zcIdentity
 
         if(!$scope.currentUser.email){
             var defer;
-            defer = zcIdentity.getIdentityObject();
+            defer = zcIdentity.getIdentity();
             defer.then(function(result){
                 $scope.currentUser = result;
             }, function(error){
