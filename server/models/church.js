@@ -22,6 +22,10 @@ var churchSchema = new Schema({
     phone:                    String,
     website:                  String,
     bio:                      String,
+    services:                 [{
+        day:                  String,
+        startTime:            String
+    }],
     createdAt:                Date,
     UpdatedAt:                Date
 });

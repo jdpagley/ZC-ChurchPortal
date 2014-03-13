@@ -125,6 +125,8 @@ exports.update = function(req, res){
 
     var msgObj = req.body;
 
+    console.log(msgObj);
+
     if(!msgObj){
         return res.json(400, {"error": "POST body is required with valid parameters"});
     }
@@ -203,6 +205,8 @@ exports.retrieveFromSession = function(req, res){
 exports.resetPassword = function(req, res){
     var msgObj = req.body;
 
+    console.log(msgObj);
+
     if(!msgObj.email){
         return res.json(400, {"error": "Email required."});
     }
@@ -234,4 +238,35 @@ exports.resetPassword = function(req, res){
         }
     })
 
+}
+
+exports.updateChurchServices = function(req, res){
+    var msgObj = req.body;
+    console.log(msgObj);
+
+    if(!msgObj.email){
+        return res.json(400, {"error": "Email required."});
+    }
+
+    Church.findOne({'email': msgObj.email}, function(error, account){
+        if(error){
+            console.log('findOne: ' + error);
+            return res.json(500, {'error': 'Server Error', 'mongoError': error});
+
+        } else if(!account){
+            return res.json(400, {'error': 'No account with that email'});
+
+        } else {
+            account.services = msgObj.services;
+
+            account.save(function(error){
+                if(error){
+                    console.log('account.save: ' + error);
+                    return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                } else {
+                    return res.json(200, {'success': 'Successfully updated services.'});
+                }
+            })
+        }
+    })
 }
