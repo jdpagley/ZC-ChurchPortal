@@ -6,24 +6,37 @@
 <head>
     <meta charset="utf-8">
     <title>Zion Connect</title>
-    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/portal-custom.css">
+    <link href="../../../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../../public/css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../../public/css/portal-custom.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
-<a href="/logout" style="float:right;margin:20px;border:1px solid black;padding:10px;">Logout</a>
+<div class="col-lg-10 col-lg-offset-1 col-md-12 col-md-offset-1 border1">
 
-<ul class="nav nav-pills">
-    <li class="active"><a href="#/feed">Feed</a></li>
-    <li><a href="#/sermons">Sermons</a></li>
-    <li><a href="#/settings">Settings</a></li>
-</ul>
+    <!--portal nav-->
+    <div class="col-lg-2 col-md-2 border1">
+        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+            <img src="../../../public/images/lion.jpg" />
+        </div>
+        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+            <ul>
+                <li>LIST1</li>
+            </ul>
+        </div>
+    </div>
 
-<div class="content">
-    <!-- This is where all the views will be inserted. -->
-    <div data-ng-view></div>
+    <!--portal views-->
+    <div class="col-lg-10 col-md-10 border1">
+
+        <div class="content">
+            <!-- This is where all the views will be inserted. -->
+            <div data-ng-view></div>
+        </div>
+
+    </div>
+
 </div>
 
 <script type="text/javascript" src="/vendor/jquery/dist/jquery.js"></script>
@@ -37,6 +50,6 @@
 <script type="text/javascript" src="/app/controllers/SettingsCtrl.js"></script>
 <script type="text/javascript" src="/app/services/zcSettings.js"></script>
 <script type="text/javascript" src="/app/services/zcIdentity.js"></script>
-<script type="text/javascript" src=""></script>
+
 </body>
-<html/>
+</html>
