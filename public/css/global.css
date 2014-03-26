@@ -40,7 +40,7 @@ textarea {
     border:1px pink solid;
 }
 
-/*bootstrap overrides*/
+/*bootstrap overrides**********************************************************************/
 
 .row {
     margin-right: 0;
@@ -66,17 +66,17 @@ textarea {
     border-color: #7A5DC7;
     font-weight: bold;
     opacity: 1;
-    -webkit-transition: background-color .25s ease-in;
-    -moz-transition: background-color .25s ease-in;
-    -o-transition: background-color .25s ease-in;
-    transition: background-color .25s ease-in;
+    -webkit-transition: background-color .15s ease-in;
+    -moz-transition: background-color .15s ease-in;
+    -o-transition: background-color .15s ease-in;
+    transition: background-color .15s ease-in;
 }
 
 .btn-purple:hover {
     color:#fff;
     background-color: #7A5DC7;
-    -webkit-transition: background-color .25s ease-out;
-    -moz-transition: background-color .25s ease-out;
-    -o-transition: background-color .25s ease-out;
-    transition: background-color .25s ease-out;
+    -webkit-transition: background-color .15s ease-out;
+    -moz-transition: background-color .15s ease-out;
+    -o-transition: background-color .15s ease-out;
+    transition: background-color .15s ease-out;
 }

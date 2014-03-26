@@ -1,34 +1,58 @@
 <!-- Created by Josh Pagley on 2/24/14.-->
 <!-- views/portal/index.ejs main index view for ZC Church Portal -->
 
-<!DOCTYPE>
+<!DOCTYPE html>
 <html data-ng-app="zcApp">
 <head>
     <meta charset="utf-8">
     <title>Zion Connect</title>
-    <link href="../../../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="./vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../../public/css/global.css" rel="stylesheet" type="text/css" />
-    <link href="../../../public/css/portal-custom.css" rel="stylesheet" type="text/css" />
+    <link href="./css/global.css" rel="stylesheet" type="text/css" />
+    <link href="./css/portal-custom.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
-<div class="col-lg-10 col-lg-offset-1 col-md-12 col-md-offset-1 border1">
+<div class="col-lg-12 col-md-12 portal-container border1">
 
-    <!--portal nav-->
-    <div class="col-lg-2 col-md-2 border1">
-        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
-            <img src="../../../public/images/lion.jpg" />
+    <!--portal shell-->
+    <div class="col-lg-2 col-md-2 portal-shell border1">
+        <!--portal shell lion-->
+        <div class="col-lg-12 col-md-12 lion-logo border2">
+            <img class="col-lg-12 col-md-12" src="./images/lion.jpg" /><!--portal shell lion logo-->
         </div>
-        <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
-            <ul>
-                <li>LIST1</li>
+        <!--portal shell nav-->
+        <div class="col-lg-12 col-md-12 border2">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-home"></span> News Feed</a></li><!--nav news feed link-->
+                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-ok-sign"></span> Check-Ins</a></li><!--nav check-ins link-->
+                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-user"></span> Members</a></li><!--nav members link-->
+                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-book"></span> Sermons</a></li><!--nav sermons link-->
             </ul>
         </div>
     </div>
 
+    <!--portal shell top-->
+    <div class="col-lg-10 col-md-10 background-fff portal-shell-top border1">
+        <div class="col-lg-6 col-md-6 border1"><h2>News Feed</h2></div><!--top page header-->
+        <div class="col-lg-6 col-md-6 border1">
+            <div class="col-lg-1 col-lg-offset-8 col-md-1 col-md-offset-8 border1"><img class="col-lg-12 col-md-12 pull-right" src="./images/meatowbrooklogo.jpg" /></div><!--top church logo-->
+            <!--top church dropdown menu-->
+            <div class="col-lg-3 col-md-3 dropdown-container">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">Meadowbrook <span class="caret"></span></a><!--top church dropdown menu name-->
+                    <!--top church dropdown menu nav-->
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation"><a href="#" role="menuitem" tabindex="-1">Settings</a></li><!--top church dropdown menu settings link-->
+                        <li role="presentation"><a href="#" role="menuitem" tabindex="-1">Logout</a></li><!--top church dropdown menu logout link-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--portal views-->
-    <div class="col-lg-10 col-md-10 border1">
+    <div class="col-lg-10 col-md-10 background-fff border1">
 
         <div class="content">
             <!-- This is where all the views will be inserted. -->
