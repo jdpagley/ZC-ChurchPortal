@@ -158,8 +158,10 @@ exports.update = function(req, res){
                 church.save(function(error, updatedChurch){
                     if(error){
                         return res.json(500, {"error": "Server error.", "mongoError": error});
+                        //{'statusCode': 500, 'error': 'Server Error.', 'mongoError': 'error'};
                     } else {
                         return res.json(200, {"success": "Account Updated", "church": updatedChurch});
+                        //{'statusCode': 200, 'success': 'Account Updated.', 'church': 'updateChurch'};
                     }
                 });
             }

@@ -6,12 +6,16 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
-    postedBy:                 String,
-    createdAt:                Date,
-    UpdatedAt:                Date
+    postAuthor:                 Schema.Types.ObjectId,
+    postRecipient:              {type: Schema.Types.objectId, ref: 'Church'},
+    comments:                   [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+    likes:                      [{type: Schema.Types.ObjectId, ref: 'Like'}],
+    message:                    String,
+    createdAt:                  Date,
+    updatedAt:                  Date
 });
 
-churchSchema.pre('save', function(next){
+postSchema.pre('save', function(next){
     this.updatedAt = new Date();
     if (!this.createdAt){
         this.createdAt = new Date();

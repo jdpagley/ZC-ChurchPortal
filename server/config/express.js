@@ -21,4 +21,5 @@ module.exports = function(app, config) {
         app.use(flash());
         app.use(express.static(config.rootPath + '/public'));
     });
+
 }
