@@ -1,3 +1,7 @@
+//To start MongoDB on windows when it has been setup as a service
+// use "net start MongoDB" and to stop "net stop MongoDB".
+// Parentheses are not actually included in commands.
+
 var path = require('path');
 var rootPath = path.normalize(__dirname + '/../../');
 

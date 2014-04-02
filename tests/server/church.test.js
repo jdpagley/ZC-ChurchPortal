@@ -3,11 +3,13 @@
  * Desciption: Tests for the controller church.js file.
  */
 
-var assert = require('assert'),
-    should = require('should'),
-    request = require('supertest'),
-    church = require('../../server/controllers/churchs.js'),
-    async = require('async');
+var assert = require('assert');
+var should = require('should');
+var request = require('supertest');
+var church = require('../../server/controllers/churchs.js');
+//var church = require('../../server/controllers/testChurch.js');
+var async = require('async');
+var dbHelper = require('../resources/dbHelper.js');
 
 //Models
 var Church = require('../../server/models/church.js');
@@ -74,7 +76,7 @@ describe('Church controller', function(){
         })
     })
 
-    describe('update function', function(){
+    describe.skip('update function', function(){
         it('should return updated church object.', function(done){
             request.post('/api/zionconnect/tests/v1/church')
                 .send({
@@ -108,20 +110,18 @@ describe('Church controller', function(){
     describe('delete function', function(){
 
         it('should return account deactivation message.', function(done){
-            this.timeout(0);
+            var params = {
+                email: "test@testchurch.com",
+                password: "church",
+                name: "Test Name",
+                address: "6312 SE 10th PL",
+                city: "Ocala",
+                state: "FL",
+                zip: "34472",
+                phone: "111-222-3333"
+            };
 
-            Church.findOne({'email': 'info@church.com'}, function(error, account){
-                if(error){
-                    console.log(error);
-                    done();
-                } else if (!account){
-                    console.log('no account');
-                    done();
-                } else {
-                    console.log('else hit');
-                    done();
-                }
-            })
+            dbHelper.addNewAccount(params, done);
         });
-    })
-})
+    });
+});

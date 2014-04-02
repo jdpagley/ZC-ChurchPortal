@@ -1,0 +1,125 @@
+
+body {
+    color:#444;
+}
+
+/*bootstrap overrides******************************************************/
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 20px;
+    margin-bottom: -1px;
+    background: none;
+    border: none;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.list-group-item span {
+    font-size:19px;
+}
+
+.list-group-item a {
+    position: relative;
+    display: block;
+    margin-bottom: -1px;
+    border: none;
+    -moz-transition: color .15s ease-in-out;
+    -webkit-transition: color .15s ease-in-out;
+    -o-transition: color .15s ease-in-out;
+    -ms-transition: color .15s ease-in-out;
+    transition: color .15s ease-in-out;
+}
+
+.list-group-item a:hover {
+    color:mediumpurple;
+    -moz-transition: color .15s ease-in-out;
+    -webkit-transition: color .15s ease-in-out;
+    -o-transition: color .15s ease-in-out;
+    -ms-transition: color .15s ease-in-out;
+    transition: color .15s ease-in-out;
+}
+
+/*portal shell*************************************************************/
+
+.portal-container {
+    background:#f2f2f2;
+}
+
+.portal-shell {
+    background:#f2f2f2;
+}
+
+.portal-shell .lion-logo {
+    margin-bottom:25px;
+}
+
+.portal-shell ul li span {
+    margin-right:10px;
+}
+
+.portal-shell-top {
+    padding:20px;
+}
+
+.portal-shell-top h2 {
+    color:mediumpurple;
+    font-weight:bold;
+}
+
+.portal-shell-top .dropdown-container {
+    height:25px;
+    padding-top:2.5%;
+    white-space:nowrap;
+}
+
+.portal-shell-top .dropdown-container .dropdown {
+    text-align:center;
+}
+
+.portal-shell-top .dropdown-container .dropdown ul {
+    text-align:left;
+}
+
+/*portal views section******************************************************/
+
+.background-fff {
+    background:#fff;
+}
+
+.color-aaa {
+    color:#aaa;
+}
+
+
+/*portal news feed*********************************************************/
+
+/*portal news feed post*/
+
+.portal-news-feed-post {
+    margin-bottom:10px;
+}
+
+.portal-news-feed-post img {
+    height:30px;
+    margin:0px;
+    padding:0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
