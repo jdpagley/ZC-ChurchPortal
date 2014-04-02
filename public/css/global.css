@@ -60,6 +60,8 @@ textarea {
     padding-left: 0px;
 }
 
+/*buttons************************************************************************************/
+
 .btn-purple {
     color: #fff;
     background-color: mediumpurple;
@@ -75,6 +77,26 @@ textarea {
 .btn-purple:hover {
     color:#fff;
     background-color: #7A5DC7;
+    -webkit-transition: background-color .15s ease-out;
+    -moz-transition: background-color .15s ease-out;
+    -o-transition: background-color .15s ease-out;
+    transition: background-color .15s ease-out;
+}
+
+.btn-grey {
+    color: #737373;
+    background-color: #ddd;
+    font-weight: bold;
+    opacity: 1;
+    -webkit-transition: background-color .15s ease-in;
+    -moz-transition: background-color .15s ease-in;
+    -o-transition: background-color .15s ease-in;
+    transition: background-color .15s ease-in;
+}
+
+.btn-grey:hover {
+    color:#737373;
+    background-color: #d3d3d3;
     -webkit-transition: background-color .15s ease-out;
     -moz-transition: background-color .15s ease-out;
     -o-transition: background-color .15s ease-out;

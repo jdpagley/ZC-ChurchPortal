@@ -1,0 +1,93 @@
+<!--created by John Pagley on 3/27/14-->
+
+<!--sermonhome container-->
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+
+    <!--sermonhome list single sermon-->
+    <div class="col-lg-12 col-md-12 border1">
+        <!--sermonhome series logo-->
+        <div class="col-lg-1 col-md-1 border2">
+            <img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg" />
+        </div>
+        <!--sermonhome series name-->
+        <div class="col-lg-9 col-md-9 border2">
+            <div class="col-lg-12 col-md-12 border1">
+                <div class="col-lg-1 col-md-1 border1"><h3>1</h3></div><!--sermonhome series count-->
+                <div class="col-lg-11 col-md-11 border1"><h3>Getting Guidance</h3></div><!--sermonhome series sermon name-->
+            </div>
+            <div class="col-lg-12 col-md-12 border1">
+                <div class="col-lg-12 col-md-12 border1">Series: <span class="color-aaa">Guidance</span></div><!--sermonhome series name-->
+                <div class="col-lg-12 col-md-12 border1">Speaker: <span class="color-aaa">Tim Gilligan</span></div><!--sermonhome series speaker-->
+            </div>
+        </div>
+        <!--sermonhome series action section-->
+        <div class="col-lg-2 col-md-2 border1">
+            <!--sermonhome series edit button-->
+            <div class="col-lg-12 col-md-12 border2">
+                <div class="col-lg-6 col-md-6 pull-right"><button type="button" class="btn btn-md btn-grey btn-block">Edit</button></div>
+            </div>
+            <!--sermonhome series action icons-->
+            <div class="col-lg-12 col-md-12 border2">
+                <div class="col-lg-4 col-md-4 border2"><a href="#"><span class="glyphicon glyphicon-list-alt"></span></a></div><!--sermonhome series notes icon-->
+                <div class="col-lg-4 col-md-4 border2"><a href="#"><span class="glyphicon glyphicon-play"></span></a></div><!--sermonhome series video icon-->
+                <div class="col-lg-4 col-md-4 border2"><a href="#"><span class="glyphicon glyphicon-volume-up"></span></a></div><!--sermonhome series audio icon-->
+            </div>
+        </div>
+    </div>
+
+    <!--sermonhome news feed post-->
+    <div class="col-lg-12 col-md-12 portal-news-feed-post border1">
+        <!--sermonhome post text box-->
+        <div class="col-lg-12 col-md-12 border1">
+            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..."></textarea><!--sermonhome post text-->
+        </div>
+        <!--post action bar-->
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-1 col-md-1 border1"><a href="#"><span class="glyphicon glyphicon-picture"></span></a></div><!--sermonhome post select image-->
+            <div class="col-lg-11 col-md-11 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="submit">Post</button></div><!--sermonhome post button-->
+        </div>
+    </div>
+
+    <!--sermonhome news feed posting-->
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" data-ng-repeat="post in posts">
+        <!--sermonhome posting from church-->
+        <div class="col-lg-12 col-md-12 border1">
+            <!--sermonhome church info-->
+            <div class="col-lg-12 col-md-12 border1">
+                <div class="col-lg-1 col-md-1 border1"><img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg"/></div><!--sermonhome church posting image-->
+                <div class="col-lg-11 col-md-11 border1">
+                    <h4>{{post.user}}</h4><!--sermonhome church name-->
+                    <h6>{{post.date | date:short}}</h6><!--sermonhome church posting date-->
+                </div>
+            </div>
+            <!--posting text box-->
+            <div class="col-lg-12 col-md-12 border1">
+                <div class="col-lg-12 col-md-12 border1"><p>{{post.message}}</p></div><!--sermonhome posting text-->
+            </div>
+        </div>
+        <!--sermonhome posting comments-->
+        <div class="col-lg-12 col-md-12 border1">
+            <div class="col-lg-12 col-md-12 border1"><span class="glyphicon glyphicon-comment"></span> Comments <span class="badge">{{post.comments.length}}</span></div><!--sermonhome comments link-->
+            <!--sermonhome comments from users-->
+            <div class="col-lg-12 col-md-12 portal-news-feed-comments border1" data-ng-repeat="comment in post.comments">
+                <!--sermonhome comments all posted-->
+                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+                    <!--sermonhome single comment-->
+                    <div class="col-lg-12 col-md-12 border1">
+                        <div class="col-lg-12 col-md-12 border1">
+                            <div class="col-lg-6 col-md-6 border1"><h4>{{comment.user}}</h4></div><!--sermonhome comments first name-->
+                            <div class="col-lg-6 col-md-6 border1"><h6>{{comment.date | date:short}}</h6></div><!--sermonhome comments date-->
+                        </div>
+                        <div class="col-lg-12 col-md-12 border1"><p>{{comment.message}}</p></div><!--sermonhome comments comment-->
+                    </div>
+                </div>
+                <!--sermonhome comments text box-->
+                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border1">
+                    <textarea class="col-lg-10 col-md-10" rows="2" placeholder="Write a comment"></textarea><!--sermonhome comments text-->
+                    <div class="col-lg-2 col-md-2 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="submit">Post</button></div><!--sermonhome comments post button-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
