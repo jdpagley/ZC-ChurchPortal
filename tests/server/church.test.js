@@ -9,7 +9,6 @@ var request = require('supertest');
 var church = require('../../server/controllers/churchs.js');
 //var church = require('../../server/controllers/testChurch.js');
 var async = require('async');
-var dbHelper = require('../resources/dbHelper.js');
 
 //Models
 var Church = require('../../server/models/church.js');

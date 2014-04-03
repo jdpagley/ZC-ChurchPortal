@@ -6,7 +6,7 @@
  church profile information for the church.
  */
 
-angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', '$scope', '$location',
+angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSettings', '$scope', '$location',
     function(zcIdentity, zcSettings, $scope, $location){
 
         //Current User Object
@@ -41,7 +41,6 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
             console.log($scope.updateObject);
             var promise = zcSettings.updateChurch($scope.updateObject);
 
-            //Promise functions. First function is success, Second function is failure.
             promise.then(
                 function(churchObject){
                     console.log('Update Successful. New churchObject: ');
@@ -75,14 +74,32 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
         //when user adds new service. currentUser.services will be sent to the service to update services.
         $scope.serviceObject = {};
 
-        $scope.updateChurchServices = function(){
+        $scope.addServiceToServiceList = function(){
             $scope.currentUser.services.push($scope.serviceObject);
-            console.log('$scope.currentUser.services: ');
-            console.log($scope.currentUser.services);
+            console.log('$scope.currentUser.services: ' + $scope.currentUser.services);
 
             //Reset serviceObject so that Angular doesn't bind to
             //service in the list.
             $scope.serviceObject = {};
+        }
+
+        $scope.removeServiceFromServiceList = function(index){
+            $scope.currentUser.services.splice(index, 1);
+
+            var servicesArray = [];
+            for(var i = 0; i < $scope.currentUser.services.length; i++){
+                if($scope.currentUser.services[i].day){
+                    servicesArray.push($scope.currentUser.services[i]);
+                }
+            }
+
+            console.log('$scope.currentUser services: ' + $scope.currentUser.services);
+            console.log();
+
+            $scope.currentUser.services = servicesArray;
+        }
+
+        $scope.updateChurchServices = function(){
 
             var promise = zcSettings.updateChurchServices($scope.currentUser.email, $scope.currentUser.services);
             promise.then(function(result){
@@ -90,29 +107,11 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
             }, function(error){
                 console.log(error);
             });
-        }
 
-        $scope.removeChurchService = function(index){
-
-            $scope.currentUser.services.splice(index, 1);
-
-            var servicesObject = [];
-            for(var i = 0; i < $scope.currentUser.services.length; i++){
-                if($scope.currentUser.services[i].day){
-                   servicesObject.push($scope.currentUser.services[i]);
-                }
-            }
-
-            $scope.currentUser.services = servicesObject;
-
-            console.log('$scope.currentUser services: ');
-            console.log($scope.currentUser.services);
-
-            zcSettings.updateChurchServices($scope.currentUser.email, $scope.currentUser.services);
         }
 
         // Reset Church Password =======================================================
-        $scope.resetConfirmationMessage = false;
+        $scope.resetPasswordConfirmationMessage = false;
         $scope.passwordMatchError = false;
         $scope.resetSuccess = false;
 
@@ -135,11 +134,12 @@ angular.module('zcApp').controller('SettingsCtrl', ['zcIdentity', 'zcSettings', 
 
             } else {
                 $scope.passwordMatchError = true;
+                $scope.resetPasswordConfirmationMessage = false;
             }
         }
 
         // Delete Church Account ==========================================================
-        $scope.deletionConfirmationMessage = false;
+        $scope.deleteAccountConfirmationMessage = false;
 
         $scope.deleteAccount = function(){
             console.log('DeleteAccount function called and current user email is: ');

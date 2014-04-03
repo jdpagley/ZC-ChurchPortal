@@ -6,7 +6,7 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedCtrl', ['$scope', '$window', 'zcIdentity',
+angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity',
     function($scope, $window, zcIdentity){
 
         //Current User Object

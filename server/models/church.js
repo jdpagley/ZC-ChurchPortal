@@ -24,7 +24,7 @@ var churchSchema = new Schema({
     bio:                      String,
     services:                 [{
         day:                  String,
-        startTime:            String
+        time:                 String
     }],
     createdAt:                Date,
     UpdatedAt:                Date

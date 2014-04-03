@@ -24,10 +24,10 @@
         <!--portal shell nav-->
         <div class="col-lg-12 col-md-12 border2">
             <ul class="list-group">
-                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-home"></span> News Feed</a></li><!--nav news feed link-->
+                <li class="list-group-item"><a href="#/feed"><span class="glyphicon glyphicon-home"></span> News Feed</a></li><!--nav news feed link-->
                 <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-ok-sign"></span> Check-Ins</a></li><!--nav check-ins link-->
                 <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-user"></span> Members</a></li><!--nav members link-->
-                <li class="list-group-item"><a href="#"><span class="glyphicon glyphicon-book"></span> Sermons</a></li><!--nav sermons link-->
+                <li class="list-group-item"><a href="#/sermons"><span class="glyphicon glyphicon-book"></span> Sermons</a></li><!--nav sermons link-->
             </ul>
         </div>
     </div>
@@ -41,11 +41,11 @@
                 <!--top church dropdown menu-->
                 <div class="col-lg-3 col-md-3 dropdown-container">
                     <div class="dropdown">
-                        <a href="#" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">Meadowbrook <span class="caret"></span></a><!--top church dropdown menu name-->
+                        <a href="" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">Meadowbrook <span class="caret"></span></a><!--top church dropdown menu name-->
                         <!--top church dropdown menu nav-->
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li><a href="#" role="menuitem">Settings</a></li><!--top church dropdown menu settings link-->
-                            <li><a href="#" role="menuitem">Logout</a></li><!--top church dropdown menu logout link-->
+                            <li><a href="#/settings" role="menuitem">Settings</a></li><!--top church dropdown menu settings link-->
+                            <li><a href="/logout" role="menuitem">Logout</a></li><!--top church dropdown menu logout link-->
                         </ul>
                     </div>
                 </div>
@@ -72,8 +72,8 @@
 <script type="text/javascript" src="/vendor/angular-resource/angular-resource.js"></script>
 <script type="text/javascript" src="/vendor/angular-route/angular-route.js"></script>
 <script type="text/javascript" src="/app/app.js"></script>
-<script type="text/javascript" src="/app/controllers/FeedCtrl.js"></script>
-<script type="text/javascript" src="/app/controllers/SettingsCtrl.js"></script>
+<script type="text/javascript" src="/app/controllers/FeedController.js"></script>
+<script type="text/javascript" src="/app/controllers/SettingsController.js"></script>
 <script type="text/javascript" src="/app/services/zcSettings.js"></script>
 <script type="text/javascript" src="/app/services/zcIdentity.js"></script>
 

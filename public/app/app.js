@@ -14,19 +14,19 @@ zcApp.config(['$routeProvider',
         $routeProvider.
             when('/feed', {
                 templateUrl: 'partials/views/feed',
-                controller: 'FeedCtrl'
+                controller: 'FeedController'
             }).
             when('/sermons', {
                 templateUrl: 'partials/views/sermons',
-                controller: 'SermonsCtrl'
+                controller: 'SermonsController'
             }).
             when('/sermonhome', {
                 templateUrl: 'partials/views/sermonHome',
-                controller: 'sermonHomeCtrl'
+                controller: 'SermonHomeController'
             }).
             when('/settings', {
                 templateUrl: 'partials/views/settings',
-                controller: 'SettingsCtrl'
+                controller: 'SettingsController'
             }).
             otherwise({
                 redirectTo: '/feed'

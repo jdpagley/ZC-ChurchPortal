@@ -5,7 +5,10 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
+var authorTypes = ['church', 'member'];
+
 var postSchema = new Schema({
+    authorType:                 {type: String, enum: authorTypes},
     postAuthor:                 Schema.Types.ObjectId,
     postRecipient:              {type: Schema.Types.objectId, ref: 'Church'},
     comments:                   [{type: Schema.Types.ObjectId, ref: 'Comment'}],

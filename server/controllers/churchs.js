@@ -11,7 +11,8 @@ var _ = require('underscore');
 //Models
 var Church = require('../models/church.js');
 
-// Create New Church
+// Create New Church expects json object in req.body
+// {'email': email, 'password': password, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
 exports.create = function(req, email, password, done){
     var msgObj = req.body;
     console.log(msgObj);
@@ -242,12 +243,19 @@ exports.resetPassword = function(req, res){
 
 }
 
+// updateChurchService expects json object in req.body
+// services is an array of service objects.
+// {'email': email, services: [{'day': serviceDay, 'time': serviceTime}]}
 exports.updateChurchServices = function(req, res){
     var msgObj = req.body;
     console.log(msgObj);
 
     if(!msgObj.email){
         return res.json(400, {"error": "Email required."});
+    }
+
+    if(!msgObj.services && msgObj.services.length !== 1){
+        return res.json(400, {"error": 'Services required.'})
     }
 
     Church.findOne({'email': msgObj.email}, function(error, account){

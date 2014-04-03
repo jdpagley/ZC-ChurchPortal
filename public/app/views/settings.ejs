@@ -1,35 +1,29 @@
-
-<!--Custom Messages----------------------------------------------------------------------->
-<div style="border:2px solid green;padding:10px;margin:20px;color:green;" data-ng-show="updateSuccess">Successfully Updated Settings!</div>
-<div style="border:2px solid red;padding:10px;margin:20px;color:red;" data-ng-show="updateFailure">Failure While Updating Settings!</div>
-
-<!--<button type="button" class="btn btn-danger btn-sm" data-ng-show="!resetConfirmationMessage" data-ng-click="resetConfirmationMessage = true">Reset Password</button>-->
-<div style="border:2px solid red;padding:10px;margin:5px;color:red;" data-ng-show="resetConfirmationMessage">
-    Are you sure you want to reset your password?
-    You will be redirect to the login page and will be required to log back in with new password.
-    <br/>
-    <a href="" class="btn btn-success btn-sm" data-ng-click="resetPassword()" data-ng-click="resetConfirmationMessage = false"> Yes</a>
-    <button type="button" class="btn btn-danger btn-sm" data-ng-click="resetConfirmationMessage = false">No</button>
-</div>
-<div style="border:2px solid green;padding:10px;margin:20px;color:green;" data-ng-show="resetSuccess">Successfully Reset Password</div>
-
-<div style="border:2px solid red;padding:10px;margin:5px;color:red;" data-ng-show="deletionConfirmationMessage">
-    Are you sure you want to delete your account and lose all your data
-    and kick all your church members off the social network?
-    <br/>
-    <a href="#" class="btn btn-success btn-sm" data-ng-click="deleteAccount()"> Yes</a>
-    <button type="button" class="btn btn-danger btn-sm" data-ng-click="deletionConfirmationMessage = false">No</button>
-</div>
-
 <!--portal church settings---------------------------------------------------------------->
 <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
     <!--full church form container-->
     <div class="col-lg-12 col-md-12 border1">
         <!--church form update errors-->
         <div class="col-lg-12 col-md-12 border1">
-            <div class="alert alert-success"><p>Successful! Your changes have been updated.</p></div><!--update successful-->
-            <div class="alert alert-danger"><p>Please fill out all the required fields.</p></div><!--update required error-->
-            <div class="alert alert-danger"><p>Passwords do not match. Check your spelling and try again.</p></div><!--update password error-->
+            <!--reset password confirmation popup-->
+            <div class="alert alert-info" data-ng-show="resetPasswordConfirmationMessage">
+                Are you sure you want to reset your password?
+                You will be redirect to the login page and will be required to log back in with new password.
+                <br/>
+                <a href="" class="btn btn-success btn-sm" data-ng-click="resetPassword()" data-ng-click="resetPasswordConfirmationMessage = false"> Yes</a>
+                <button type="button" class="btn btn-danger btn-sm" data-ng-click="resetPasswordConfirmationMessage = false">No</button>
+            </div>
+            <!--delete account confirmation message-->
+            <div class="alert alert-danger" data-ng-show="deleteAccountConfirmationMessage">
+                Are you sure you want to delete your account and lose all your data
+                and kick all your church members off the social network?
+                <br/>
+                <a href="#" class="btn btn-success btn-sm" data-ng-click="deleteAccount()"> Yes</a>
+                <button type="button" class="btn btn-danger btn-sm" data-ng-click="deleteAccountConfirmationMessage = false">No</button>
+            </div>
+            <div class="alert alert-success" data-ng-show="updateSuccess"><p>Successful! Your changes have been updated.</p></div><!--update successful-->
+            <div class="alert alert-success" data-ng-show="resetSuccess"><p>Successful! Password has been reset.</p></div><!--update successful-->
+            <div class="alert alert-danger" data-ng-show="updateFailure"><p>Oops! We are having trouble updating your account. Please try later.</p></div><!--update required error-->
+            <div class="alert alert-danger" data-ng-show="passwordMatchError"><p>Passwords do not match. Check your spelling and try again.</p></div><!--update password error-->
         </div>
         <!--column 1-->
         <!--church info container-->
@@ -153,7 +147,7 @@
                             <input type="password" class="form-control" id="retypeNewPassword" name="retypeNewPassword" placeholder="Retype Password" data-ng-model="newPasswordRetyped"/>
                             <div class="col-lg-12 col-md-12 border1">
                                 <div class="col-lg-6 col-md-6 border1"><span class="glyphicon glyphicon-info-sign"></span></div><!--authentication info icon-->
-                                <div class="col-lg-6 col-md-6 border1"><button type="button" class="btn btn-md btn-purple btn-block pull-right" data-ng-show="!resetConfirmationMessage" data-ng-click="resetConfirmationMessage = true">Reset Password</button></div><!--authentication reset button-->
+                                <div class="col-lg-6 col-md-6 border1"><button type="button" class="btn btn-md btn-purple btn-block pull-right" data-ng-show="!resetPasswordConfirmationMessage" data-ng-click="resetPasswordConfirmationMessage = true; passwordMatchError = false;">Reset Password</button></div><!--authentication reset button-->
                             </div>
                         </div>
                     </div>
@@ -174,16 +168,16 @@
                                 <!--service time active times-->
                                 <div class="col-lg-12 col-md-12 border1">
                                     <!--service time single time-->
-                                    <div class="col-lg-12 col-mg-12 border1">
-                                        <div class="col-lg-11 col-md-11">Sunday 8:00 am</div><!--service time single active date & time-->
-                                        <div class="col-lg-1 col-md-1"><span class="glyphicon glyphicon-remove"></span></div><!--service time single remove date & time-->
+                                    <div class="col-lg-12 col-mg-12 border1" ng-repeat="service in currentUser.services">
+                                        <div class="col-lg-11 col-md-11">{{service.day}} {{service.time}}</div><!--service time single active date & time-->
+                                        <div class="col-lg-1 col-md-1"><a><span class="glyphicon glyphicon-remove" ng-click="removeServiceFromServiceList($index)"></span></a></div><!--service time single remove date & time-->
                                     </div>
                                 </div>
                                 <!--service time add-->
                                 <div class="col-lg-12 col-md-12 border1">
                                     <!--service time day-->
                                     <div class="col-lg-6 col-md-6 border1">
-                                        <select class="form-control" name="serviceDay" title="Sunday"><!--service time day select-->
+                                        <select class="form-control" name="serviceDay" title="Sunday" data-ng-model="serviceObject.day"><!--service time day select-->
                                             <option>Sunday</option>
                                             <option>Monday</option>
                                             <option>Tuesday</option>
@@ -195,7 +189,7 @@
                                     </div>
                                     <!--service time hour-->
                                     <div class="col-lg-6 col-md-6 border1">
-                                        <select class="form-control" name="serviceTime" title="12:00 am"><!--service time hour select-->
+                                        <select class="form-control" name="serviceTime" title="12:00 am" data-ng-model="serviceObject.time"><!--service time hour select-->
                                             <option>12:00 am</option>
                                             <option>1:00 am</option>
                                             <option>2:00 am</option>
@@ -222,12 +216,12 @@
                                             <option>11:00 pm</option>
                                         </select><!--service time hour select-->
                                     </div>
-                                    <div class="col-lg-12 col-md-12 border1"><a href="#"><span class="glyphicon glyphicon-plus"></span> Add another service time</a></div><!--add another service time link-->
+                                    <div class="col-lg-12 col-md-12 border1"><a href="" ng-click="addServiceToServiceList()"><span class="glyphicon glyphicon-plus"></span> Add another service time</a></div><!--add another service time link-->
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 border1">
                                 <div class="col-lg-6 col-md-6 border1"><span class="glyphicon glyphicon-info-sign"></span></div><!--service time info icon-->
-                                <div class="col-lg-6 col-md-6 border1"><button type="submit" class="btn btn-md btn-purple btn-block pull-right">Update</button></div><!--service time button-->
+                                <div class="col-lg-6 col-md-6 border1"><button type="submit" class="btn btn-md btn-purple btn-block pull-right" ng-click="updateChurchServices()">Update</button></div><!--service time button-->
                             </div>
                         </div>
                     </div>
