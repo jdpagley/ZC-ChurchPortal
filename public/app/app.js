@@ -24,6 +24,14 @@ zcApp.config(['$routeProvider',
                 templateUrl: 'partials/views/sermonHome',
                 controller: 'sermonHomeCtrl'
             }).
+            when('/checkins', {
+                templateUrl: 'partials/views/checkIns',
+                controller: 'chechInsCtrl'
+            }).
+            when('/members', {
+                templateUrl: 'partials/views/members',
+                controller: 'membersCtrl'
+            }).
             when('/settings', {
                 templateUrl: 'partials/views/settings',
                 controller: 'SettingsCtrl'
