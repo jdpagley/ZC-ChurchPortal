@@ -6,113 +6,92 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity',
-    function($scope, $window, zcIdentity){
+angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity', 'zcFeed',
+    function($scope, $window, zcIdentity, zcFeed){
 
         //Current User Object
         $scope.currentUser = {};
 
+        //Current Posts
+        $scope.posts = [];
 
+        //Retrieve Current User Object From Server
         if(!$scope.currentUser.email){
-            var defer;
-            defer = zcIdentity.getIdentity();
-            defer.then(function(result){
+            var promise = zcIdentity.getIdentity();
+            promise.then(function(result){
+                //set currentUser with userObject returned from server.
                 $scope.currentUser = result;
+                console.log($scope.currentUser);
+
+                //Retrieve Posts Associated With Current User ID.
+                if($scope.currentUser._id && $scope.posts.length < 1){;
+                    var promise;
+                    promise = zcFeed.retrievPosts($scope.currentUser._id);
+                    promise.then(function(result){
+                        $scope.posts = result.posts;
+                        console.log(result);
+                    }, function(error){
+                        console.log('Error: ' + error);
+                    });
+                }
+
             }, function(error){
                 console.log('Error: ' + error);
             });
         }
 
-        console.log('currentUser in FeedCtrl: ');
-        console.log($scope.currentUser);
 
-        $scope.posts = [{
-            user: 'Josh Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2013, 10, 20),
-            comments: [{
-                user: 'Bill Joe',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Hannah Smith',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Tim Allen',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            }]
-        },{
-            user: 'John Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2013, 10, 10),
-            comments: [{
-                user: 'Bill Joe',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Hannah Smith',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            }]
-        },{
-            user: 'Jeff Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2013, 11, 20),
-            comments: [{
-                user: 'Bill Joe',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Hannah Smith',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Tim Allen',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            }]
-        },{
-            user: 'Jeremy Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2013, 9, 20)
-        },{
-            user: 'mariah Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2014, 1, 20),
-            comments: [{
-                user: 'Bill Joe',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Hannah Smith',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Tim Allen',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Tim Allen',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            },{
-                user: 'Tim Allen',
-                message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-                date: new Date(2013, 10, 20),
-            }]
-        },{
-            user: 'Marisa Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2014, 2, 10)
-        },{
-            user: 'Malia Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date(2014, 1, 22)
-        },{
-            user: 'Kaitlin Pagley',
-            message: 'This is just an example message from me. I love to code and do awesome stuff in tech.',
-            date: new Date()
-        }];
+        //Creating a new post on feed.
+
+        //Object that view is binding to to create
+        //new post on feed.
+        $scope.newPostObj = {};
+
+        $scope.createPost = function(){
+            if($scope.currentUser._id && $scope.newPostObj.message !== ""){
+
+                //Default properties for newPostObj for church.
+                $scope.newPostObj['authorType'] = 'church';
+                $scope.newPostObj['author'] = $scope.currentUser._id;
+                $scope.newPostObj['owner'] = $scope.currentUser._id;
+                $scope.newPostObj['authorName'] = $scope.currentUser.name;
+
+                var promise = zcFeed.createPost($scope.newPostObj);
+
+                promise.then(function(result){
+                    $scope.posts.unshift(result.post);
+                    console.log(result);
+                    $scope.newPostObj = {};
+                }, function(error){
+                    console.log('Error: ' + error);
+                });
+            }
+        }
+
+        //Add Comments To post
+        $scope.newCommentObj = {};
+
+        $scope.createComment = function(owner, index){
+            var newCommentObj = {};
+
+            newCommentObj['authorType'] = 'church';
+            newCommentObj['author'] = $scope.currentUser._id;
+            newCommentObj['authorName'] = $scope.currentUser.name;
+            newCommentObj['owner'] = owner;
+            //The view puts the comment body in the the newCommentObj key under the posts id.
+            newCommentObj['body'] = $scope.newCommentObj[owner];
+
+            console.log(newCommentObj);
+
+            var promise = zcFeed.createComment(newCommentObj);
+
+            promise.then(function(result){
+                $scope.posts[index].comments.unshift(result.comment);
+                console.log(result);
+                $scope.newCommentObj = {};
+            }, function(error){
+                console.log('Error: ' + error);
+            });
+        }
+
     }]);

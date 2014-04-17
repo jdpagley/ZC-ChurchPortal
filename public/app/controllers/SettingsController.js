@@ -12,21 +12,21 @@ angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSetti
         //Current User Object
         $scope.currentUser = {};
 
-        var defer;
         if(!$scope.currentUser.email){
-            defer = zcIdentity.getIdentity();
-            defer.then(function(result){
+            var promise;
+            promise = zcIdentity.getIdentity();
+            promise.then(function(result){
                 $scope.currentUser = result;
             }, function(error){
                 console.log('Error: ' + error);
             });
         }
 
-        // Update User Settings =======================================================
-
         //Booleans to see if update was successful or failed.
         $scope.updateSuccess = false;
         $scope.updateFailure = false;
+
+        // Update User Settings =======================================================
 
         //Settings form fields are binding ot updateObject.
         $scope.updateObject = {};
@@ -103,6 +103,7 @@ angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSetti
 
             var promise = zcSettings.updateChurchServices($scope.currentUser.email, $scope.currentUser.services);
             promise.then(function(result){
+                $scope.updateSuccess = true;
                 console.log(result);
             }, function(error){
                 console.log(error);

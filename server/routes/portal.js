@@ -6,6 +6,8 @@
  */
 
 var churchs = require('../controllers/churchs.js');
+var posts = require('../controllers/posts.js');
+var comments = require('../controllers/comments.js');
 
 module.exports = function(app) {
 
@@ -35,6 +37,13 @@ module.exports = function(app) {
 
     //route to retrieve churchObject from session
     app.get('/api/zionconnect/v1/church/session', isLoggedIn, churchs.retrieveFromSession);
+
+    //Post Routes
+    app.get('/api/zionconnect/v1/church/posts', isLoggedIn, posts.retrieve);
+    app.post('/api/zionconnect/v1/church/posts', isLoggedIn, posts.create);
+
+    //Comment Routes
+    app.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, comments.create);
 
 
 

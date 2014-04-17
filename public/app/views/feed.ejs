@@ -1,65 +1,58 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8" />
-    <link href="../../vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
-    <link href="../../css/portal-custom.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
+
 <!--portal news feed------------------------------------------------------------------------>
 <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed border1">
     <!--portal news feed post-->
     <div class="col-lg-12 col-md-12 portal-news-feed-post border1">
         <!--post text box-->
         <div class="col-lg-12 col-md-12 border1">
-            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..."></textarea><!--post text-->
+            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..." data-ng-model="newPostObj.body"></textarea><!--post text-->
         </div>
         <!--post action bar-->
         <div class="col-lg-12 col-md-12 border1">
             <div class="col-lg-1 col-md-1 border1"><a href="#"><span class="glyphicon glyphicon-picture"></span></a></div><!--post select image-->
-            <div class="col-lg-11 col-md-11 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="submit">Post</button></div><!--post button-->
+            <div class="col-lg-11 col-md-11 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="button" ng-click="createPost()">Post</button></div><!--post button-->
         </div>
     </div>
     <!--portal news feed posting-->
-    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" data-ng-repeat="post in posts">
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" data-ng-repeat="post in posts | orderBy:post.createdAt:reverse">
         <!--posting from church-->
         <div class="col-lg-12 col-md-12 border1">
             <!--church info-->
             <div class="col-lg-12 col-md-12 border1">
                 <div class="col-lg-1 col-md-1 border1"><img src="#"/></div><!--church posting image-->
                 <div class="col-lg-11 col-md-11 border1">
-                    <h4>{{post.user}}</h4><!--church name-->
-                    <h6>{{post.date | date:short}}</h6><!--church posting date-->
+                    <h4>{{post.author_name}}</h4><!--church name-->
+                    <h6>{{post.createdAt | date:short}}</h6><!--church posting date-->
                 </div>
             </div>
             <!--posting text box-->
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1"><p>{{post.message}}</p></div><!--posting text-->
+                <div class="col-lg-12 col-md-12 border1"><p>{{post.body}}</p></div><!--posting text-->
             </div>
         </div>
         <!--posting comments-->
-        <div class="col-lg-12 col-md-12 border1">
+        <div class="col-lg-12 col-md-12 border1" >
             <div class="col-lg-12 col-md-12 border1"><span class="glyphicon glyphicon-comment"></span> Comments <span class="badge">{{post.comments.length}}</span></div><!--comments link-->
             <!--comments from users-->
-            <div class="col-lg-12 col-md-12 portal-news-feed-comments border1" data-ng-repeat="comment in post.comments">
+            <div class="col-lg-12 col-md-12 portal-news-feed-comments border1" >
                 <!--comments all posted-->
-                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+                <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2" ng-repeat="comment in post.comments | orderBy:'createdAt':true">
                     <!--single comment-->
                     <div class="col-lg-12 col-md-12 border1">
                         <div class="col-lg-12 col-md-12 border1">
-                            <div class="col-lg-6 col-md-6 border1"><h4>{{comment.user}}</h4></div><!--comments first name-->
-                            <div class="col-lg-6 col-md-6 border1"><h6>{{comment.date | date:short}}</h6></div><!--comments date-->
+                            <div class="col-lg-6 col-md-6 border1"><h4>{{comment.author_name}}</h4></div><!--comments first name-->
+                            <div class="col-lg-6 col-md-6 border1"><h6>{{comment.createdAt | date:short}}</h6></div><!--comments date-->
                         </div>
-                        <div class="col-lg-12 col-md-12 border1"><p>{{comment.message}}</p></div><!--comments comment-->
+                        <div class="col-lg-12 col-md-12 border1"><p>{{comment.body}}</p></div><!--comments comment-->
                     </div>
                 </div>
                 <!--comments text box-->
                 <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border1">
-                    <textarea class="col-lg-10 col-md-10" rows="2" placeholder="Write a comment"></textarea><!--comments text-->
-                    <div class="col-lg-2 col-md-2 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="submit">Post</button></div><!--comments post button-->
+                    <textarea class="col-lg-10 col-md-10" rows="2" placeholder="Write a comment" data-ng-model="newCommentObj[post._id]"></textarea><!--comments text-->
+                    <div class="col-lg-2 col-md-2 border1"><button class="btn btn-md btn-purple btn-block pull-right" type="submit" ng-click="createComment(post._id, $index)">Post</button></div><!--comments post button-->
                 </div>
             </div>
         </div>
     </div>
 </div>
-</body>
+
