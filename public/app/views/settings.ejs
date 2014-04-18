@@ -22,167 +22,227 @@
 </div>
 
 <!--portal church settings---------------------------------------------------------------->
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
     <!--full church form container-->
-    <div class="col-lg-12 col-md-12 border1">
-        <!--church form update errors-->
-        <div class="col-lg-12 col-md-12 border1">
-            <div class="alert alert-success"><p>Successful! Your changes have been updated.</p></div><!--update successful-->
-            <div class="alert alert-danger"><p>Please fill out all the required fields.</p></div><!--update required error-->
-            <div class="alert alert-danger"><p>Passwords do not match. Check your spelling and try again.</p></div><!--update password error-->
+    <div class="col-lg-12 col-md-12 settings-form">
+        <!--church form update alerts-->
+        <div class="col-lg-12 col-md-12">
+            <!--update successful-->
+            <div class="alert alert-success alert-dismissable">
+                <span>Successful! Your changes have been updated.</span><!--update successful paragraph-->
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update successful x icon-->
+            </div>
+            <!--update required error-->
+            <div class="alert alert-danger alert-dismissable">
+                <span>Please fill out all the required fields.</span><!--update required error paragraph-->
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update required error x icon-->
+            </div>
+            <!--update password error-->
+            <div class="alert alert-danger alert-dismissable">
+                <span>Passwords do not match. Check your spelling and try again.</span><!--update password error paragraph-->
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update password error x icon-->
+            </div>
         </div>
         <!--column 1-->
         <!--church info container-->
-        <div class="col-lg-6 col-md-6 border1">
-            <div class="panel panel-primary">
-                <!--church info head-->
-                <div class="panel-heading">
-                    <h3 class="panel-title">Church Info</h3>
-                </div>
-                <!--church info body-->
-                <div class="panel-body">
-                    <!--church info form-->
-                    <div class="col-lg-12 col-md-12 form-group">
-                        <!--church info name-->
-                        <label for="churchName">Name</label>
-                        <input type="text" class="form-control" id="churchName" name="churchName" value="{{currentUser.name}}" data-ng-model="updateObject.name" />
-                        <!--church info address-->
-                        <label for="churchAddress">Address</label>
-                        <input type="text" class="form-control" id="churchAddress" name="churchAddress" value="{{currentUser.address.street}}" data-ng-model="updateObject.address" />
-                        <!--church info city-->
-                        <label for="churchCity">City</label>
-                        <input type="text" class="form-control" id="churchCity" name="churchCity" value="{{currentUser.address.city}}" data-ng-model="updateObject.city" />
-                        <!--church info state-->
-                        <label for="churchState">State</label>
-                        <select class="form-control" id="churchState" name="churchState" title="State" value="{{currentUser.address.state}}" data-ng-model="updateObject.state">
-                            <option>AL</option>
-                            <option>AK</option>
-                            <option>AZ</option>
-                            <option>AR</option>
-                            <option>CA</option>
-                            <option>CO</option>
-                            <option>CT</option>
-                            <option>DE</option>
-                            <option>FL</option>
-                            <option>GA</option>
-                            <option>HI</option>
-                            <option>ID</option>
-                            <option>IL</option>
-                            <option>IN</option>
-                            <option>IA</option>
-                            <option>KS</option>
-                            <option>KY</option>
-                            <option>LA</option>
-                            <option>ME</option>
-                            <option>MD</option>
-                            <option>MA</option>
-                            <option>MI</option>
-                            <option>MN</option>
-                            <option>MS</option>
-                            <option>MO</option>
-                            <option>MT</option>
-                            <option>NE</option>
-                            <option>NV</option>
-                            <option>NH</option>
-                            <option>NJ</option>
-                            <option>NM</option>
-                            <option>NY</option>
-                            <option>NC</option>
-                            <option>ND</option>
-                            <option>OH</option>
-                            <option>OK</option>
-                            <option>OR</option>
-                            <option>PA</option>
-                            <option>RI</option>
-                            <option>SC</option>
-                            <option>SD</option>
-                            <option>TN</option>
-                            <option>TX</option>
-                            <option>UT</option>
-                            <option>VT</option>
-                            <option>VA</option>
-                            <option>WA</option>
-                            <option>WV</option>
-                            <option>WI</option>
-                            <option>WY</option>
-                        </select>
-                        <!--church info zipcode-->
-                        <label for="churchZipcode">Zipcode</label>
-                        <input type="text" class="form-control" id="churchZipcode" name="churchZipcode" value="{{currentUser.address.zip}}" data-ng-model="updateObject.zip" />
-                        <!--church info website-->
-                        <label for="churchWebsite">Website</label>
-                        <input type="text" class="form-control" id="churchWebsite" name="churchWebsite" value="{{currentUser.website}}" data-ng-model="updateObject.website"  />
-                        <!--church info phone-->
-                        <label for="churchPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="churchPhoneNumber" name="churchPhoneNumber" value="{{currentUser.phone}}" data-ng-model="updateObject.phone" />
-                        <!--church info bio-->
-                        <label for="churchBio">Bio</label>
-                        <textarea class="form-control" id="churchBio" name="churchBio" rows="13" cols="100%" value="{{currentUser.bio}}" data-ng-model="updateObject.bio"></textarea>
-                        <div class="col-lg-12 col-md-12 border1">
-                            <div class="col-lg-6 col-md-6 border1"><span class="glyphicon glyphicon-info-sign"></span></div><!--church info icon-->
-                            <div class="col-lg-6 col-md-6 border1"><button type="button" class="btn btn-md btn-purple pull-right" data-ng-click="updateChurch()">Update</button></div><!--church info update button-->
-                        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="col-lg-12 col-md-12 single-settings-form">
+                <div class="panel panel-default">
+                    <!--church info head-->
+                    <div class="panel-heading">
+                        <h3 class="panel-title purple-header">Church Info</h3>
+                    </div>
+                    <!--church info body-->
+                    <div class="panel-body">
+                        <!--church info form-->
+                        <form>
+                            <!--church info name-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchName">Name</label>
+                                <input type="text" class="form-control" id="churchName" name="churchName" value="{{currentUser.name}}" data-ng-model="updateObject.name" />
+                            </div>
+                            <!--church info address-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchAddress">Address</label>
+                                <input type="text" class="form-control" id="churchAddress" name="churchAddress" value="{{currentUser.address.street}}" data-ng-model="updateObject.address" />
+                            </div>
+                            <!--church info city-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchCity">City</label>
+                                <input type="text" class="form-control" id="churchCity" name="churchCity" value="{{currentUser.address.city}}" data-ng-model="updateObject.city" />
+                            </div>
+                            <!--church info state-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchState">State</label>
+                                <select class="form-control" id="churchState" name="churchState" title="State" value="{{currentUser.address.state}}" data-ng-model="updateObject.state">
+                                    <option>AL</option>
+                                    <option>AK</option>
+                                    <option>AZ</option>
+                                    <option>AR</option>
+                                    <option>CA</option>
+                                    <option>CO</option>
+                                    <option>CT</option>
+                                    <option>DE</option>
+                                    <option>FL</option>
+                                    <option>GA</option>
+                                    <option>HI</option>
+                                    <option>ID</option>
+                                    <option>IL</option>
+                                    <option>IN</option>
+                                    <option>IA</option>
+                                    <option>KS</option>
+                                    <option>KY</option>
+                                    <option>LA</option>
+                                    <option>ME</option>
+                                    <option>MD</option>
+                                    <option>MA</option>
+                                    <option>MI</option>
+                                    <option>MN</option>
+                                    <option>MS</option>
+                                    <option>MO</option>
+                                    <option>MT</option>
+                                    <option>NE</option>
+                                    <option>NV</option>
+                                    <option>NH</option>
+                                    <option>NJ</option>
+                                    <option>NM</option>
+                                    <option>NY</option>
+                                    <option>NC</option>
+                                    <option>ND</option>
+                                    <option>OH</option>
+                                    <option>OK</option>
+                                    <option>OR</option>
+                                    <option>PA</option>
+                                    <option>RI</option>
+                                    <option>SC</option>
+                                    <option>SD</option>
+                                    <option>TN</option>
+                                    <option>TX</option>
+                                    <option>UT</option>
+                                    <option>VT</option>
+                                    <option>VA</option>
+                                    <option>WA</option>
+                                    <option>WV</option>
+                                    <option>WI</option>
+                                    <option>WY</option>
+                                </select>
+                            </div>
+                            <!--church info zipcode-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchZipcode">Zipcode</label>
+                                <input type="text" class="form-control" id="churchZipcode" name="churchZipcode" value="{{currentUser.address.zip}}" data-ng-model="updateObject.zip" />
+                            </div>
+                            <!--church info website-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchWebsite">Website</label>
+                                <input type="text" class="form-control" id="churchWebsite" name="churchWebsite" value="{{currentUser.website}}" data-ng-model="updateObject.website"  />
+                            </div>
+                            <!--church info phone-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchPhoneNumber">Phone Number</label>
+                                <input type="text" class="form-control" id="churchPhoneNumber" name="churchPhoneNumber" value="{{currentUser.phone}}" data-ng-model="updateObject.phone" />
+                            </div>
+                            <!--church info bio-->
+                            <div class="form-group">
+                                <label class="control-label" for="churchBio">Bio</label>
+                                <textarea class="form-control" id="churchBio" name="churchBio" rows="5" cols="100%" value="{{currentUser.bio}}" data-ng-model="updateObject.bio"></textarea>
+                            </div>
+                            <!--authentication icon and update button-->
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="col-lg-6 col-md-6"><a href=""><span class="glyphicon glyphicon-info-sign"></span></a></div><!--church info icon-->
+                                    <div class="col-lg-6 col-md-6"><button type="button" class="btn btn-md btn-purple pull-right" data-ng-click="updateChurch()">Update</button></div><!--church info update button-->
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <!--column 2-->
-        <div class="col-lg-6 col-md-6 border1">
+        <div class="col-lg-6 col-md-6 ">
             <!--authentication container-->
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="panel panel-primary">
+            <div class="col-lg-12 col-md-12 single-settings-form">
+                <div class="panel panel-default">
                     <!--authentication head-->
                     <div class="panel-heading">
-                        <h3 class="panel-title">Account Authentication</h3>
+                        <h3 class="panel-title purple-header">Account Authentication</h3>
                     </div>
                     <!--authentication body-->
                     <div class="panel-body">
                         <!--authentication form-->
-                        <div class="form-group form-group-lg">
+                        <form>
                             <!--authentication email-->
-                            <label for="accountEmail">Email</label>
-                            <input type="email" class="form-control" id="accountEmail" name="accountEmail" value="{{currentUser.email}}" />
-                            <!--authentication current password-->
-                            <label for="currentPassword">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" placeholder="Current Password" />
-                            <!--authentication new password-->
-                            <label for="newPassword">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Password" data-ng-model="newPassword"/>
-                            <!--authentication retype password-->
-                            <label for="retypeNewPassword">Retype Password</label>
-                            <input type="password" class="form-control" id="retypeNewPassword" name="retypeNewPassword" placeholder="Retype Password" data-ng-model="newPasswordRetyped"/>
-                            <div class="col-lg-12 col-md-12 border1">
-                                <div class="col-lg-6 col-md-6 border1"><span class="glyphicon glyphicon-info-sign"></span></div><!--authentication info icon-->
-                                <div class="col-lg-6 col-md-6 border1"><button type="button" class="btn btn-md btn-purple btn-block pull-right" data-ng-show="!resetConfirmationMessage" data-ng-click="resetConfirmationMessage = true">Reset Password</button></div><!--authentication reset button-->
+                            <div class="form-group">
+                                <label class="control-label" for="accountEmail">Email</label>
+                                <input type="email" class="form-control" id="accountEmail" name="accountEmail" value="{{currentUser.email}}" />
                             </div>
-                        </div>
+                            <!--authentication current password-->
+                            <div class="form-group">
+                                <label class="control-label" for="currentPassword">Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" />
+                            </div>
+                            <!--authentication new password-->
+                            <div class="form-group">
+                                <label class="control-label" for="newPassword">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" name="newPassword" data-ng-model="newPassword"/>
+                            </div>
+                            <!--authentication retype password-->
+                            <div class="form-group">
+                                <label class="control-label" for="retypeNewPassword">Retype Password</label>
+                                <input type="password" class="form-control" id="retypeNewPassword" name="retypeNewPassword" data-ng-model="newPasswordRetyped"/>
+                            </div>
+                            <!--authentication icon and update button-->
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="col-lg-6 col-md-6"><a href=""><span class="glyphicon glyphicon-info-sign"></span></a></div><!--authentication info icon-->
+                                    <div class="col-lg-6 col-md-6"><button type="button" class="btn btn-md btn-purple pull-right" data-ng-show="!resetConfirmationMessage" data-ng-click="resetConfirmationMessage = true">Reset Password</button></div><!--authentication reset button-->
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
             <!--service time container-->
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="panel panel-primary">
+            <div class="col-lg-12 col-md-12 single-settings-form">
+                <div class="panel panel-default">
                     <!--service time head-->
                     <div class="panel-heading">
-                        <h3 class="panel-title">Service Times</h3>
+                        <h3 class="panel-title purple-header">Service Times</h3>
                     </div>
                     <!--service time body-->
                     <div class="panel-body">
                         <!--service time form-->
-                        <div class="form-group form-group-lg">
-                            <div class="col-lg-12 col-md-12 border1">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="fcol-lg-12 col-md-12">
                                 <!--service time active times-->
-                                <div class="col-lg-12 col-md-12 border1">
+                                <div class="well well-sm clearfix">
                                     <!--service time single time-->
-                                    <div class="col-lg-12 col-mg-12 border1">
-                                        <div class="col-lg-11 col-md-11">Sunday 8:00 am</div><!--service time single active date & time-->
-                                        <div class="col-lg-1 col-md-1"><span class="glyphicon glyphicon-remove"></span></div><!--service time single remove date & time-->
+                                    <div class="col-lg-12 col-md-12 ">
+                                        <div class="alert-dismissable">
+                                        <span>Sunday 8:00 am</span><!--service time single active date & time-->
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--service time single remove date & time-->
+                                        </div>
+                                    </div>
+                                    <!--service time single time-->
+                                    <div class="col-lg-12 col-md-12 ">
+                                        <div class="alert-dismissable">
+                                            <span>Sunday 9:00 am</span><!--service time single active date & time-->
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--service time single remove date & time-->
+                                        </div>
+                                    </div>
+                                    <!--service time single time-->
+                                    <div class="col-lg-12 col-md-12 ">
+                                        <div class="alert-dismissable">
+                                            <span>Sunday 10:00 am</span><!--service time single active date & time-->
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--service time single remove date & time-->
+                                        </div>
                                     </div>
                                 </div>
                                 <!--service time add-->
-                                <div class="col-lg-12 col-md-12 border1">
+                                <div class="col-lg-12 col-md-12 form-group">
                                     <!--service time day-->
-                                    <div class="col-lg-6 col-md-6 border1">
+                                    <div class="col-lg-5 col-md-5">
                                         <select class="form-control" name="serviceDay" title="Sunday"><!--service time day select-->
                                             <option>Sunday</option>
                                             <option>Monday</option>
@@ -194,7 +254,7 @@
                                         </select><!--service time day select-->
                                     </div>
                                     <!--service time hour-->
-                                    <div class="col-lg-6 col-md-6 border1">
+                                    <div class="col-lg-5 col-md-5 add-service">
                                         <select class="form-control" name="serviceTime" title="12:00 am"><!--service time hour select-->
                                             <option>12:00 am</option>
                                             <option>1:00 am</option>
@@ -222,12 +282,15 @@
                                             <option>11:00 pm</option>
                                         </select><!--service time hour select-->
                                     </div>
-                                    <div class="col-lg-12 col-md-12 border1"><a href="#"><span class="glyphicon glyphicon-plus"></span> Add another service time</a></div><!--add another service time link-->
+                                    <div class="col-lg-2 col-md-2 add-service"><button class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span> Add</button></div><!--add another service time link-->
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 border1">
-                                <div class="col-lg-6 col-md-6 border1"><span class="glyphicon glyphicon-info-sign"></span></div><!--service time info icon-->
-                                <div class="col-lg-6 col-md-6 border1"><button type="submit" class="btn btn-md btn-purple btn-block pull-right">Update</button></div><!--service time button-->
+                            <!--service icon and update button-->
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="col-lg-6 col-md-6"><a href=""><span class="glyphicon glyphicon-info-sign"></span></a></div><!--service time info icon-->
+                                    <div class="col-lg-6 col-md-6"><button type="submit" class="btn btn-md btn-purple pull-right">Update</button></div><!--service time button-->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,7 +299,7 @@
         </div>
     </div>
     <!--delete account container-->
-    <div class="col=lg-12 col-md-12 border1">
-        <a href="#">Delete Account</a><!--delete account link-->
+    <div class="col=lg-12 col-md-12 single-settings-form">
+        <p><a href="#" class="text-danger">Delete Account</a> - this is not recommended.</p><!--delete account link-->
     </div>
 </div>

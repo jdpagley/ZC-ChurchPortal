@@ -46,11 +46,38 @@ body {
     transition: color .15s ease-in-out;
 }
 
+.list-group-item a:active {
+    color:mediumpurple;
+}
+
+.dropdown-menu > li > a {
+    display: block;
+    padding: 3px 12px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: inherit;
+    white-space: nowrap;
+}
+
+.dropdown-menu > li > a .secondary-container {
+    overflow: hidden;
+}
+
+.dropdown-menu > li > a h5 {
+    font-size:12px;
+}
+
+.dropdown-menu > li > a .secondary {
+    font-size:10px;
+}
+
 /*portal shell*************************************************************/
 
 .portal-container {
     background:#f2f2f2;
     height:100%;
+    min-width:1100px;
 }
 
 .portal-content {
@@ -58,20 +85,39 @@ body {
     overflow:scroll;
 }
 
-.portal-shell {
+.portal-content .portal-shell-top-header h2 {
+    font-size:35px;
+    margin-top:3px;
+}
+
+.portal-content .top-logo {
+    width:45px;
+    margin:1px 10px 0 0;
+}
+
+.portal-content .top-icon {
+    text-align:center;
+    margin-top:10px;
+}
+
+.portal-content .top-icon .glyphicon {
+    font-size:18px;
+}
+
+.portal-shell-left {
     background:#f2f2f2;
 }
 
-.portal-shell .lion-logo {
+.portal-shell-left .lion-logo {
     margin-bottom:25px;
 }
 
-.portal-shell ul li span {
+.portal-shell-left ul li span {
     margin-right:10px;
 }
 
 .portal-shell-top {
-    padding:20px;
+    padding:20px 0px;
 }
 
 .portal-shell-top h2 {
@@ -81,17 +127,22 @@ body {
 
 .portal-shell-top .dropdown-container {
     height:25px;
-    padding-top:2.5%;
+    padding:1.5% 0 1.5% 1.5%;
     white-space:nowrap;
 }
 
-.portal-shell-top .dropdown-container .dropdown {
+/*.portal-shell-top .dropdown-container .dropdown {
     text-align:center;
+}*/
+
+.portal-shell-top .portal-shell-top-content, .portal-shell-top-header {
+    height:50px;
 }
 
 .portal-shell-top .dropdown-container .dropdown ul {
     text-align:left;
 }
+
 
 /*portal views section******************************************************/
 
@@ -120,8 +171,25 @@ body {
 }
 
 
+/*portal settings form******************************************************/
 
+.settings-form .glyphicon-info-sign {
+    font-size:17px;
+    color:#ccc;
+    padding-top:2.5%;
+}
 
+.settings-form .glyphicon-remove {
+    text-align:center;
+}
+
+.settings-form .add-service {
+    padding-left:1%;
+}
+
+.single-settings-form {
+    padding:1%;
+}
 
 
 

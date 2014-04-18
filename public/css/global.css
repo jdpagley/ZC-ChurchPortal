@@ -60,7 +60,22 @@ textarea {
     padding-left: 0px;
 }
 
-/*buttons************************************************************************************/
+.btn-default {
+    color: inherit;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default.active,
+.open .dropdown-toggle.btn-default {
+    color: inherit;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+/*custom buttons******************************************************************************/
 
 .btn-purple {
     color: #fff;
@@ -101,4 +116,9 @@ textarea {
     -moz-transition: background-color .15s ease-out;
     -o-transition: background-color .15s ease-out;
     transition: background-color .15s ease-out;
+}
+
+.purple-header {
+    color: mediumpurple;
+    font-weight: bold;
 }
