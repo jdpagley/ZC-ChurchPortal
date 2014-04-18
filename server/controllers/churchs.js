@@ -11,7 +11,8 @@ var _ = require('underscore');
 //Models
 var Church = require('../models/church.js');
 
-// Create New Church
+// Create New Church expects json object in req.body
+// {'email': email, 'password': password, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
 exports.create = function(req, email, password, done){
     var msgObj = req.body;
     console.log(msgObj);
@@ -158,8 +159,10 @@ exports.update = function(req, res){
                 church.save(function(error, updatedChurch){
                     if(error){
                         return res.json(500, {"error": "Server error.", "mongoError": error});
+                        //{'statusCode': 500, 'error': 'Server Error.', 'mongoError': 'error'};
                     } else {
                         return res.json(200, {"success": "Account Updated", "church": updatedChurch});
+                        //{'statusCode': 200, 'success': 'Account Updated.', 'church': 'updateChurch'};
                     }
                 });
             }
@@ -240,12 +243,19 @@ exports.resetPassword = function(req, res){
 
 }
 
+// updateChurchService expects json object in req.body
+// services is an array of service objects.
+// {'email': email, services: [{'day': serviceDay, 'time': serviceTime}]}
 exports.updateChurchServices = function(req, res){
     var msgObj = req.body;
     console.log(msgObj);
 
     if(!msgObj.email){
         return res.json(400, {"error": "Email required."});
+    }
+
+    if(!msgObj.services && msgObj.services.length !== 1){
+        return res.json(400, {"error": 'Services required.'})
     }
 
     Church.findOne({'email': msgObj.email}, function(error, account){

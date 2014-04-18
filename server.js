@@ -38,3 +38,5 @@ console.log('*** Environment is ' + process.env.NODE_ENV + '***');
 
 app.listen(config.port);
 console.log('Listening on port ' + config.port + '...');
+
+module.exports = app;

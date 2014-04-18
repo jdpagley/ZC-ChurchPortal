@@ -24,7 +24,7 @@ var churchSchema = new Schema({
     bio:                      String,
     services:                 [{
         day:                  String,
-        startTime:            String
+        time:                 String
     }],
     createdAt:                Date,
     UpdatedAt:                Date
@@ -40,8 +40,8 @@ churchSchema.pre('save', function(next){
 });
 
 // methods ===========================
-// generating a hash
 
+// generating a hash
 churchSchema.methods.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };

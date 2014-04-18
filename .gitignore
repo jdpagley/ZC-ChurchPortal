@@ -6,7 +6,6 @@ lib-cov
 *.out
 *.pid
 *.gz
-*.idea
 .idea
 pids
 logs
@@ -15,4 +14,4 @@ results
 npm-debug.log
 node_modules
 
-.idea/jsLibraryMappings.xml
+*.idea/jsLibraryMappings.xml
