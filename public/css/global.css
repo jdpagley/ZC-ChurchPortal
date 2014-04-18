@@ -117,3 +117,8 @@ textarea {
     -o-transition: background-color .15s ease-out;
     transition: background-color .15s ease-out;
 }
+
+.purple-header {
+    color: mediumpurple;
+    font-weight: bold;
+}
