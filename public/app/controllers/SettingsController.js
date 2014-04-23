@@ -7,7 +7,7 @@
  */
 
 angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSettings', '$scope', '$location',
-    function(zcIdentity, zcSettings, $scope, $location){
+    function(zcIdentity, zcSettings, $scope){
 
         //Current User Object
         $scope.currentUser = {};

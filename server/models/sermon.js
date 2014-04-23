@@ -43,4 +43,4 @@ sermonSchema.pre('save', function(next){
 });
 
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Sermon', sermonSchema);

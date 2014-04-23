@@ -57,7 +57,6 @@ exports.create = function(req, res){
     });
 }
 
-// TODO: have retrieve function send back the populated account object's stored in posts documents.
 exports.retrieve = function(req, res){
     var msgObj = req.query;
 
@@ -80,6 +79,7 @@ exports.retrieve = function(req, res){
                 console.log(error);
                 return res.json(500, {'error': 'Server Error', 'mongoError': error});
             } else {
+                console.log(posts);
                 //reverse the order of the comments in the array.
                 res.json(200, {'success': 'Successfully retrieved posts.', 'posts': posts});
                 return;

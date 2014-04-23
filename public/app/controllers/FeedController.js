@@ -21,12 +21,11 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
             promise.then(function(result){
                 //set currentUser with userObject returned from server.
                 $scope.currentUser = result;
-                console.log($scope.currentUser);
 
                 //Retrieve Posts Associated With Current User ID.
                 if($scope.currentUser._id && $scope.posts.length < 1){;
                     var promise;
-                    promise = zcFeed.retrievPosts($scope.currentUser._id);
+                    promise = zcFeed.retrievePosts($scope.currentUser._id);
                     promise.then(function(result){
                         $scope.posts = result.posts;
                         console.log(result);

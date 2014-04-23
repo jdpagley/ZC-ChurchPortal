@@ -8,6 +8,7 @@
 var churchs = require('../controllers/churchs.js');
 var posts = require('../controllers/posts.js');
 var comments = require('../controllers/comments.js');
+var sermons = require('../controllers/sermons.js');
 
 module.exports = function(app) {
 
@@ -44,6 +45,10 @@ module.exports = function(app) {
 
     //Comment Routes
     app.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, comments.create);
+
+    //Sermon Routes
+    app.post('/api/zionconnect/v1/church/sermons', isLoggedIn, sermons.create);
+    app.get('/api/zionconnect/v1/church/sermons', isLoggedIn, sermons.retrieve);
 
 
 

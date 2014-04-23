@@ -55,10 +55,6 @@ exports.create = function(req, email, password, done){
         return done(null, false, req.flash('signupMessage', 'Please provide a zip.'));
     }
 
-    if(!msgObj.phone){
-        return done(null, false, req.flash('signupMessage', 'Please select a state.'));
-    }
-
     // This method is checking to see if the church email the church is using to create
     // a new account with already exists with another church.
     Church.findOne({'email': email}, function(error, church){
@@ -72,16 +68,15 @@ exports.create = function(req, email, password, done){
             // If there is no church with that email then create the church.
             var newChurch = new Church();
 
-            // set the church's local credentials
-            newChurch.email = email;
-            newChurch.password = newChurch.generateHash(password);
-            newChurch.name = msgObj.name;
-            newChurch.address.street = msgObj.address;
-            newChurch.address.city = msgObj.city;
-            newChurch.address.state = msgObj.state;
-            newChurch.address.zip = msgObj.zip;
-            newChurch.phone = msgObj.phone;
-            newChurch.bio = msgObj.bio;
+            if(email){ newChurch.email = email; }
+            if(password){ newChurch.password = newChurch.generateHash(password); }
+            if(msgObj.name){ newChurch.name = msgObj.name; }
+            if(msgObj.address){ newChurch.address.street = msgObj.address; }
+            if(msgObj.city){ newChurch.address.city = msgObj.city; }
+            if(msgObj.state){ newChurch.address.state = msgObj.state; }
+            if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
+            if(msgObj.phone){ newChurch.phone = msgObj.phone; }
+            if(msgObj.bio){ newChurch.bio = msgObj.bio; }
 
             // save the church
             newChurch.save(function(error){
@@ -173,7 +168,6 @@ exports.update = function(req, res){
 exports.delete = function(req, res){
     console.log('church deletion method hit.');
     var msgObj = req.query;
-    console.log(msgObj);
 
     Church.findOne({'email': msgObj.email}, function(error, account){
         if(error){
