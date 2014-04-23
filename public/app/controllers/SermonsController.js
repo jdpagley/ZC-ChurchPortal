@@ -8,7 +8,7 @@ angular.module('zcApp').controller('SermonsController', ['$scope', 'zcIdentity',
         $scope.currentUser = {};
 
         //Sermon List
-        $scope.sermons = {};
+        $scope.sermons = [];
 
         //Retrieve User Profile From Server On Page Refresh
         if(!$scope.currentUser.email){
@@ -16,11 +16,22 @@ angular.module('zcApp').controller('SermonsController', ['$scope', 'zcIdentity',
             promise = zcIdentity.getIdentity();
             promise.then(function(result){
                 $scope.currentUser = result;
+
+                //Retrieve Posts Associated With Current User ID.
+                if($scope.currentUser._id && $scope.sermons.length < 1){;
+                    var promise;
+                    promise = zcSermons.retrieveSermons($scope.currentUser._id);
+                    promise.then(function(result){
+                        $scope.sermons = result.sermons;
+                        console.log(result);
+                    }, function(error){
+                        console.log('Error: ' + error);
+                    });
+                }
+
             }, function(error){
                 console.log('Error: ' + error);
             });
         }
-
-        //Retrieve List Of Sermons
 
     }]);

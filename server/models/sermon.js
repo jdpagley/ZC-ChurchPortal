@@ -22,6 +22,7 @@ var likeSchema = require('./like.js');
 
 var sermonSchema = new Schema({
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
+    sermonImageURL:                String,
     title:                      String,
     series:                     String,
     part:                       Number,

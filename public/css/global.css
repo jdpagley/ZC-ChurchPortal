@@ -80,7 +80,6 @@ textarea {
 .btn-purple {
     color: #fff;
     background-color: mediumpurple;
-    border-color: #7A5DC7;
     font-weight: bold;
     opacity: 1;
     -webkit-transition: background-color .15s ease-in;
@@ -122,3 +121,43 @@ textarea {
     color: mediumpurple;
     font-weight: bold;
 }
+
+/*margin and padding****************************************************************************/
+
+.padding-5-0 {
+    padding:5px 0;
+}
+
+.padding-2 {
+    padding:2px;
+}
+
+/*colors and backgrounds***********************************************************************/
+
+.background-fff {
+    background:#fff;
+}
+
+.color-aaa {
+    color:#aaa;
+}
+
+/*fonts and text**********************************************************************"""""""*/
+
+
+.bold {
+    font-weight:bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

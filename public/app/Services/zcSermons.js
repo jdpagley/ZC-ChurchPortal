@@ -3,7 +3,8 @@
  */
 
 angular.module('zcApp').factory('zcSermons', ['$resource', '$q', function($resource, $q){
-    var sermonsResource = $resource('/api/zionconnect/v1/church/sermons');
+    var sermonsResource = $resource('/api/zionconnect/v1/church/sermon');
+    var retrieveAllSermonsResource = $resource('/api/zionconnect/v1/church/sermon/list');
 
     var sermons = [];
 
@@ -30,10 +31,28 @@ angular.module('zcApp').factory('zcSermons', ['$resource', '$q', function($resou
         retrieveLocalSermonList: function(){
             return sermons;
         },
+        //Used inside SermonsController
         retrieveSermons: function(churchID){
             console.log('retrieving posts from server.')
             var promise = $q.defer();
-            sermonsResource.get({'owner': churchID}, function(result){
+            retrieveAllSermonsResource.get({'owner': churchID}, function(result){
+                sermons = result.sermons;
+                console.log('zcSermons sermons: ');
+                console.log(result.sermons);
+                promise.resolve(result);
+            }, function(error){
+                promise.reject(error);
+            });
+
+            return promise.promise;
+        },
+        //Used inside of SermonHomeController
+        retrieveSermonById: function(sermonID){
+            var promise = $q.defer();
+            sermonsResource.get({'id': sermonID}, function(result){
+                sermons = result.sermon;
+                console.log('zcSermons sermon: ');
+                console.log(result.sermon);
                 promise.resolve(result);
             }, function(error){
                 promise.reject(error);

@@ -67,7 +67,7 @@ exports.create = function(req, res){
 }
 
 //{'owner': id}
-exports.retrieve = function(req, res){
+exports.retrieveAllSermons = function(req, res){
     var msgObj = req.query;
 
     if(!msgObj){
@@ -96,8 +96,9 @@ exports.retrieve = function(req, res){
 }
 
 // {'id': id}
-exports.retrieveOne = function(req, res){
+exports.retrieveSermonById = function(req, res){
     var msgObj = req.query;
+    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error': 'POST body is required.'});
@@ -118,7 +119,7 @@ exports.retrieveOne = function(req, res){
                 return res.json(400, {'error': 'No sermon with that _id'});
             } else {
                 //reverse the order of the comments in the array.
-                res.json(200, {'success': 'Successfully retrieved sermons.', 'posts': sermon});
+                res.json(200, {'success': 'Successfully retrieved sermon.', 'sermon': sermon});
                 return;
             }
         });
