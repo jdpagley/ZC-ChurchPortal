@@ -117,7 +117,7 @@ body {
 }
 
 .portal-shell-top {
-    padding:20px 0px;
+    padding:30px 0px 40px 0px;
 }
 
 .portal-shell-top h2 {
@@ -142,19 +142,6 @@ body {
 .portal-shell-top .dropdown-container .dropdown ul {
     text-align:left;
 }
-
-
-/*portal views section******************************************************/
-
-.background-fff {
-    background:#fff;
-}
-
-.color-aaa {
-    color:#aaa;
-}
-
-
 
 /*portal news feed**********************************************************/
 
@@ -192,11 +179,26 @@ body {
 }
 
 
+/*portal sermons******************************************************/
 
+.sermon-list {
+    border-top:1px #ddd solid;
+}
 
+.single-sermon {
+    border-bottom:1px #ddd solid;
+    padding:20px 0;
+}
 
+.sermon-number {
+    padding:5px 10px 5px 25px;
+}
 
-
-
+.sermon-number h3 {
+    border:3px #aaa solid;
+    border-radius:100%;
+    width:33px;
+    height:33px;
+}
 
 
