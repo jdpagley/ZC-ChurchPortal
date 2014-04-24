@@ -21,7 +21,7 @@
                 <div class="col-lg-2 col-md-2 border2">
                     <div class="col-lg-6 col-md-6 control-label"><label for="sermonPart">Part</label></div>
                     <div class="col-lg-6 col-md-6">
-                    <select class="form-control" id="sermonPart" name="sermonPart" title="1" data-ng-model="sermonObject.part">
+                    <select class="form-control" id="sermonPart" name="sermonPart" title="{{sermon.part}}" data-ng-model="sermonObject.part">
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -38,7 +38,7 @@
                 <div class="col-lg-10 col-md-10 border1">
                     <div class="col-lg-1 col-md-1 control-label"><label for="sermonTitle">Title</label></div>
                     <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" data-ng-model="sermonObject.title"/>
+                    <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" ng-model="sermonObject.title"/>
                     </div>
                 </div>
             </div>

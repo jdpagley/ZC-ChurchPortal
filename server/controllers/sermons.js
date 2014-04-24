@@ -134,12 +134,12 @@ exports.update = function(req, res){
         return res.json(400, {"error": "POST body is required with valid parameters"});
     }
 
-    if(!msgObj.id){
+    if(!msgObj._id){
         return res.json(400, {"error": "id required."});
     }
 
-    if(msgObj.id){
-        Sermon.findById(msgObj.id, function(error, sermon){
+    if(msgObj._id){
+        Sermon.findById(msgObj._id, function(error, sermon){
             if(error){
                 return res.json(500, {'error': 'Server Error.', 'mongoError': error});
             } else if (!sermon){
@@ -158,6 +158,7 @@ exports.update = function(req, res){
                     if(error){
                         return res.json(500, {'error': 'Server Error.', 'mongoError': error});
                     } else {
+                        console.log('Successfully updated sermon: ' + JSON.stringify(updatedSermon));
                         return res.json(200, {'success': 'Successfully updated sermon.', 'sermon': updatedSermon});
                     }
                 })

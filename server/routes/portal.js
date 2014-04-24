@@ -48,6 +48,7 @@ module.exports = function(app) {
 
     //Sermon Routes
     app.post('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.create);
+    app.put('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.update);
     app.get('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.retrieveSermonById);
     app.get('/api/zionconnect/v1/church/sermon/list', isLoggedIn, sermons.retrieveAllSermons);
 

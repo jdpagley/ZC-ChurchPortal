@@ -75,6 +75,7 @@ exports.create = function(req, email, password, done){
             if(msgObj.city){ newChurch.address.city = msgObj.city; }
             if(msgObj.state){ newChurch.address.state = msgObj.state; }
             if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
+            if(msgObj.website){ newChurch.website = msgObj.website; }
             if(msgObj.phone){ newChurch.phone = msgObj.phone; }
             if(msgObj.bio){ newChurch.bio = msgObj.bio; }
 

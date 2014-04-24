@@ -28,7 +28,7 @@ zcApp.config(['$routeProvider',
                 templateUrl: 'partials/views/sermonAddEdit',
                 controller: 'SermonAddController'
             }).
-            when('/sermon/edit', {
+            when('/sermon/edit/:id', {
                 templateUrl: 'partials/views/sermonAddEdit',
                 controller: 'SermonEditController'
             }).

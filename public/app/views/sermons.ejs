@@ -11,7 +11,7 @@
         <!--sermons search bar-->
         <div class="col-lg-3 col-lg-offset-7 col-md-3 col-md-offset-7">
             <div class="input-group">
-                <input type="search" class="form-control" /><!--sermons search bar field-->
+                <input type="search" class="form-control" ng-model="sermonQuery"/><!--sermons search bar field-->
                 <span class="input-group-addon"><a href=""><span class="glyphicon glyphicon-search"></span></a></span><!--sermons search bar icon-->
             </div>
         </div>
@@ -22,7 +22,7 @@
 
 
         <!--sermons list single sermon-->
-        <div class="col-lg-12 col-md-12 single-sermon" ng-repeat="sermon in sermons">
+        <div class="col-lg-12 col-md-12 single-sermon" ng-repeat="sermon in sermons | filter:sermonQuery">
             <!--sermon series logo-->
             <div class="col-lg-1 col-md-1">
                 <img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="col-lg-2 col-md-2">
-                <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
+                <a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
             </div>
         </div>
 
