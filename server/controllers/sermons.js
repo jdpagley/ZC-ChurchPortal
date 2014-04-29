@@ -197,3 +197,61 @@ exports.delete = function(req, res){
         });
     }
 }
+
+// createComment function expects req.body to contain json object:
+// {'owner': id, 'authorType': church, 'author': id, 'authorName': name, 'body': string  }
+exports.createComment = function(req, res){
+    var msgObj = req.body;
+    console.log(msgObj)
+
+    if(!msgObj){
+        return res.json(400, {'error': 'POST body is required.'});
+    }
+
+    if(!msgObj.owner){
+        return res.json(400, {'error': 'Owner Id is required.'});
+    }
+
+    if(!msgObj.authorType){
+        return res.json(400, {'error': 'Author Type is required.'});
+    }
+
+    if(!msgObj.author){
+        return res.json(400, {'error': 'Author is required.'});
+    }
+
+    if(!msgObj.authorName){
+        return res.json(400, {'error': 'Author name is required.'});
+    }
+
+    if(!msgObj.body){
+        return res.json(400, {'error': 'Body is required.'});
+    }
+
+    Sermon.findById(msgObj.owner, function(error, sermon){
+        if(error){
+            return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+        } else if (!sermon){
+            return res.json(400, {'error': 'No post with that owner ID'});
+        } else {
+
+            console.log('post: ' + JSON.stringify(sermon));
+
+            sermon.comments.push({
+                'authorType': msgObj.authorType,
+                'author_church': msgObj.author,
+                'author_name': msgObj.authorName,
+                'body': msgObj.body
+            });
+
+            sermon.save(function(error, post){
+                if(error){
+                    return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                } else {
+                    console.log('New comment created on post: ' + sermon.comments[sermon.comments.length - 1]);
+                    return res.json(200, {'success': 'Successfully added new comment.', 'comment': sermon.comments[sermon.comments.length - 1]});
+                }
+            });
+        }
+    });
+}

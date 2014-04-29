@@ -31,4 +31,30 @@ angular.module('zcApp').controller('SermonHomeController', ['$scope', '$routePar
                 console.log(error);
             });
         }
+
+        //Add Comments To post
+        $scope.newCommentObj = {};
+
+        $scope.createComment = function(owner){
+            var newCommentObj = {};
+
+            newCommentObj['authorType'] = 'church';
+            newCommentObj['author'] = $scope.currentUser._id;
+            newCommentObj['authorName'] = $scope.currentUser.name;
+            newCommentObj['owner'] = owner;
+            //The view puts the comment body in the the newCommentObj key under the posts id.
+            newCommentObj['body'] = $scope.newCommentObj.body;
+
+            console.log(newCommentObj);
+
+            var promise = zcSermons.createComment(newCommentObj);
+
+            promise.then(function(result){
+                $scope.sermon.comments.unshift(result.comment);
+                console.log(result);
+                $scope.newCommentObj = {};
+            }, function(error){
+                console.log('Error: ' + error);
+            });
+        }
     }]);

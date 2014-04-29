@@ -5,62 +5,73 @@
  * ie. feed, settings, sermons, checkins, etc.
  */
 
-var churchs = require('../controllers/churchs.js');
-var posts = require('../controllers/posts.js');
-var comments = require('../controllers/comments.js');
-var sermons = require('../controllers/sermons.js');
+var express = require('express'),
+    churchs = require('../controllers/churchs.js'),
+    posts = require('../controllers/posts.js'),
+    sermons = require('../controllers/sermons.js');
 
 module.exports = function(app) {
+    //===========================================================
+    //View Routes ===============================================
+    //===========================================================
+    var viewsRouter = express.Router();
 
     //Renders main index page for ZC Portal.
-    //Defaults to News Feed as starting page.
-    app.get('/portal', isLoggedIn, function(req, res) {
-        res.render('portal/index', {
-            churchObject: req.user // get user out of session and pass to template
-        });
+//    viewsRouter.get('/portal', isLoggedIn, function(req, res) {
+//        res.render('portal/index', {
+//            churchObject: req.user // get user out of session and pass to template
+//        });
+//    });
+
+    viewsRouter.get('/portal', isLoggedIn, function(req, res) {
+        return res.render('portal/index');
     });
 
     //Renders all the partial files in the ZC Portal.
-    //ie. News Feed, Settings, Check-ins and Sermon pages.
-    app.get('/partials/*', isLoggedIn, function(req, res) {
-        res.render('../../public/app/' + req.params);
+    viewsRouter.get('/partials/*', isLoggedIn, function(req, res) {
+        return res.render('../../public/app/' + req.params["0"]);
     });
 
-    //Church Routes.
-    app.post('/api/zionconnect/v1/church', isLoggedIn, churchs.update);
-    app.del('/api/zionconnect/v1/church', isLoggedIn, churchs.delete);
+    //===========================================================
+    //Church Routes =============================================
+    //===========================================================
+    var churchRouter = express.Router();
+    churchRouter.post('/api/zionconnect/v1/church', isLoggedIn, churchs.update); //Update Church Account Info.
+    churchRouter.delete('/api/zionconnect/v1/church', isLoggedIn, churchs.delete);  //Delete church from ZC
+    churchRouter.post('/api/zionconnect/v1/church/services', isLoggedIn, churchs.updateChurchServices); //Update Church Services
+    churchRouter.post('/api/zionconnect/v1/church/reset', isLoggedIn, churchs.resetPassword); //Password Reset
+    churchRouter.get('/api/zionconnect/v1/church/session', isLoggedIn, churchs.retrieveFromSession); //Retrieve church account from session
 
-    //Update Church Services
-    app.post('/api/zionconnect/v1/church/services', isLoggedIn, churchs.updateChurchServices);
+    //===========================================================
+    //News Feed Post Routes =====================================
+    //===========================================================
+    var postsRouter = express.Router();
+    postsRouter.get('/api/zionconnect/v1/church/posts', isLoggedIn, posts.retrieve);
+    postsRouter.post('/api/zionconnect/v1/church/posts', isLoggedIn, posts.create);
+    postsRouter.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, posts.createComment); //Create Comment on a Post
 
-    //Password Reset
-    app.post('/api/zionconnect/v1/church/reset', isLoggedIn, churchs.resetPassword);
+    //===========================================================
+    //Sermon Routes =============================================
+    //===========================================================
+    var sermonRouter = express.Router();
+    sermonRouter.post('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.create);
+    sermonRouter.put('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.update);
+    sermonRouter.get('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.retrieveSermonById);
+    sermonRouter.get('/api/zionconnect/v1/church/sermon/list', isLoggedIn, sermons.retrieveAllSermons);
+    sermonRouter.post('/api/zionconnect/v1/church/sermon/comment', isLoggedIn, sermons.createComment);
 
-    //route to retrieve churchObject from session
-    app.get('/api/zionconnect/v1/church/session', isLoggedIn, churchs.retrieveFromSession);
-
-    //Post Routes
-    app.get('/api/zionconnect/v1/church/posts', isLoggedIn, posts.retrieve);
-    app.post('/api/zionconnect/v1/church/posts', isLoggedIn, posts.create);
-
-    //Comment Routes
-    app.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, comments.create);
-
-    //Sermon Routes
-    app.post('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.create);
-    app.put('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.update);
-    app.get('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.retrieveSermonById);
-    app.get('/api/zionconnect/v1/church/sermon/list', isLoggedIn, sermons.retrieveAllSermons);
-
-
-
+    // Require Routers
+    app.use('/', viewsRouter);
+    app.use('/', churchRouter);
+    app.use('/', postsRouter);
+    app.use('/', sermonRouter);
 
 
 }
 
-// route middleware to make sure user is logged in.
 function isLoggedIn(req, res, next){
-    //if user is logged in the session, carry on
+    //If user is logged in continue,
+    //if not redirect to "/".
     if(req.isAuthenticated()){
         return next();
     }
