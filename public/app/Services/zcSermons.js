@@ -7,6 +7,7 @@ angular.module('zcApp').factory('zcSermons', ['$resource','$http', '$q', functio
     var sermonsUpdateResource = $resource('/api/zionconnect/v1/church/sermon', {}, { update: {method: 'PUT'}});
     var retrieveAllSermonsResource = $resource('/api/zionconnect/v1/church/sermon/list');
     var sermonCommentResource = $resource('/api/zionconnect/v1/church/sermon/comment');
+    var sermonCommentLikeResource = $resource('/api/zionconnect/v1/church/sermon/comment/like');
 
     var sermons = [];
 
@@ -66,6 +67,17 @@ angular.module('zcApp').factory('zcSermons', ['$resource','$http', '$q', functio
         createComment: function(commentObj){
             var promise = $q.defer();
             sermonCommentResource.save(commentObj, function(result){
+                promise.resolve(result);
+            }, function(error){
+                promise.reject(error);
+            });
+
+            return promise.promise;
+        },
+        //Used by SermonHomeController
+        likeComment: function(likeObj){
+            var promise = $q.defer();
+            sermonCommentLikeResource.save(likeObj, function(result){
                 promise.resolve(result);
             }, function(error){
                 promise.reject(error);

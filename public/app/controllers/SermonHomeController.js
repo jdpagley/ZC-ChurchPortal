@@ -54,7 +54,31 @@ angular.module('zcApp').controller('SermonHomeController', ['$scope', '$routePar
                 console.log(result);
                 $scope.newCommentObj = {};
             }, function(error){
-                console.log('Error: ' + error);
+                console.log(error);
             });
+        }
+
+        //Like A Sermon Comment.
+        $scope.likeComment = function(sermonId, commentId, index){
+            var newLikeObj = {};
+
+            newLikeObj['sermonId'] = sermonId;
+            newLikeObj['commentId'] = commentId;
+            newLikeObj['author'] = $scope.currentUser._id;
+            newLikeObj['authorName'] = $scope.currentUser.name;
+
+            console.log(newLikeObj);
+
+            console.log(index);
+
+            var promise = zcSermons.likeComment(newLikeObj);
+
+            promise.then(function(result){
+                $scope.sermon.comments[index].likes.push(result.like);
+                console.log(result);
+            }, function(error){
+                console.log(error);
+            });
+
         }
     }]);

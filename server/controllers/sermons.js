@@ -3,6 +3,7 @@
  */
 
 var async = require('async');
+var _ = require('underscore');
 
 //Models
 var Sermon = require('../models/sermon.js');
@@ -232,10 +233,10 @@ exports.createComment = function(req, res){
         if(error){
             return res.json(500, {'error': 'Server Error.', 'mongoError': error});
         } else if (!sermon){
-            return res.json(400, {'error': 'No post with that owner ID'});
+            return res.json(400, {'error': 'No sermon with that owner ID'});
         } else {
 
-            console.log('post: ' + JSON.stringify(sermon));
+            console.log('sermon: ' + JSON.stringify(sermon));
 
             sermon.comments.push({
                 'authorType': msgObj.authorType,
@@ -252,6 +253,89 @@ exports.createComment = function(req, res){
                     return res.json(200, {'success': 'Successfully added new comment.', 'comment': sermon.comments[sermon.comments.length - 1]});
                 }
             });
+        }
+    });
+}
+
+//{'sermonId': id, 'commentId': id, 'author': id, 'authorName':name}
+exports.likeSermonComment = function(req, res){
+    var msgObj = req.body;
+    console.log(msgObj)
+
+    if(!msgObj){
+        return res.json(400, {'error': 'POST body is required.'});
+    }
+
+    if(!msgObj.commentId){
+        return res.json(400, {'error': 'CommentId is required.'});
+    }
+
+    if(!msgObj.sermonId){
+        return res.json(400, {'error': 'SermonId is required.'});
+    }
+
+    if(!msgObj.author){
+        return res.json(400, {'error': 'Author is required.'});
+    }
+
+    if(!msgObj.authorName){
+        return res.json(400, {'error': 'Author name is required.'});
+    }
+
+    Sermon.findById(msgObj.sermonId, function(error, sermon){
+        if(error){
+            return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+        } else if (!sermon){
+            return res.json(400, {'error': 'No sermon with that ID'});
+        } else {
+
+            console.log('sermon: ' + JSON.stringify(sermon));
+
+            //Make sure church doesn't like the same comment more than once.
+            async.series([
+                    //1. Check to see if church has liked comment yet.
+                function(done){
+                    //1.1 Loop through likes and check to see if author already exists on a like doc
+                    async.each(sermon.comments.id(msgObj.commentId).likes,
+                        function(element, callback){
+                            if(element.author_church == msgObj.author){
+                                callback(new Error('Cant like comment twice.'));
+                            } else {
+                                callback();
+                            }
+                        },
+                        function(error){
+                            if(error){
+                                console.log('async.each error: ' + error);
+                                done(error);
+                            } else {
+                                done();
+                            }
+                        })
+                }],
+                function(error){
+                    if(error){
+                        //2. Send back error message if church has already liked comment.
+                        console.log('error: ' + error);
+                        return res.json(400, {'error': error.Error});
+                    } else {
+                        //3. Save new comment like and return to client.
+                        sermon.comments.id(msgObj.commentId).likes.push({
+                            'author_church': msgObj.author,
+                            'author_name': msgObj.authorName
+                        });
+
+                        sermon.save(function(error, updatedSermon){
+                            if(error){
+                                return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                            } else {
+                                var commentLikesLength = updatedSermon.comments.id(msgObj.commentId).likes.length;
+                                console.log('New like: ' + updatedSermon.comments.id(msgObj.commentId).likes[commentLikesLength - 1]);
+                                return res.json(200, {'success': 'Successfully liked comment.', 'like': updatedSermon.comments.id(msgObj.commentId).likes[commentLikesLength - 1]});
+                            }
+                        });
+                    }
+                })
         }
     });
 }

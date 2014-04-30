@@ -59,6 +59,7 @@ module.exports = function(app) {
     sermonRouter.get('/api/zionconnect/v1/church/sermon', isLoggedIn, sermons.retrieveSermonById);
     sermonRouter.get('/api/zionconnect/v1/church/sermon/list', isLoggedIn, sermons.retrieveAllSermons);
     sermonRouter.post('/api/zionconnect/v1/church/sermon/comment', isLoggedIn, sermons.createComment);
+    sermonRouter.post('/api/zionconnect/v1/church/sermon/comment/like', isLoggedIn, sermons.likeSermonComment);
 
     // Require Routers
     app.use('/', viewsRouter);
