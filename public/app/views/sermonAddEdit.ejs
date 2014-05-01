@@ -1,88 +1,98 @@
 <!-- Created by John Pagley on 4/9/14 -->
 
 <!--sermon edit container-->
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border1">
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 
-    <div class="col-lg-12 col-md-12 border2">
-        <div class="col-lg-1 col-md-1"><img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg" /></div><!--sermon edit logo-->
+    <div class="col-lg-12 col-md-12 sermon-edit">
+        <div class="col-lg-1 col-md-1"><img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" /></div><!--sermon edit logo-->
         <!--sermon edit info-->
-        <div class="col-lg-11 col-md-11 form-group">
-            <div class="col-lg-12 col-md-12 border2">
-                <!--sermon edit part-->
-                <div class="col-lg-2 col-md-2 border2">
-                    <div class="col-lg-6 col-md-6 control-label"><label for="sermonPart">Part</label></div>
-                    <div class="col-lg-6 col-md-6">
-                    <select class="form-control" id="sermonPart" name="sermonPart" title="1">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                    </select>
+        <div class="col-lg-11 col-md-11">
+            <div class="col-lg-12 col-md-12">
+                <!--sermon edit part number-->
+                <div class="col-lg-2 col-md-2 form-group">
+                    <div class="col-lg-6 col-md-6 sermon-edit-label text-right">
+                        <label class="control-label" for="sermonPart">Part</label>
+                    </div>
+                    <div class="col-lg-6 col-md-6 sermon-edit-field">
+                        <input type="text" class="form-control" id="sermonPart" name="sermonPart" /><!--sermon edit part number field-->
                     </div>
                 </div>
                 <!--sermon edit title-->
-                <div class="col-lg-10 col-md-10 border1">
-                    <div class="col-lg-1 col-md-1 control-label"><label for="sermonTitle">Title</label></div>
+                <div class="col-lg-10 col-md-10 form-group">
+                    <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                        <label class="control-label" for="sermonTitle">Title</label>
+                    </div>
                     <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" />
+                        <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" /><!--sermon edit title field -->
                     </div>
                 </div>
             </div>
             <!--sermon edit series-->
-            <div class="col-lg-12 col-md-12 border2">
-                <div class="col-lg-1 col-md-1 control-label"><label for="sermonSeries">Series</label></div>
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                    <label class="control-label" for="sermonSeries">Series</label>
+                </div>
                 <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonSeries" name="sermonSeries" />
+                    <input type="text" class="form-control" id="sermonSeries" name="sermonSeries" /><!--sermon edit series field-->
                 </div>
             </div>
             <!--sermon edit speaker-->
-            <div class="col-lg-12 col-md-12 border2">
-                <div class="col-lg-1 col-md-1 control-label"><label for="sermonSpeaker">Speaker</label></div>
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                    <label class="control-label" for="sermonSpeaker">Speaker</label>
+                </div>
                 <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" />
+                    <input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" /><!--sermon edit speaker field-->
                 </div>
             </div>
         </div>
-        <!--sermon edit upload info-->
-        <div class="col-lg-12 col-md-12 form-group border1">
-            <!--sermon edit upload video-->
-            <div class="col-lg-12 col-md-12 border2">
-                <div class="col-lg-9 col-md-9"><input type="text" class="form-control" id="sermonVideo" name="sermonVideo" /></div>
-                <div class="col-lg-3 col-md-3"><a href="" class="btn btn-purple">Upload Video</a></div>
+        <!--sermon edit upload video-->
+        <div class="col-lg-6 col-md-6 form-group padding-0-5-0-0">
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-9 col-md-9">
+                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" /><!--sermon edit upload video field-->
+                </div>
+                <div class="col-lg-3 col-md-3 sermon-upload-button">
+                    <a href="" class="btn btn-grey btn-block">Upload Video</a><!--sermon edit upload video button-->
+                </div>
             </div>
             <!--sermon edit upload video player-->
-            <div class="col-lg-12 col-md-12 border2">
-                <video controls>
+            <div class="col-lg-12 col-md-12">
+                <video controls class="col-lg-12 col-md-12">
                     <source src="movie.mp4" type="video/mp4">
                     <source src="movie.ogg" type="video/ogg">
                     Your browser does not support this video player.
                 </video>
             </div>
-            <!--sermon edit upload audio-->
-            <div class="col-lg-12 col-md-12 border2">
-                <div class="col-lg-9 col-md-9"><input type="text" class="form-control" id="sermonAudio" name="sermonAudio" /></div>
-                <div class="col-lg-3 col-md-3"><a href="" class="btn btn-purple">Upload Audio</a></div>
+        </div>
+        <!--sermon edit upload audio-->
+        <div class="col-lg-6 col-md-6 form-group padding-0-0-0-5">
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-9 col-md-9">
+                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" /><!--sermon edit upload audio field-->
+                </div>
+                <div class="col-lg-3 col-md-3 sermon-upload-button">
+                    <a href="" class="btn btn-grey btn-block">Upload Audio</a><!--sermon edit upload audio button-->
+                </div>
             </div>
             <!--sermon edit upload audio player-->
-            <div class="col-lg-12 col-md-12 border2">
-                <audio controls>
+            <div class="col-lg-12 col-md-12">
+                <audio controls class="col-lg-12 col-md-12">
                     <source src="horse.ogg" type="audio/ogg">
                     <source src="horse.mp3" type="audio/mpeg">
                     Your browser does not support this audio player.
                 </audio>
             </div>
-            <!--sermon edit message notes-->
-            <div class="col-lg-12 col-md-12 border2">
-                <div class="col-lg-12 col-md-12"><label for="sermonMessageNotes">Message Notes</label></div>
-                <div class="col-lg-12 col-md-12"><textarea class="form-control" id="sermonMessageNotes" name="sermonMessageNotes" rows="13" cols="100%"></textarea></div>
-                <div class="col-lg-12 col-md-12"><a href="" class="btn btn-purple pull-right">Update</a></div>
+        </div>
+        <!--sermon edit message notes-->
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-12 col-md-12 form-group">
+                <label class="control-label" for="sermonMessageNotes">Message Notes</label>
+                <textarea class="form-control" id="sermonMessageNotes" name="sermonMessageNotes" rows="13" cols="100%"></textarea><!--sermon edit message text area-->
             </div>
         </div>
+        <div class="col-lg-12 col-md-12">
+            <a href="" class="btn btn-purple pull-right">Update</a><!--sermon edit update button-->
+        </div>
     </div>
-
 </div>
