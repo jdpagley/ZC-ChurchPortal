@@ -12,18 +12,18 @@
         <!--sermonhome series name-->
         <div class="col-lg-10 col-md-10 border2">
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-1 col-md-1 border1"><h3>1</h3></div><!--sermonhome series count-->
-                <div class="col-lg-11 col-md-11 border1"><h3>Getting Guidance</h3></div><!--sermonhome series sermon name-->
+                <div class="col-lg-1 col-md-1 border1"><h3>{{sermon.part}}</h3></div><!--sermonhome series count-->
+                <div class="col-lg-11 col-md-11 border1"><h3>{{sermon.title}}</h3></div><!--sermonhome series sermon name-->
             </div>
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1">Series: <span class="color-aaa">Guidance</span></div><!--sermonhome series name-->
-                <div class="col-lg-12 col-md-12 border1">Speaker: <span class="color-aaa">Tim Gilligan</span></div><!--sermonhome series speaker-->
+                <div class="col-lg-12 col-md-12 border1">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermonhome series name-->
+                <div class="col-lg-12 col-md-12 border1">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermonhome series speaker-->
             </div>
         </div>
         <!--sermonhome series action section-->
         <div class="col-lg-1 col-md-1 border1">
             <!--sermonhome series edit button-->
-            <div class="col-lg-12 col-md-12 border2"><a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a></div>
+            <div class="col-lg-12 col-md-12 border2"><a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a></div>
         </div>
     </div>
 
@@ -31,32 +31,32 @@
     <div class="col-lg-12 col-md-12 portal-news-feed-post border1">
         <!--sermonhome post text box-->
         <div class="col-lg-12 col-md-12 border1">
-            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..."></textarea><!--sermonhome post text-->
+            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..." ng-model="newCommentObj.body"></textarea><!--sermonhome post text-->
         </div>
         <!--sermonhome post button-->
-        <div class="col-lg-12 col-md-12 border1"><a class="btn btn-purple pull-right">Post</a></div>
+        <div class="col-lg-12 col-md-12 border1"><a class="btn btn-purple pull-right" ng-click="createComment(sermon._id)">Post</a></div>
     </div>
 
     <!--sermonhome news feed posting-->
-    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" >
+    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" ng-repeat="comment in sermon.comments">
         <!--sermonhome posting from church-->
         <div class="col-lg-12 col-md-12 border1">
             <!--sermonhome church info-->
             <div class="col-lg-12 col-md-12 border1">
                 <div class="col-lg-1 col-md-1 border1"><img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg"/></div><!--sermonhome church posting image-->
                 <div class="col-lg-11 col-md-11 border1">
-                    <h4>{{post.user}}</h4><!--sermonhome church name-->
-                    <h6>{{post.date | date:short}}</h6><!--sermonhome church posting date-->
+                    <h4>{{comment.author_name}}</h4><!--sermonhome church name-->
+                    <h6>{{comment.createdAt | date:short}}</h6><!--sermonhome church posting date-->
                 </div>
             </div>
             <!--sermonhome posting text box-->
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1"><p>{{post.message}}</p></div><!--sermonhome posting text-->
+                <div class="col-lg-12 col-md-12 border1"><p>{{comment.body}}</p></div><!--sermonhome posting text-->
             </div>
             <!--sermonhome posting likes-->
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col=lg-12 col-md-12 border1">18 Likes</div><!--sermonhome posting likes total-->
-                <div class="col=lg-12 col-md-12 border1"><a href="" class="btn btn-grey"><span class="glyphicon glyphicon-heart"></span> Like</a></div><!--sermonhome posting likes button-->
+                <div class="col=lg-12 col-md-12 border1">{{comment.likes.length}}</div><!--sermonhome posting likes total-->
+                <div class="col=lg-12 col-md-12 border1"><a href="" class="btn btn-grey" ng-click="likeComment(sermon._id, comment._id, $index)"><span class="glyphicon glyphicon-heart"></span> Like</a></div><!--sermonhome posting likes button-->
             </div>
         </div>
     </div>

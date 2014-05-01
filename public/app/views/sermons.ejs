@@ -6,12 +6,12 @@
     <div class="col-lg-12 col-md-12 form-group">
         <!--sermons add new-->
         <div class="col-lg-2 col-md-2">
-            <a href="" class="btn btn-grey btn-block"><span class="glyphicon glyphicon-plus"></span> New Sermon</a><!--sermons add new button-->
+            <a href="#/sermon/add" class="btn btn-grey btn-block"><span class="glyphicon glyphicon-plus"></span> New Sermon</a><!--sermons add new button-->
         </div>
         <!--sermons search bar-->
         <div class="col-lg-3 col-lg-offset-7 col-md-3 col-md-offset-7">
             <div class="input-group">
-                <input type="search" class="form-control" /><!--sermons search bar field-->
+                <input type="search" class="form-control" ng-model="sermonQuery"/><!--sermons search bar field-->
                 <span class="input-group-addon"><a href=""><span class="glyphicon glyphicon-search"></span></a></span><!--sermons search bar icon-->
             </div>
         </div>
@@ -20,7 +20,7 @@
     <div class="col-lg-12 col-md-12 sermon-list">
 
         <!--sermons list single sermon-->
-        <div class="col-lg-12 col-md-12 single-sermon">
+        <div class="col-lg-12 col-md-12 single-sermon" ng-repeat="sermon in sermons | filter:sermonQuery">
             <!--sermon series logo-->
             <div class="col-lg-1 col-md-1">
                 <img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />
@@ -28,63 +28,64 @@
             <!--sermon series name-->
             <div class="col-lg-9 col-md-9">
                 <div class="col-lg-1 col-md-1 sermon-number">
-                    <div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">3</h3></div><!--sermon series count-->
+                    <div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">{{sermon.part}}</h3></div><!--sermon series count-->
                 </div>
                 <div class="col-lg-11 col-md-11">
-                    <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><h3 class="bold">Getting Guidance</h3></div><!--sermon series sermon name-->
-                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">Guidance</span></div><!--sermon series name-->
-                    <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">Tim Gilligan</span></div><!--sermon series speaker-->
-                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> May 4, 2013</div><!--sermon series publish date-->
+                    <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><a href="#/sermons/{{sermon._id}}"><h3 class="bold">{{sermon.title}}</h3></a></div><!--sermon series sermon name-->
+                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermon series name-->
+                    <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermon series speaker-->
+                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> {{sermon.createdAt | date:short}}</div><!--sermon series publish date-->
                 </div>
             </div>
             <div class="col-lg-2 col-md-2">
-                <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
+                <a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
             </div>
         </div>
-        <!--sermons list single sermon-->
-        <div class="col-lg-12 col-md-12 single-sermon">
-            <!--sermon series logo-->
-            <div class="col-lg-1 col-md-1">
-                <img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />
-            </div>
-            <!--sermon series name-->
-            <div class="col-lg-9 col-md-9">
-                <div class="col-lg-1 col-md-1 sermon-number">
-                    <div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">3</h3></div><!--sermon series count-->
-                </div>
-                <div class="col-lg-11 col-md-11">
-                    <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><h3 class="bold">Getting Guidance</h3></div><!--sermon series sermon name-->
-                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">Guidance</span></div><!--sermon series name-->
-                    <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">Tim Gilligan</span></div><!--sermon series speaker-->
-                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> May 4, 2013</div><!--sermon series publish date-->
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-                <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
-            </div>
-        </div>
-        <!--sermons list single sermon-->
-        <div class="col-lg-12 col-md-12 single-sermon">
-            <!--sermon series logo-->
-            <div class="col-lg-1 col-md-1">
-                <img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />
-            </div>
-            <!--sermon series name-->
-            <div class="col-lg-9 col-md-9">
-                <div class="col-lg-1 col-md-1 sermon-number">
-                    <div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">3</h3></div><!--sermon series count-->
-                </div>
-                <div class="col-lg-11 col-md-11">
-                    <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><h3 class="bold">Getting Guidance</h3></div><!--sermon series sermon name-->
-                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">Guidance</span></div><!--sermon series name-->
-                    <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">Tim Gilligan</span></div><!--sermon series speaker-->
-                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> May 4, 2013</div><!--sermon series publish date-->
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-                <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
-            </div>
-        </div>
+        <!--IF YOU NEED THESE FOR STYLE TESTING JUST UNCOMMENT THEM-->
+        <!--&lt;!&ndash;sermons list single sermon&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 single-sermon">-->
+            <!--&lt;!&ndash;sermon series logo&ndash;&gt;-->
+            <!--<div class="col-lg-1 col-md-1">-->
+                <!--<img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon series name&ndash;&gt;-->
+            <!--<div class="col-lg-9 col-md-9">-->
+                <!--<div class="col-lg-1 col-md-1 sermon-number">-->
+                    <!--<div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">3</h3></div>&lt;!&ndash;sermon series count&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-11 col-md-11">-->
+                    <!--<div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><h3 class="bold">Getting Guidance</h3></div>&lt;!&ndash;sermon series sermon name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Series: <span class="color-aaa">Guidance</span></div>&lt;!&ndash;sermon series name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">Tim Gilligan</span></div>&lt;!&ndash;sermon series speaker&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12"><span class="bold">Published</span> May 4, 2013</div>&lt;!&ndash;sermon series publish date&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-lg-2 col-md-2">-->
+                <!--<a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a>&lt;!&ndash;sermon edit button&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermons list single sermon&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 single-sermon">-->
+            <!--&lt;!&ndash;sermon series logo&ndash;&gt;-->
+            <!--<div class="col-lg-1 col-md-1">-->
+                <!--<img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon series name&ndash;&gt;-->
+            <!--<div class="col-lg-9 col-md-9">-->
+                <!--<div class="col-lg-1 col-md-1 sermon-number">-->
+                    <!--<div class="col-lg-12 col-md-12 sermon-number-inner "><h3 class="color-aaa text-center bold">3</h3></div>&lt;!&ndash;sermon series count&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-11 col-md-11">-->
+                    <!--<div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><h3 class="bold">Getting Guidance</h3></div>&lt;!&ndash;sermon series sermon name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Series: <span class="color-aaa">Guidance</span></div>&lt;!&ndash;sermon series name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">Tim Gilligan</span></div>&lt;!&ndash;sermon series speaker&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12"><span class="bold">Published</span> May 4, 2013</div>&lt;!&ndash;sermon series publish date&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-lg-2 col-md-2">-->
+                <!--<a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a>&lt;!&ndash;sermon edit button&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
 
     </div>
 </div>

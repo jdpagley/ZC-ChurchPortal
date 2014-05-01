@@ -1,45 +1,51 @@
 /**
  * Created by Josh Pagley on 2/22/14.
+ * Description:
+ * Auth routes control all authentication operations for the portal
  */
+
+var express = require('express');
 
 module.exports = function(app, passport){
 
-    // Signup ==============================
-    app.get('/signup', isAuthorizedToViewProfile, function(req, res){
+    var authenticationRouter = express.Router();
+
+    //========================================================
+    // Signup ================================================
+    //========================================================
+    authenticationRouter.get('/signup', isAuthorizedToViewProfile, function(req, res){
         res.render('website/signup.ejs', {message: req.flash('signupMessage')} );
     });
 
     //process the signup form
-    app.post('/signup', passport.authenticate('local-signup', {
+    authenticationRouter.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/portal',
         failureRedirect: '/signup',
         failureFlash: true
     }));
 
-    // Login ===============================
-    app.get('/login', isAuthorizedToViewProfile, function(req, res){
+    //========================================================
+    // Login =================================================
+    //========================================================
+    authenticationRouter.get('/login', isAuthorizedToViewProfile, function(req, res){
         res.render('website/login.ejs', {message: req.flash('loginMessage')});
     });
 
-    app.post('/login', passport.authenticate('local-login', {
+    authenticationRouter.post('/login', passport.authenticate('local-login', {
         successRedirect: '/portal',
         failureRedirect: '/login',
         failureFlash: true
     }));
 
-    app.get('/logout', function(req, res){
+    //========================================================
+    // Logout ================================================
+    //========================================================
+    authenticationRouter.get('/logout', function(req, res){
         req.logout();
         res.redirect('/');
     });
-}
 
-// route middleware to make sure user is logged in.
-function isLoggedIn(req, res, next){
-    //if user is logged in the session, carry on
-    if(req.isAuthenticated()){
-        return next();
-    }
-    return res.redirect('/');
+    app.use('/', authenticationRouter);
 }
 
 function isAuthorizedToViewProfile(req, res, next){

@@ -6,7 +6,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 // Sub document Schemas
-var commentSchema = require('./comment.js');
+var sermonCommentSchema = require('./sermonComment.js');
 var likeSchema = require('./like.js');
 
 /*
@@ -22,6 +22,7 @@ var likeSchema = require('./like.js');
 
 var sermonSchema = new Schema({
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
+    sermonImageURL:             String,
     title:                      String,
     series:                     String,
     part:                       Number,
@@ -29,7 +30,8 @@ var sermonSchema = new Schema({
     notes:                      String,
     audio:                      String,
     video:                      String,
-    comments:                   [commentSchema],
+    likes:                      [likeSchema],
+    comments:                   [sermonCommentSchema],
     createdAt:                  Date,
     updatedAt:                  Date
 });
@@ -43,4 +45,4 @@ sermonSchema.pre('save', function(next){
 });
 
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Sermon', sermonSchema);

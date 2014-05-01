@@ -11,8 +11,8 @@ var Schema = mongoose.Schema;
 
 var churchSchema = new Schema({
     name:                     String,
-    email:                    String,
-    password:                 String,
+    email:                    {type: String, unique: true, required: true},
+    password:                 {type: String, required: true},
     address:                  {
         street:               String,
         city:                 String,

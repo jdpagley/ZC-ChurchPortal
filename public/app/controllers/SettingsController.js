@@ -7,7 +7,7 @@
  */
 
 angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSettings', '$scope', '$location',
-    function(zcIdentity, zcSettings, $scope, $location){
+    function(zcIdentity, zcSettings, $scope){
 
         //Current User Object
         $scope.currentUser = {};
@@ -17,6 +17,16 @@ angular.module('zcApp').controller('SettingsController', ['zcIdentity', 'zcSetti
             promise = zcIdentity.getIdentity();
             promise.then(function(result){
                 $scope.currentUser = result;
+                $scope.updateObject = {
+                    name: result.name,
+                    address: result.address.street,
+                    city: result.address.city,
+                    state: result.address.state,
+                    zip: result.address.zip,
+                    website: result.website,
+                    phone: result.phone,
+                    bio: result.bio
+                }
             }, function(error){
                 console.log('Error: ' + error);
             });
