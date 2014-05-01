@@ -1,0 +1,109 @@
+<!-- Created by John Pagley on 4/9/14 -->
+
+<!--sermon edit container-->
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+    <!--update successful-->
+    <div class="alert alert-success alert-dismissable" data-ng-show="sermonCreatedSuccessfully">
+        <span>Successfully created new sermon.</span><!--update successful paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update successful x icon-->
+    </div>
+    <!--update failed error-->
+    <div class="alert alert-danger alert-dismissable" data-ng-show="sermonCreationFailure">
+        <span>Oops! We are having trouble adding your sermon. Please try again later.</span><!--update failed error paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
+    </div>
+
+    <div class="col-lg-12 col-md-12 sermon-edit">
+        <div class="col-lg-1 col-md-1"><img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" /></div><!--sermon edit logo-->
+        <!--sermon edit info-->
+        <div class="col-lg-11 col-md-11">
+            <div class="col-lg-12 col-md-12">
+                <!--sermon edit part number-->
+                <div class="col-lg-2 col-md-2 form-group">
+                    <div class="col-lg-6 col-md-6 sermon-edit-label text-right">
+                        <label class="control-label" for="sermonPart">Part</label>
+                    </div>
+                    <div class="col-lg-6 col-md-6 sermon-edit-field">
+                        <input type="text" class="form-control" id="sermonPart" name="sermonPart" title="{{sermon.part}}" data-ng-model="sermonObject.part"/><!--sermon edit part number field-->
+                    </div>
+                </div>
+                <!--sermon edit title-->
+                <div class="col-lg-10 col-md-10 form-group">
+                    <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                        <label class="control-label" for="sermonTitle">Title</label>
+                    </div>
+                    <div class="col-lg-11 col-md-11">
+                        <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" ng-model="sermonObject.title"/><!--sermon edit title field -->
+                    </div>
+                </div>
+            </div>
+            <!--sermon edit series-->
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                    <label class="control-label" for="sermonSeries">Series</label>
+                </div>
+                <div class="col-lg-11 col-md-11">
+                    <input type="text" class="form-control" id="sermonSeries" name="sermonSeries" data-ng-model="sermonObject.series"/><!--sermon edit series field-->
+                </div>
+            </div>
+            <!--sermon edit speaker-->
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
+                    <label class="control-label" for="sermonSpeaker">Speaker</label>
+                </div>
+                <div class="col-lg-11 col-md-11">
+                    <input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" data-ng-model="sermonObject.speaker"/><!--sermon edit speaker field-->
+                </div>
+            </div>
+        </div>
+        <!--sermon edit upload video-->
+        <div class="col-lg-6 col-md-6 form-group padding-0-5-0-0">
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-9 col-md-9">
+                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.video"/><!--sermon edit upload video field-->
+                </div>
+                <div class="col-lg-3 col-md-3 sermon-upload-button">
+                    <a href="" class="btn btn-grey btn-block">Upload Video</a><!--sermon edit upload video button-->
+                </div>
+            </div>
+            <!--sermon edit upload video player-->
+            <div class="col-lg-12 col-md-12">
+                <video controls class="col-lg-12 col-md-12">
+                    <source src="movie.mp4" type="video/mp4">
+                    <source src="movie.ogg" type="video/ogg">
+                    Your browser does not support this video player.
+                </video>
+            </div>
+        </div>
+        <!--sermon edit upload audio-->
+        <div class="col-lg-6 col-md-6 form-group padding-0-0-0-5">
+            <div class="col-lg-12 col-md-12 form-group">
+                <div class="col-lg-9 col-md-9">
+                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.audio"/><!--sermon edit upload audio field-->
+                </div>
+                <div class="col-lg-3 col-md-3 sermon-upload-button">
+                    <a href="" class="btn btn-grey btn-block">Upload Audio</a><!--sermon edit upload audio button-->
+                </div>
+            </div>
+            <!--sermon edit upload audio player-->
+            <div class="col-lg-12 col-md-12">
+                <audio controls class="col-lg-12 col-md-12">
+                    <source src="horse.ogg" type="audio/ogg">
+                    <source src="horse.mp3" type="audio/mpeg">
+                    Your browser does not support this audio player.
+                </audio>
+            </div>
+        </div>
+        <!--sermon edit message notes-->
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-12 col-md-12 form-group">
+                <label class="control-label" for="sermonMessageNotes">Message Notes</label>
+                <textarea class="form-control" id="sermonMessageNotes" name="sermonMessageNotes" rows="13" cols="100%" data-ng-model="sermonObject.notes"></textarea><!--sermon edit message text area-->
+            </div>
+
+        </div>
+        <div class="col-lg-12 col-md-12">
+            <a href="" class="btn btn-purple pull-right" ng-click="createSermon()">Create</a><!--sermon edit update button-->
+        </div>
+    </div>
+</div>

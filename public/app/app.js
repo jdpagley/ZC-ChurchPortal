@@ -25,11 +25,11 @@ zcApp.config(['$routeProvider',
                 controller: 'SermonHomeController'
             }).
             when('/sermon/add', {
-                templateUrl: 'partials/views/sermonAddEdit',
+                templateUrl: 'partials/views/sermonAdd',
                 controller: 'SermonAddController'
             }).
             when('/sermon/edit/:id', {
-                templateUrl: 'partials/views/sermonAddEdit',
+                templateUrl: 'partials/views/sermonEdit',
                 controller: 'SermonEditController'
             }).
             when('/checkins', {

@@ -37,7 +37,7 @@ angular.module('zcApp').controller('SermonEditController', ['$scope', '$routePar
         $scope.sermonCreatedSuccessfully = false;
         $scope.sermonCreationFailure = false;
 
-        $scope.createSermon = function(){
+        $scope.updateSermon = function(){
 
             var promise = zcSermons.updateSermon($scope.sermonObject);
             promise.then(function(result){
