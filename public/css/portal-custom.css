@@ -194,11 +194,29 @@ body {
     padding:5px 10px 5px 25px;
 }
 
-.sermon-number h3 {
+.sermon-number .sermon-number-inner {
     border:3px #aaa solid;
     border-radius:100%;
-    width:33px;
-    height:33px;
+    width:85%;
+    height:100%;
 }
 
+/*portal sermon edit**************************************************/
 
+.sermon-edit .sermon-edit-label label {
+    padding:5%;
+}
+
+.sermon-edit .sermon-upload-button {
+    padding-left:1%;
+}
+
+/*portal checkins*****************************************************/
+
+.checkins-container .checkins-populate-button {
+    padding-left:1%;
+}
+
+.checkins-container .checkins-table {
+
+}

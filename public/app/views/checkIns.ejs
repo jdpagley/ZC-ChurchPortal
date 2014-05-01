@@ -1,38 +1,46 @@
 <!-- Created by John Pagley on 3/30/14 -->
 
 <!--checkins container-->
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 checkins-container">
     <!--checkins filter criteria-->
-    <div class="col-lg-6 col-md-6 border1">
-        <!--checkins filter service-->
-        <div class="col-lg-12 col-md-12 border1">
-            <label for="checkinService">Service</label>
-            <select class="form-control" id="checkinService" name="checkinService" title="Service">
-                <option>Sunday 8:00 am (1/2/14)</option><!--checkins service single time-->
-                <option>Sunday 9:00 am (1/2/14)</option><!--checkins service single time-->
-                <option>Sunday 10:00 am (1/2/14)</option><!--checkins service single time-->
-            </select>
-        </div>
-        <!--checkins filter search-->
-        <div class="col-lg-12 col-md-12 border1">
-            <label for="checkinSearch">Search</label>
-            <div class="input-group">
-                <input type="search" id="checkinSearch" class="form-control" /><!--checkins search bar field-->
-                <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--checkins search bar icon-->
+    <div class="col-lg-12 col-md-12">
+
+
+        <div class="col-lg-6 col-md-6 form-group">
+            <!--checkins filter service dropdown-->
+            <div class="col-lg-12 col-md-12">
+                <div class="col-lg-9 col-md-9">
+                    <select class="form-control" id="checkinService" name="checkinService" title="Service">
+                        <option>Sunday 8:00 am (1/2/14)</option><!--checkins service single time-->
+                        <option>Sunday 9:00 am (1/2/14)</option><!--checkins service single time-->
+                        <option>Sunday 10:00 am (1/2/14)</option><!--checkins service single time-->
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3 checkins-populate-button">
+                    <a href="" class="btn btn-grey">Populate</a><!--checkins populate button-->
+                </div>
+            </div>
+            <!--checkins filter populate-->
+            <div class="col-lg-12 col-md-12 checkbox">
+                <label><input type="checkbox"> New Members Only</label><!--checkins new members checkbox-->
             </div>
         </div>
-        <!--checkins filter button-->
-        <div class="col-lg-5 col-lg-offset-1 col-md-5 col-md-offset-1 checkbox border1">
-            <label><input type="checkbox"> New Members Only</label><!--checkins new members checkbox-->
-        </div>
-        <div class="col-lg-6 col-md-6 border1">
-            <a href="" class="btn btn-purple pull-right">Populate</a><!--checkins populate button-->
+        <!--checkins filter search bar-->
+        <div class="col-lg-6 col-md-6 form-group">
+            <div class="col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6">
+                <div class="input-group">
+                    <input class="form-control" type="search" id="checkinSearch" /><!--checkins search bar field-->
+                    <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--checkins search bar icon-->
+                </div>
+            </div>
         </div>
     </div>
+
+
     <!--checkins table-->
-    <div class="col-lg-12 col-md-12 well well-sm table-responsive">
+    <div class="col-lg-12 col-md-12 well well-sm table-responsive padding-5-25">
         <!--checkins table total-->
-        <div class="col-lg-12 col-md-12 border1"><span class="pull-right">Total: 144</span></div>
+        <div class="col-lg-12 col-md-12 padding-2"><span class="pull-right">Total: 144</span></div>
         <!--checkins table grid-->
         <table class="table table-striped table-bordered table-hover">
             <!--checkins table head-->
@@ -98,8 +106,6 @@
                 <td>Single</td><!--checkins table relationship-->
             </tr>
         </table>
-        <!--checkins table total bottom-->
-        <div class="col-lg-12 col-md-12 border1"><span class="pull-right">Total: 144</span></div>
     </div>
 
 </div>

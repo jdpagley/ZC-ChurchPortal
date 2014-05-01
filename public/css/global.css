@@ -32,6 +32,10 @@ textarea {
     height:auto;
 }
 
+thead {
+    font-weight:bold;
+}
+
 .border1 {
     border:1px red solid;
 }
@@ -60,11 +64,26 @@ textarea {
     padding-left: 0px;
 }
 
+@media (max-width: 1400px) {
+.btn {
+    font-size:13px;
+    line-height: 20px;
+}
+}
+
+@media (max-width: 1200px) {
+.btn {
+    font-size:11px;
+    line-height: 20px;
+}
+}
+
 .btn-default {
     color: inherit;
     background-color: #fff;
     border-color: #ccc;
 }
+
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active,
@@ -73,6 +92,15 @@ textarea {
     color: inherit;
     background-color: #fff;
     border-color: #ccc;
+}
+
+.checkbox {
+    display: block;
+    min-height: 20px;
+    padding-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left:0px;
 }
 
 /*custom buttons******************************************************************************/
@@ -124,12 +152,28 @@ textarea {
 
 /*margin and padding****************************************************************************/
 
+.padding-2 {
+    padding:2px;
+}
+
+.padding-5 {
+    padding:5px;
+}
+
 .padding-5-0 {
     padding:5px 0;
 }
 
-.padding-2 {
-    padding:2px;
+.padding-0-0-0-5 {
+    padding:0 0 0 5px;
+}
+
+.padding-0-5-0-0 {
+    padding:0 5px 0 0;
+}
+
+.padding-5-25 {
+    padding:5px 25px;
 }
 
 /*colors and backgrounds***********************************************************************/
