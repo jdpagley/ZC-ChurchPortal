@@ -6,31 +6,58 @@
     <div class="col-lg-12 col-md-12">
 
 
-        <div class="col-lg-6 col-md-6 form-group">
-            <!--checkins filter service dropdown-->
+        <div class="col-lg-6 col-md-6">
+            <!--checkins filter-->
             <div class="col-lg-12 col-md-12">
-                <div class="col-lg-9 col-md-9">
-                    <select class="form-control" id="checkinService" name="checkinService" title="Service">
-                        <option>Sunday 8:00 am (1/2/14)</option><!--checkins service single time-->
-                        <option>Sunday 9:00 am (1/2/14)</option><!--checkins service single time-->
-                        <option>Sunday 10:00 am (1/2/14)</option><!--checkins service single time-->
-                    </select>
-                </div>
-                <div class="col-lg-3 col-md-3 checkins-populate-button">
-                    <a href="" class="btn btn-grey">Populate</a><!--checkins populate button-->
+                <!--checkins filter panel-->
+                <div class="panel panel-default">
+                    <!--checkins filter panel head-->
+                    <div class="panel-heading">
+                        <h3 class="panel-title purple-header">Filter Grid</h3>
+                    </div>
+                    <!--checkins filter panel body-->
+                    <div class="panel-body">
+                        <!--checkins filter panel form-->
+                        <form>
+                            <!--checkins filter service-->
+                            <div class="col-lg-12 col-md-12 form-group">
+                                <label class="control-label" for="checkinService">Filter by Service</label>
+                                <select class="form-control" id="checkinService" name="checkinService" title="Service">
+                                    <option>Sunday 8:00 am (1/2/14)</option><!--checkins service single time-->
+                                    <option>Sunday 9:00 am (1/2/14)</option><!--checkins service single time-->
+                                    <option>Sunday 10:00 am (1/2/14)</option><!--checkins service single time-->
+                                </select>
+                            </div>
+                            <!--checkins filter date-->
+                            <div class="col-lg-12 col-md-12 form-group">
+                                <div class="col-lg-6 col-md-6 checkins-date-filter">
+                                    <label class="control-label" for="serviceStartDate">Start Date</label>
+                                    <input class="form-control" type="search" id="serviceStartDate" />
+                                    <p class="text-muted font-11">i.e. 5/11/2012</p>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <label class="control-label" for="serviceEndDate">End Date</label>
+                                    <input class="form-control" type="search" id="serviceEndDate" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12">
+                                <a href="" class="btn btn-grey pull-right">Populate</a><!--checkins populate button-->
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
             <!--checkins filter populate-->
-            <div class="col-lg-12 col-md-12 checkbox">
-                <label><input type="checkbox"> New Members Only</label><!--checkins new members checkbox-->
-            </div>
+            <!--<div class="col-lg-12 col-md-12 checkbox">-->
+                <!--<label><input type="checkbox"> New Members Only</label>&lt;!&ndash;checkins new members checkbox&ndash;&gt;-->
+            <!--</div>-->
         </div>
-        <!--checkins filter search bar-->
-        <div class="col-lg-6 col-md-6 form-group">
-            <div class="col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6">
-                <div class="input-group">
-                    <input class="form-control" type="search" id="checkinSearch" /><!--checkins search bar field-->
-                    <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--checkins search bar icon-->
+        <!--checkins grid search bar-->
+        <div class="col-lg-6 col-md-6 form-group checkins-searchbar1">
+            <div class="col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6 checkins-searchbar2">
+                <div class="input-group checkins-searchbar3">
+                    <input class="form-control" type="search" id="checkinSearch" /><!--checkins grid search bar field-->
+                    <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--checkins grid search bar icon-->
                 </div>
             </div>
         </div>
@@ -40,7 +67,7 @@
     <!--checkins table-->
     <div class="col-lg-12 col-md-12 well well-sm table-responsive padding-5-25">
         <!--checkins table total-->
-        <div class="col-lg-12 col-md-12 padding-2"><span class="pull-right">Total: 144</span></div>
+        <div class="col-lg-12 col-md-12 padding-2"><span class="bold pull-right">Total: 144</span></div>
         <!--checkins table grid-->
         <table class="table table-striped table-bordered table-hover">
             <!--checkins table head-->

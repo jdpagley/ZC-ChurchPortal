@@ -147,7 +147,10 @@ thead {
 
 .purple-header {
     color: mediumpurple;
-    font-weight: bold;
+}
+
+.grey-header {
+    color: #444;
 }
 
 /*margin and padding****************************************************************************/
@@ -176,6 +179,14 @@ thead {
     padding:5px 25px;
 }
 
+.padding-14-0-0-0 {
+    padding:14px 0 0 0;
+}
+
+.padding-0-0-0-25 {
+    padding:0 0 0 25px;
+}
+
 /*colors and backgrounds***********************************************************************/
 
 .background-fff {
@@ -188,9 +199,12 @@ thead {
 
 /*fonts and text**********************************************************************"""""""*/
 
-
 .bold {
     font-weight:bold;
+}
+
+.font-11 {
+    font-size:11px;
 }
 
 
