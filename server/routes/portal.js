@@ -8,7 +8,8 @@
 var express = require('express'),
     churchs = require('../controllers/churchs.js'),
     posts = require('../controllers/posts.js'),
-    sermons = require('../controllers/sermons.js');
+    sermons = require('../controllers/sermons.js'),
+    checkins = require('../controllers/checkins.js');
 
 module.exports = function(app) {
     //===========================================================
@@ -61,11 +62,18 @@ module.exports = function(app) {
     sermonRouter.post('/api/zionconnect/v1/church/sermon/comment', isLoggedIn, sermons.createComment);
     sermonRouter.post('/api/zionconnect/v1/church/sermon/comment/like', isLoggedIn, sermons.likeSermonComment);
 
+    //===========================================================
+    //Checkin Routes ============================================
+    //===========================================================
+    var checkinRouter = express.Router();
+    checkinRouter.get('/api/zionconnect/v1/church/checkins', checkins.retrieve);
+
     // Require Routers
     app.use('/', viewsRouter);
     app.use('/', churchRouter);
     app.use('/', postsRouter);
     app.use('/', sermonRouter);
+    app.use('/', checkinRouter);
 
 
 }

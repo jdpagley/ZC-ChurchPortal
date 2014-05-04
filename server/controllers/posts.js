@@ -79,8 +79,6 @@ exports.retrieve = function(req, res){
                 console.log(error);
                 return res.json(500, {'error': 'Server Error', 'mongoError': error});
             } else {
-                console.log(posts);
-                //reverse the order of the comments in the array.
                 res.json(200, {'success': 'Successfully retrieved posts.', 'posts': posts});
                 return;
             }
@@ -124,8 +122,6 @@ exports.createComment = function(req, res){
         } else if (!post){
             return res.json(400, {'error': 'No post with that owner ID'});
         } else {
-
-            console.log('post: ' + JSON.stringify(post));
 
             post.comments.push({
                 'authorType': msgObj.authorType,

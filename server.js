@@ -33,6 +33,27 @@ var walk = function(path) {
 };
 walk(routes_path);
 
+//var Checkin = require('./server/models/checkin.js');
+//
+//for(var i = 0; i < 5; i++){
+//    Checkin.create({'church':'534dec1e0fd8e3e3428a452d', member:'5363fa1c4cd782ea6d31942f', service:"Sunday 10:00 am", day:'4/24/2014', createdAt: new Date('4/24/2014')}, function(error, checkin){
+//        if(error){
+//            console.log('error');
+//        } else {
+//            console.log(checkin);
+//        }
+//    })
+//}
+//
+//for(var i = 0; i < 5; i++){
+//    Checkin.create({'church':'534dec1e0fd8e3e3428a452d', member:'5363fa1c4cd782ea6d31942f', service:"Sunday 10:00 am", day:'4/16/2014', createdAt: new Date('4/16/2014')}, function(error, checkin){
+//        if(error){
+//            console.log('error');
+//        } else {
+//            console.log(checkin);
+//        }
+//    })
+//}
 
 console.log('*** Environment is ' + process.env.NODE_ENV + '***');
 

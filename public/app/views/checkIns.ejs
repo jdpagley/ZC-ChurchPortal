@@ -10,27 +10,25 @@
             <!--checkins filter service dropdown-->
             <div class="col-lg-12 col-md-12">
                 <div class="col-lg-9 col-md-9">
-                    <select class="form-control" id="checkinService" name="checkinService" title="Service">
-                        <option>Sunday 8:00 am (1/2/14)</option><!--checkins service single time-->
-                        <option>Sunday 9:00 am (1/2/14)</option><!--checkins service single time-->
-                        <option>Sunday 10:00 am (1/2/14)</option><!--checkins service single time-->
+                    <select class="form-control" id="checkinService" name="checkinService" title="Service" ng-model="selectedService">
+                        <option ng-repeat="service in currentUser.services">{{service.day}} {{service.time}}</option><!--checkins service single time-->
                     </select>
                 </div>
                 <div class="col-lg-3 col-md-3 checkins-populate-button">
-                    <a href="" class="btn btn-grey">Populate</a><!--checkins populate button-->
+                    <a href="" class="btn btn-grey" ng-click="retrieveCheckins(selectedService)">Populate</a><!--checkins populate button-->
                 </div>
             </div>
             <!--checkins filter populate-->
-            <div class="col-lg-12 col-md-12 checkbox">
-                <label><input type="checkbox"> New Members Only</label><!--checkins new members checkbox-->
-            </div>
+            <!--<div class="col-lg-12 col-md-12 checkbox">-->
+                <!--<label><input type="checkbox"> New Members Only</label>&lt;!&ndash;checkins new members checkbox&ndash;&gt;-->
+            <!--</div>-->
         </div>
         <!--checkins filter search bar-->
         <div class="col-lg-6 col-md-6 form-group">
             <div class="col-lg-6 col-lg-offset-6 col-md-6 col-md-offset-6">
                 <div class="input-group">
-                    <input class="form-control" type="search" id="checkinSearch" /><!--checkins search bar field-->
-                    <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--checkins search bar icon-->
+                    <input class="form-control" type="search" id="checkinSearch"/><!--checkins search bar field-->
+                    <span class="input-group-addon"><button type="button" ><span class="glyphicon glyphicon-search"></span></button></span><!--checkins search bar icon-->
                 </div>
             </div>
         </div>
@@ -40,12 +38,13 @@
     <!--checkins table-->
     <div class="col-lg-12 col-md-12 well well-sm table-responsive padding-5-25">
         <!--checkins table total-->
-        <div class="col-lg-12 col-md-12 padding-2"><span class="pull-right">Total: 144</span></div>
+        <div class="col-lg-12 col-md-12 padding-2"><span class="pull-right">Total: {{checkins.length}}</span></div>
         <!--checkins table grid-->
         <table class="table table-striped table-bordered table-hover">
             <!--checkins table head-->
             <thead>
                 <tr>
+                    <td>Date</td><!--checkins table head date-->
                     <td>Name</td><!--checkins table head name-->
                     <td>Email</td><!--checkins table head email-->
                     <td>Address</td><!--checkins table head address-->
@@ -56,55 +55,60 @@
                 </tr>
             </thead>
             <!--checkins table single row-->
-            <tr>
-                <td>John Doe</td><!--checkins table name-->
-                <td>john@email.com</td><!--checkins table email-->
-                <td>6312 SE 10th PL, Ocala, FL</td><!--checkins table address-->
-                <td>352-333-3333</td><!--checkins table phone-->
-                <td>6/9/1993</td><!--checkins table birthday-->
-                <td>Male</td><!--checkins table gender-->
-                <td>Single</td><!--checkins table relationship-->
+            <tr ng-repeat="checkin in checkins">
+                <td>{{checkin.createdAt | date:short}}</td><!--checkins table date-->
+                <td>{{checkin.member.name}}</td><!--checkins table name-->
+                <td>{{checkin.member.email}}</td><!--checkins table email-->
+                <td>{{checkin.member.address.street}}, {{checkin.member.address.city}}, {{checkin.member.address.state}}</td><!--checkins table address-->
+                <td>{{checkin.member.phone}}</td><!--checkins table phone-->
+                <td>{{checkin.member.birthdate}}</td><!--checkins table birthday-->
+                <td>{{checkin.member.gender}}</td><!--checkins table gender-->
+                <td>{{checkin.member.relationshipStatus}}</td><!--checkins table relationship-->
             </tr>
-            <!--checkins table single row-->
-            <tr>
-                <td>John Doe</td><!--checkins table name-->
-                <td>john@email.com</td><!--checkins table email-->
-                <td>6312 SE 10th PL, Ocala, FL</td><!--checkins table address-->
-                <td>352-333-3333</td><!--checkins table phone-->
-                <td>6/9/1993</td><!--checkins table birthday-->
-                <td>Male</td><!--checkins table gender-->
-                <td>Single</td><!--checkins table relationship-->
-            </tr>
-            <!--checkins table single row-->
-            <tr>
-                <td>John Doe</td><!--checkins table name-->
-                <td>john@email.com</td><!--checkins table email-->
-                <td>6312 SE 10th PL, Ocala, FL</td><!--checkins table address-->
-                <td>352-333-3333</td><!--checkins table phone-->
-                <td>6/9/1993</td><!--checkins table birthday-->
-                <td>Male</td><!--checkins table gender-->
-                <td>Single</td><!--checkins table relationship-->
-            </tr>
-            <!--checkins table single row-->
-            <tr>
-                <td>John Doe</td><!--checkins table name-->
-                <td>john@email.com</td><!--checkins table email-->
-                <td>6312 SE 10th PL, Ocala, FL</td><!--checkins table address-->
-                <td>352-333-3333</td><!--checkins table phone-->
-                <td>6/9/1993</td><!--checkins table birthday-->
-                <td>Male</td><!--checkins table gender-->
-                <td>Single</td><!--checkins table relationship-->
-            </tr>
-            <!--checkins table single row-->
-            <tr>
-                <td>John Doe</td><!--checkins table name-->
-                <td>john@email.com</td><!--checkins table email-->
-                <td>6312 SE 10th PL, Ocala, FL</td><!--checkins table address-->
-                <td>352-333-3333</td><!--checkins table phone-->
-                <td>6/9/1993</td><!--checkins table birthday-->
-                <td>Male</td><!--checkins table gender-->
-                <td>Single</td><!--checkins table relationship-->
-            </tr>
+            <!--&lt;!&ndash;checkins table single row&ndash;&gt;-->
+            <!--<tr>-->
+                <!--<td>Apr 26, 2014</td>&lt;!&ndash;checkins table date&ndash;&gt;-->
+                <!--<td>John Doe</td>&lt;!&ndash;checkins table name&ndash;&gt;-->
+                <!--<td>john@email.com</td>&lt;!&ndash;checkins table email&ndash;&gt;-->
+                <!--<td>6312 SE 10th PL, Ocala, FL</td>&lt;!&ndash;checkins table address&ndash;&gt;-->
+                <!--<td>352-333-3333</td>&lt;!&ndash;checkins table phone&ndash;&gt;-->
+                <!--<td>6/9/1993</td>&lt;!&ndash;checkins table birthday&ndash;&gt;-->
+                <!--<td>Male</td>&lt;!&ndash;checkins table gender&ndash;&gt;-->
+                <!--<td>Single</td>&lt;!&ndash;checkins table relationship&ndash;&gt;-->
+            <!--</tr>-->
+            <!--&lt;!&ndash;checkins table single row&ndash;&gt;-->
+            <!--<tr>-->
+                <!--<td>Apr 26, 2014</td>&lt;!&ndash;checkins table date&ndash;&gt;-->
+                <!--<td>John Doe</td>&lt;!&ndash;checkins table name&ndash;&gt;-->
+                <!--<td>john@email.com</td>&lt;!&ndash;checkins table email&ndash;&gt;-->
+                <!--<td>6312 SE 10th PL, Ocala, FL</td>&lt;!&ndash;checkins table address&ndash;&gt;-->
+                <!--<td>352-333-3333</td>&lt;!&ndash;checkins table phone&ndash;&gt;-->
+                <!--<td>6/9/1993</td>&lt;!&ndash;checkins table birthday&ndash;&gt;-->
+                <!--<td>Male</td>&lt;!&ndash;checkins table gender&ndash;&gt;-->
+                <!--<td>Single</td>&lt;!&ndash;checkins table relationship&ndash;&gt;-->
+            <!--</tr>-->
+            <!--&lt;!&ndash;checkins table single row&ndash;&gt;-->
+            <!--<tr>-->
+                <!--<td>Apr 26, 2014</td>&lt;!&ndash;checkins table date&ndash;&gt;-->
+                <!--<td>John Doe</td>&lt;!&ndash;checkins table name&ndash;&gt;-->
+                <!--<td>john@email.com</td>&lt;!&ndash;checkins table email&ndash;&gt;-->
+                <!--<td>6312 SE 10th PL, Ocala, FL</td>&lt;!&ndash;checkins table address&ndash;&gt;-->
+                <!--<td>352-333-3333</td>&lt;!&ndash;checkins table phone&ndash;&gt;-->
+                <!--<td>6/9/1993</td>&lt;!&ndash;checkins table birthday&ndash;&gt;-->
+                <!--<td>Male</td>&lt;!&ndash;checkins table gender&ndash;&gt;-->
+                <!--<td>Single</td>&lt;!&ndash;checkins table relationship&ndash;&gt;-->
+            <!--</tr>-->
+            <!--&lt;!&ndash;checkins table single row&ndash;&gt;-->
+            <!--<tr>-->
+                <!--<td>Apr 26, 2014</td>&lt;!&ndash;checkins table date&ndash;&gt;-->
+                <!--<td>John Doe</td>&lt;!&ndash;checkins table name&ndash;&gt;-->
+                <!--<td>john@email.com</td>&lt;!&ndash;checkins table email&ndash;&gt;-->
+                <!--<td>6312 SE 10th PL, Ocala, FL</td>&lt;!&ndash;checkins table address&ndash;&gt;-->
+                <!--<td>352-333-3333</td>&lt;!&ndash;checkins table phone&ndash;&gt;-->
+                <!--<td>6/9/1993</td>&lt;!&ndash;checkins table birthday&ndash;&gt;-->
+                <!--<td>Male</td>&lt;!&ndash;checkins table gender&ndash;&gt;-->
+                <!--<td>Single</td>&lt;!&ndash;checkins table relationship&ndash;&gt;-->
+            <!--</tr>-->
         </table>
     </div>
 
