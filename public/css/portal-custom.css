@@ -104,6 +104,10 @@ body {
     font-size:18px;
 }
 
+.portal-content .top-icon .glyphicon:hover {
+    color:mediumpurple;
+}
+
 .portal-shell-left {
     background:#f2f2f2;
 }
@@ -190,16 +194,55 @@ body {
     padding:20px 0;
 }
 
+.sermon-info {
+    padding:0px 0px 0px 1px;
+}
+
 .sermon-number {
-    padding:5px 10px 5px 25px;
+    padding:5px 0px 5px 25px;
 }
 
 .sermon-number .sermon-number-inner {
     border:3px #aaa solid;
     border-radius:100%;
-    width:85%;
-    height:100%;
+    width:31px;
+    height:31px;
 }
+
+@media (max-width: 1400px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sermon-number .sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:29px;
+        height:29px;
+    }
+
+    .sermon-number .sermon-number-inner h3 {
+        font-size:22px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sermon-number .sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:27px;
+        height:27px;
+    }
+
+    .sermon-number .sermon-number-inner h3 {
+        font-size:20px;
+    }
+}
+
 
 /*portal sermon edit**************************************************/
 
@@ -213,10 +256,31 @@ body {
 
 /*portal checkins*****************************************************/
 
-.checkins-container .checkins-populate-button {
-    padding-left:1%;
+.checkins-container .checkins-date-filter {
+    padding-right:5px;
 }
 
-.checkins-container .checkins-table {
+.checkins-container .checkins-searchbar1 {
+    display:block;
+    height:257px;
+}
 
+.checkins-container .checkins-searchbar2 {
+    top:88%;
+}
+
+.checkins-container .checkins-searchbar1 {
+
+}
+
+
+/*portal members******************************************************/
+
+.member-list {
+    border-top:1px #ddd solid;
+}
+
+.single-member {
+    border-bottom:1px #ddd solid;
+    padding:20px 0;
 }

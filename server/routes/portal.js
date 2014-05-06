@@ -66,7 +66,8 @@ module.exports = function(app) {
     //Checkin Routes ============================================
     //===========================================================
     var checkinRouter = express.Router();
-    checkinRouter.get('/api/zionconnect/v1/church/checkins', checkins.retrieve);
+    checkinRouter.get('/api/zionconnect/v1/church/checkins/service', checkins.retrieveCheckinsForServiceAndDateRange);
+    checkinRouter.get('/api/zionconnect/v1/church/checkins', checkins.retrieveCheckinsForDateRange);
 
     // Require Routers
     app.use('/', viewsRouter);

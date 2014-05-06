@@ -21,24 +21,59 @@ angular.module('zcApp').controller('CheckinsController', ['$scope', 'zcIdentity'
             });
         }
 
-        $scope.retrieveCheckins = function(service){
+        //Retrieve Checkins For Checkins Table.
+        $scope.showCheckinsErrorMessage = false;
+        $scope.checkinsErrorMessage = "";
+
+        $scope.retrieveCheckins = function(service, startDate, endDate){
             var newQueryObj = {}
 
-            newQueryObj['endDate'] = new Date().getTime();
-            newQueryObj['startDate'] = new Date().getTime() - 604800000;
-            newQueryObj['service'] = service;
-            newQueryObj['church'] = $scope.currentUser._id;
+            if(service && service !== "All" && startDate && endDate){
+                //Check service, startDate, and endDate to retrieve checkins based on date range and specific service.
+                newQueryObj['endDate'] = new Date(endDate).getTime();
+                newQueryObj['startDate'] = new Date(startDate).getTime();
+                newQueryObj['service'] = service;
+                newQueryObj['church'] = $scope.currentUser._id;
 
-            console.log(newQueryObj);
+                console.log(newQueryObj);
 
-            var promise;
-            promise = zcCheckins.retrieveCheckins(newQueryObj);
-            promise.then(function(result){
-                    console.log(result.checkins);
-                    $scope.checkins = result.checkins;
-                },
-                function(error){
-                    console.log(error);
-                });
+                var promise;
+                promise = zcCheckins.retrieveCheckinsForServiceAndDateRange(newQueryObj);
+                promise.then(function(result){
+                        console.log(result.checkins);
+                        $scope.checkins = result.checkins;
+                    },
+                    function(error){
+                        console.log(error);
+                        $scope.showCheckinsErrorMessage = true;
+                        $scope.checkinsErrorMessage = error.data.error;
+                    });
+            } else if (startDate && endDate){
+                //Check startDate and endDate to retrieve checkins based on date range.
+                newQueryObj['endDate'] = new Date(endDate).getTime();
+                newQueryObj['startDate'] = new Date(startDate).getTime();
+                newQueryObj['church'] = $scope.currentUser._id;
+
+                console.log(newQueryObj);
+
+                var promise;
+                promise = zcCheckins.retrieveCheckinsForDateRange(newQueryObj);
+                promise.then(function(result){
+                        console.log(result.checkins);
+                        $scope.checkins = result.checkins;
+                    },
+                    function(error){
+                        console.log(error);
+                        $scope.showCheckinsErrorMessage = true;
+                        $scope.checkinsErrorMessage = error.data.error;
+                    });
+            } else {
+                //If service and/or startDate and endDate are not specified throw error.
+                console.log('Please specify "Start Date" and "End Date".');
+                $scope.showCheckinsErrorMessage = true;
+                $scope.checkinsErrorMessage = 'Please specify "Start Date" and "End Date". Thanks!';
+            }
+
+
         }
     }]);
