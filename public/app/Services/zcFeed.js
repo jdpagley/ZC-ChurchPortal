@@ -22,7 +22,6 @@ angular.module('zcApp').factory('zcFeed',['$resource', '$q', function($resource,
             return promise.promise;
         },
         retrievePosts: function(churchID){
-            console.log('retrieving posts from server.')
             var promise = $q.defer();
             postsResource.get({'churchID': churchID}, function(result){
                 promise.resolve(result);
