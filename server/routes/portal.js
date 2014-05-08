@@ -9,7 +9,8 @@ var express = require('express'),
     churchs = require('../controllers/churchs.js'),
     posts = require('../controllers/posts.js'),
     sermons = require('../controllers/sermons.js'),
-    checkins = require('../controllers/checkins.js');
+    checkins = require('../controllers/checkins.js'),
+    member = require('../controllers/members.js');
 
 module.exports = function(app) {
     //===========================================================
@@ -66,8 +67,15 @@ module.exports = function(app) {
     //Checkin Routes ============================================
     //===========================================================
     var checkinRouter = express.Router();
-    checkinRouter.get('/api/zionconnect/v1/church/checkins/service', checkins.retrieveCheckinsForServiceAndDateRange);
-    checkinRouter.get('/api/zionconnect/v1/church/checkins', checkins.retrieveCheckinsForDateRange);
+    checkinRouter.get('/api/zionconnect/v1/church/checkins/service', isLoggedIn, checkins.retrieveCheckinsForServiceAndDateRange);
+    checkinRouter.get('/api/zionconnect/v1/church/checkins',isLoggedIn, checkins.retrieveCheckinsForDateRange);
+
+    //===========================================================
+    //Member Routes =============================================
+    //===========================================================
+    var memberRouter = express.Router();
+    memberRouter.get('/api/zionconnect/v1/church/members/all', isLoggedIn, member.retrieve);
+    memberRouter.get('/api/zionconnect/v1/church/members', isLoggedIn, member.retrieveMemberById);
 
     // Require Routers
     app.use('/', viewsRouter);
@@ -75,6 +83,7 @@ module.exports = function(app) {
     app.use('/', postsRouter);
     app.use('/', sermonRouter);
     app.use('/', checkinRouter);
+    app.use('/', memberRouter);
 
 
 }

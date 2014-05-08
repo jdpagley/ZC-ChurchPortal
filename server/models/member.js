@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var memberSchema = new Schema({
     name:                     String,
     email:                    {type: String, unique: true, required: true},
-    password:                 {type: String, required: true},
+   // password:                 {type: String, required: true},
     address:                  {
         street:               String,
         city:                 String,
@@ -17,10 +17,11 @@ var memberSchema = new Schema({
         zip:                  String
     },
     phone:                    String,
-    birthday:                 String,
+    birthdate:                String,
     gender:                   String,
     relationshipStatus:       String,
     bio:                      String,
+    memberships:              [{type: Schema.Types.ObjectId, ref: 'Church'}],
     createdAt:                Date,
     UpdatedAt:                Date
 });

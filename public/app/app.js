@@ -40,7 +40,7 @@ zcApp.config(['$routeProvider',
                 templateUrl: 'partials/views/members',
                 controller: 'MembersController'
             }).
-            when('/member/profile', {
+            when('/member/profile/:id', {
                 templateUrl: 'partials/views/memberProfile',
                 controller: 'MemberProfileController'
             }).

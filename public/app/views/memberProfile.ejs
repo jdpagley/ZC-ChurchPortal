@@ -10,21 +10,21 @@
         </div>
         <!--member profile personal info-->
         <div class="col-lg-11 col-md-11 border2">
-            <div class="col-lg-12 col-md-12 border1"><h3>John Doe</h3></div><!--member profile personal name-->
+            <div class="col-lg-12 col-md-12 border1"><h3>{{member.name}}</h3></div><!--member profile personal name-->
             <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1">Email:  <span class="color-aaa">john@email.com</span></div><!--member profile personal email-->
-                <div class="col-lg-12 col-md-12 border1">Phone: <span class="color-aaa">352-333-3333</span></div><!--member profile personal phone-->
-                <div class="col-lg-12 col-md-12 border1">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div><!--member profile personal address-->
-                <div class="col-lg-12 col-md-12 border1">Birthday: <span class="color-aaa">3/23/1993</span></div><!--member profile personal birthday-->
-                <div class="col-lg-12 col-md-12 border1">Gender: <span class="color-aaa">Male</span></div><!--member profile personal gender-->
-                <div class="col-lg-12 col-md-12 border1">Relationship: <span class="color-aaa">Single</span></div><!--member profile personal relationship-->
+                <div class="col-lg-12 col-md-12 border1">Email:  <span class="color-aaa">{{member.email}}</span></div><!--member profile personal email-->
+                <div class="col-lg-12 col-md-12 border1">Phone: <span class="color-aaa">{{member.phone}}</span></div><!--member profile personal phone-->
+                <div class="col-lg-12 col-md-12 border1">Address: <span class="color-aaa">{{member.address.street}}, {{member.address.city}}, {{member.address.state}}</span></div><!--member profile personal address-->
+                <div class="col-lg-12 col-md-12 border1">Birthday: <span class="color-aaa">{{member.birthdate}}</span></div><!--member profile personal birthday-->
+                <div class="col-lg-12 col-md-12 border1">Gender: <span class="color-aaa">{{member.gender}}</span></div><!--member profile personal gender-->
+                <div class="col-lg-12 col-md-12 border1">Relationship: <span class="color-aaa">{{member.relationshipStatus}}</span></div><!--member profile personal relationship-->
             </div>
         </div>
     </div>
     <!--member profile message feed-->
     <div class="col-lg-12 col-md-12 border1">
         <div class="col-lg-12 col-md-12 border1">
-            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..."></textarea><!--member profile message text-->
+            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write message..."></textarea><!--member profile message text-->
         </div>
         <!--member profile message send button-->
         <div class="col-lg-12 col-md-12 border1">

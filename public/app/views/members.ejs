@@ -5,7 +5,7 @@
     <!--members top criteria-->
     <div class="col-lg-12 col-md-12 form-group">
         <!--members total count-->
-        <div class="col-lg-2 col-md-2 padding-14-0-0-0"><p class="bold">Total: 350</p></div>
+        <div class="col-lg-2 col-md-2 padding-14-0-0-0"><p class="bold">Total: {{members.length}}</p></div>
         <!--members search bar-->
         <div class="col-lg-3 col-lg-offset-7 col-md-3 col-md-offset-7">
             <div class="input-group">
@@ -19,62 +19,62 @@
     <!--members list-->
     <div class="col-lg-12 col-md-12 member-list">
         <!--members list single person-->
-        <div class="col-lg-12 col-md-12 single-member">
+        <div class="col-lg-12 col-md-12 single-member" ng-repeat="member in members">
             <!--members person photo-->
             <div class="col-lg-1 col-md-1">
-                <img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" />
+                <a href="#/member/profile/{{member._id}}"><img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" /></a>
             </div>
             <!--members personal info-->
             <div class="col-lg-11 col-md-11">
                 <div class="col-lg-10 col-md-10 padding-0-0-0-25">
-                    <div class="col-lg-12 col-md-12 padding-5-0 grey-header"><h3 class="bold">John Doe</h3></div><!--members personal name-->
-                    <div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">john@email.com</span></div><!--members personal email-->
-                    <div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">352-333-3333</span></div><!--members personal phone-->
-                    <div class="col-lg-12 col-md-12">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div><!--members personal address-->
+                    <div class="col-lg-12 col-md-12 padding-5-0 grey-header"><a href="#/member/profile/{{member._id}}"><h3 class="bold">{{member.name}}</h3></a></div><!--members personal name-->
+                    <div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">{{member.email}}</span></div><!--members personal email-->
+                    <div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">member.phone</span></div><!--members personal phone-->
+                    <div class="col-lg-12 col-md-12">Address: <span class="color-aaa">{{member.address.street}}, {{member.address.city}}, {{member.address.state}}</span></div><!--members personal address-->
                 </div>
                 <div class="col-lg-2 col-md-2">
                     <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-send"></span> Message</a><!--members message person button-->
                 </div>
             </div>
         </div>
-        <!--members list single person-->
-        <div class="col-lg-12 col-md-12 single-member">
-            <!--members person photo-->
-            <div class="col-lg-1 col-md-1">
-                <img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" />
-            </div>
-            <!--members personal info-->
-            <div class="col-lg-11 col-md-11">
-                <div class="col-lg-10 col-md-10 padding-0-0-0-25">
-                    <div class="col-lg-12 col-md-12 padding-5-0 grey-header"><h3 class="bold">Sarah Miller</h3></div><!--members personal name-->
-                    <div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">sarah@email.com</span></div><!--members personal email-->
-                    <div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">352-333-3333</span></div><!--members personal phone-->
-                    <div class="col-lg-12 col-md-12">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div><!--members personal address-->
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-send"></span> Message</a><!--members message person button-->
-                </div>
-            </div>
-        </div>
-        <!--members list single person-->
-        <div class="col-lg-12 col-md-12 single-member">
-            <!--members person photo-->
-            <div class="col-lg-1 col-md-1">
-                <img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" />
-            </div>
-            <!--members personal info-->
-            <div class="col-lg-11 col-md-11">
-                <div class="col-lg-10 col-md-10 padding-0-0-0-25">
-                    <div class="col-lg-12 col-md-12 padding-5-0 grey-header"><h3 class="bold">Peter Hill</h3></div><!--members personal name-->
-                    <div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">peter@email.com</span></div><!--members personal email-->
-                    <div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">352-333-3333</span></div><!--members personal phone-->
-                    <div class="col-lg-12 col-md-12">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div><!--members personal address-->
-                </div>
-                <div class="col-lg-2 col-md-2">
-                    <a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-send"></span> Message</a><!--members message person button-->
-                </div>
-            </div>
-        </div>
+        <!--&lt;!&ndash;members list single person&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 single-member">-->
+            <!--&lt;!&ndash;members person photo&ndash;&gt;-->
+            <!--<div class="col-lg-1 col-md-1">-->
+                <!--<img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" />-->
+            <!--</div>-->
+            <!--&lt;!&ndash;members personal info&ndash;&gt;-->
+            <!--<div class="col-lg-11 col-md-11">-->
+                <!--<div class="col-lg-10 col-md-10 padding-0-0-0-25">-->
+                    <!--<div class="col-lg-12 col-md-12 padding-5-0 grey-header"><h3 class="bold">Sarah Miller</h3></div>&lt;!&ndash;members personal name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">sarah@email.com</span></div>&lt;!&ndash;members personal email&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">352-333-3333</span></div>&lt;!&ndash;members personal phone&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div>&lt;!&ndash;members personal address&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-2 col-md-2">-->
+                    <!--<a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-send"></span> Message</a>&lt;!&ndash;members message person button&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;members list single person&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 single-member">-->
+            <!--&lt;!&ndash;members person photo&ndash;&gt;-->
+            <!--<div class="col-lg-1 col-md-1">-->
+                <!--<img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/user.jpg" />-->
+            <!--</div>-->
+            <!--&lt;!&ndash;members personal info&ndash;&gt;-->
+            <!--<div class="col-lg-11 col-md-11">-->
+                <!--<div class="col-lg-10 col-md-10 padding-0-0-0-25">-->
+                    <!--<div class="col-lg-12 col-md-12 padding-5-0 grey-header"><h3 class="bold">Peter Hill</h3></div>&lt;!&ndash;members personal name&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Email:  <span class="color-aaa">peter@email.com</span></div>&lt;!&ndash;members personal email&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Phone: <span class="color-aaa">352-333-3333</span></div>&lt;!&ndash;members personal phone&ndash;&gt;-->
+                    <!--<div class="col-lg-12 col-md-12">Address: <span class="color-aaa">6312 SE 10th PL, Ocala, FL</span></div>&lt;!&ndash;members personal address&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-2 col-md-2">-->
+                    <!--<a href="" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-send"></span> Message</a>&lt;!&ndash;members message person button&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
     </div>
 </div>
