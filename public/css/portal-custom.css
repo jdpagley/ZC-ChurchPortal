@@ -8,6 +8,18 @@ body {
     height:100%;
 }
 
+.post-link {
+    color:mediumpurple;
+    font-size:12px;
+}
+
+.post-link:hover {
+    color:mediumpurple;
+    font-size:12px;
+    text-decoration:underline;
+}
+
+
 /*bootstrap overrides******************************************************/
 
 .list-group-item {
@@ -82,7 +94,8 @@ body {
 
 .portal-content {
     height:100vh;
-    overflow:scroll;
+    overflow-y: scroll;
+    overflow:auto;
 }
 
 .portal-content .portal-shell-top-header h2 {
@@ -149,16 +162,24 @@ body {
 
 /*portal news feed**********************************************************/
 
+
 /*portal news feed post*/
 
 .portal-news-feed-post {
     margin-bottom:10px;
+    padding:10px;
 }
 
 .portal-news-feed-post img {
     height:30px;
     margin:0px;
     padding:0px;
+}
+
+.feed-main-posting {
+    border-bottom:1px #ddd solid;
+    padding-bottom:5px;
+    margin-bottom:5px;
 }
 
 
@@ -283,4 +304,113 @@ body {
 .single-member {
     border-bottom:1px #ddd solid;
     padding:20px 0;
+}
+
+/*portal messages******************************************************/
+
+.messages-container {
+
+}
+
+.group-messages {
+    height:500px;
+    overflow-y: scroll;
+    overflow:auto;
+}
+
+.single-message {
+    border-bottom:1px #ddd solid;
+    padding:5px;
+}
+
+.single-message .single-message-body {
+    padding:7px 0;
+}
+
+.single-message .person-photo {
+    width:50px;
+}
+
+.single-message .person-name {
+    float:left;
+    font-weight:bold;
+}
+
+.single-message .message-date {
+    float:right;
+    color:#aaa;
+    font-size:11px;
+}
+
+@media (max-width: 1400px) {
+
+    .single-message .single-message-body {
+        padding:2px 0;
+    }
+
+    .single-message .person-photo {
+        width:50px;
+    }
+
+    .single-message .person-name {
+        float:left;
+        clear:both;
+        padding:0;
+        margin:0;
+    }
+
+    .single-message .message-date {
+        float:left;
+        clear:both;
+    }
+}
+
+.single-message .person-message {
+    white-space: nowrap;
+    overflow: hidden;
+    color:#aaa;
+    font-size:12px;
+}
+
+.live-conversation {
+     height:500px;
+ }
+
+.live-conversation .live-conversation-messages {
+    height:374px;
+    overflow-y: scroll;
+    overflow:auto;
+}
+
+.single-conversation-message {
+    padding:5px 20px;
+}
+
+.single-conversation-message .person-photo {
+    width:50px;
+}
+
+.single-conversation-message .single-conversation-body {
+    padding:7px 0;
+}
+
+.single-conversation-message .person-name {
+    float:left;
+    font-weight:bold;
+}
+
+.single-conversation-message .message-date {
+    float:right;
+    color:#aaa;
+    font-size:11px;
+}
+
+.single-conversation-message .person-message {
+    white-space: pre-wrap;
+    font-size:12px;
+}
+
+.write-message {
+    border-radius: 0;
+    padding:10px;
 }

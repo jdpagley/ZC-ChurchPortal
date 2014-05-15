@@ -24,6 +24,10 @@ a:hover, a:focus, a:active {
     text-decoration:none;
 }
 
+div {
+    display: block;
+}
+
 h1, h2, h3, h4, h5, h6, p, a {
     font-family: 'raleway', sans-serif;
 }
@@ -103,6 +107,11 @@ thead {
     margin-left:0px;
 }
 
+.media,
+.media .media {
+    margin-top: 0px;
+}
+
 /*custom buttons******************************************************************************/
 
 .btn-purple {
@@ -159,6 +168,10 @@ thead {
     padding:2px;
 }
 
+.padding-2-0 {
+    padding:2px 0;
+}
+
 .padding-5 {
     padding:5px;
 }
@@ -175,6 +188,14 @@ thead {
     padding:0 5px 0 0;
 }
 
+.padding-7-0 {
+    padding:7px 0;
+}
+
+.padding-15-0-0-0 {
+    padding:15px 0 0 0;
+}
+
 .padding-5-25 {
     padding:5px 25px;
 }
@@ -187,7 +208,11 @@ thead {
     padding:0 0 0 25px;
 }
 
-/*colors and backgrounds***********************************************************************/
+/*colors, backgrounds, and borders***********************************************************************/
+
+.purple {
+    color:mediumpurple;
+}
 
 .background-fff {
     background:#fff;
@@ -197,7 +222,28 @@ thead {
     color:#aaa;
 }
 
-/*fonts and text**********************************************************************"""""""*/
+.border-ddd {
+    border:1px #ddd solid;
+}
+
+.border-ddd-top {
+    border-top: 1px #ddd solid;
+}
+
+.border-ddd-right {
+    border-right:1px #ddd solid;
+}
+
+.border-ddd-bottom {
+    border-bottom:1px #ddd solid;
+}
+
+.border-ddd-left {
+    border-left:1px #ddd solid;
+}
+
+
+/*fonts, text and glyphicons******************************************************************/
 
 .bold {
     font-weight:bold;
@@ -207,12 +253,25 @@ thead {
     font-size:11px;
 }
 
+.font-12 {
+    font-size:12px;
+}
 
+.glyphicon1 {
+    font-size:25px;
+    font-size:22px;
+    color:#ccc;
+}
 
+.glyphicon1:hover {
+    color:mediumpurple;
+}
 
+/*size and positions*************************************************************************/
 
-
-
+.width-50 {
+    width:50px;
+}
 
 
 
