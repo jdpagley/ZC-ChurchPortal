@@ -48,6 +48,10 @@ zcApp.config(['$routeProvider',
                 templateUrl: 'partials/views/settings',
                 controller: 'SettingsController'
             }).
+            when('/messages', {
+                templateUrl: 'partials/views/messages',
+                controller: 'MessagesController'
+            }).
             otherwise({
                 redirectTo: '/feed'
             });
