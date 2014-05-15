@@ -6,8 +6,8 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity', 'zcFeed',
-    function($scope, $window, zcIdentity, zcFeed){
+angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity', 'zcFeed', 'zcNotifications',
+    function($scope, $window, zcIdentity, zcFeed, zcNotifications){
 
         //Current User Object
         $scope.currentUser = {};
@@ -59,7 +59,7 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
 
                 promise.then(function(result){
                     $scope.posts.unshift(result.post);
-                    console.log(result);
+
                     $scope.newPostObj = {};
                 }, function(error){
                     console.log('Error: ' + error);
@@ -86,7 +86,13 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
 
             promise.then(function(result){
                 $scope.posts[index].comments.unshift(result.comment);
-                console.log(result);
+
+                var newNotification = {};
+                newNotification['sender'] = $scope.currentUser._id;
+                newNotification['recipient'] = owner;
+
+                zcNotifications.createNotification()
+
                 $scope.newCommentObj = {};
             }, function(error){
                 console.log('Error: ' + error);

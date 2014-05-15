@@ -10,7 +10,8 @@ var express = require('express'),
     posts = require('../controllers/posts.js'),
     sermons = require('../controllers/sermons.js'),
     checkins = require('../controllers/checkins.js'),
-    member = require('../controllers/members.js');
+    member = require('../controllers/members.js'),
+    notifications = require('../controllers/notifications.js');
 
 module.exports = function(app) {
     //===========================================================
@@ -77,6 +78,13 @@ module.exports = function(app) {
     memberRouter.get('/api/zionconnect/v1/church/members/all', isLoggedIn, member.retrieve);
     memberRouter.get('/api/zionconnect/v1/church/members', isLoggedIn, member.retrieveMemberById);
 
+    //===========================================================
+    //Notification Routes =======================================
+    //===========================================================
+    var notificationRouter = express.Router();
+    notificationRouter.post('/api/zionconnect/v1/church/notification', isLoggedIn, notifications.create);
+
+
     // Require Routers
     app.use('/', viewsRouter);
     app.use('/', churchRouter);
@@ -84,6 +92,7 @@ module.exports = function(app) {
     app.use('/', sermonRouter);
     app.use('/', checkinRouter);
     app.use('/', memberRouter);
+    app.use('/', notificationRouter);
 
 
 }
