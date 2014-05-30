@@ -48,6 +48,10 @@ thead {
     border:1px pink solid;
 }
 
+.well-inner {
+    background:none;
+}
+
 /*bootstrap overrides**********************************************************************/
 
 .row {
@@ -241,7 +245,6 @@ thead {
 .border-ddd-left {
     border-left:1px #ddd solid;
 }
-
 
 /*fonts, text and glyphicons******************************************************************/
 
