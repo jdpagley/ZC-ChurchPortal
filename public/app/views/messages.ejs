@@ -1,0 +1,127 @@
+<!-- Created by John Pagley on 5/9/14 -->
+
+<!--messages container-->
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
+    <!--messages search-->
+    <div class="col-lg-12 col-md-12 form-group">
+        <div class="col-lg-3 col-md-3">
+            <div class="input-group">
+                <input type="search" class="form-control" /><!--messages search bar field-->
+                <span class="input-group-addon"><a href="#"><span class="glyphicon glyphicon-search"></span></a></span><!--messages search bar icon-->
+            </div>
+        </div>
+        <div class="col-lg-3 col-lg-offset-6 col-md-3 col-md-offset-6">
+            <a href="" class="text text-danger pull-right padding-15-0-0-0">Delete Conversation <span class="glyphicon glyphicon-trash"></span></a><!--messages delete conversation-->
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12">
+        <!--group messages-->
+        <div class="col-lg-3 col-md-3 group-messages border-ddd-top border-ddd-right border-ddd-bottom border-ddd-left">
+            <!--messages single group message-->
+            <div class="media single-message" ng-repeat="conversation in conversations" ng-click="displayConversation($index)">
+                <div class="pull-left">
+                    <img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--group message person photo-->
+                </div>
+                <div class="media-body single-message-body">
+                    <div class="clearfix">
+                        <div><h5 class="media-heading person-name">{{conversation.members[0].name}}</h5></div><!--group message person name-->
+                        <div><p class="message-date">{{conversation.messages[conversation.messages.length - 1].createdAt | date:'MMM d'}}</p></div><!--group message message date-->
+                    </div>
+                    <div class="person-message">{{conversation.messages[conversation.messages.length - 1].message}}</div><!--group message partial message-->
+                </div>
+            </div>
+            <!--messages single group message-->
+            <!--<div class="media single-message">-->
+                <!--<div class="pull-left">-->
+                    <!--<img class="media-object img-rounded person-photo" src="./images/user.jpg" />&lt;!&ndash;group message person photo&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="media-body single-message-body">-->
+                    <!--<div class="clearfix">-->
+                        <!--<div><h5 class="media-heading person-name">John Pagley</h5></div>&lt;!&ndash;group message person name&ndash;&gt;-->
+                        <!--<div><p class="message-date">Apr 24</p></div>&lt;!&ndash;group message message date&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="person-message">Thanks for your help today</div>&lt;!&ndash;group message partial message&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--messages single group message-->
+            <!--<div class="media single-message">-->
+                <!--<div class="pull-left">-->
+                    <!--<img class="media-object img-rounded person-photo" src="./images/user.jpg" />&lt;!&ndash;group message person photo&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="media-body single-message-body">-->
+                    <!--<div class="clearfix">-->
+                        <!--<div><h5 class="media-heading person-name">John Pagley</h5></div>&lt;!&ndash;group message person name&ndash;&gt;-->
+                        <!--<div><p class="message-date">Apr 24</p></div>&lt;!&ndash;group message message date&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="person-message">Thanks for your help today</div>&lt;!&ndash;group message partial message&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <!--messages live conversation-->
+        <div class="col-lg-9 col-md-9 live-conversation border-ddd-top border-ddd-right border-ddd-bottom">
+            <div class="col-lg-12 col-mg-12 live-conversation-messages">
+                <!--conversation single message-->
+                <div class="media single-conversation-message" ng-repeat="message in selectedConversation.messages">
+                    <div class="pull-left">
+                        <img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--conversation person photo-->
+                    </div>
+                    <div class="media-body single-conversation-body">
+                        <div class="clearfix">
+                            <div><h5 class="media-heading person-name">{{message.sender_name}}</h5></div><!--conversation person name-->
+                            <div><p class="message-date">{{message.createdAt | date:"MMM d"}}</p></div><!--conversation message date-->
+                        </div>
+                        <div class="person-message">{{message.message}}</div><!--conversation message-->
+                    </div>
+                </div>
+                <!--conversation single message-->
+                <!--<div class="media single-conversation-message">-->
+                    <!--<div class="pull-left">-->
+                        <!--<img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--conversation person photo-->
+                    <!--</div>-->
+                    <!--<div class="media-body single-conversation-body">-->
+                        <!--<div class="clearfix">-->
+                            <!--<div><h5 class="media-heading person-name">John Pagley</h5></div><!--conversation person name-->
+                            <!--<div><p class="message-date">Apr 24</p></div><!--conversation message date-->
+                        <!--</div>-->
+                        <!--<div class="person-message">Thanks for your help today</div><!--conversation message-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--conversation single message-->
+                <!--<div class="media single-conversation-message">-->
+                    <!--<div class="pull-left">-->
+                        <!--<img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--conversation person photo-->
+                    <!--</div>-->
+                    <!--<div class="media-body single-conversation-body">-->
+                        <!--<div class="clearfix">-->
+                            <!--<div><h5 class="media-heading person-name">John Pagley</h5></div><!--conversation person name-->
+                            <!--<div><p class="message-date">Apr 24</p></div><!--conversation message date-->
+                        <!--</div>-->
+                        <!--<div class="person-message">Thanks for your help today Thanks for your help today Thanks for your help today Thanks for your help today Thanks for your help today Thanks for your help today Thanks for your help today Thanks for your help today</div><!--conversation message-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--conversation single message-->
+                <!--<div class="media single-conversation-message">-->
+                    <!--<div class="pull-left">-->
+                        <!--<img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--conversation person photo-->
+                    <!--</div>-->
+                    <!--<div class="media-body single-conversation-body">-->
+                        <!--<div class="clearfix">-->
+                            <!--<div><h5 class="media-heading person-name">John Pagley</h5></div><!--conversation person name-->
+                            <!--<div><p class="message-date">Apr 24</p></div><!--conversation message date-->
+                        <!--</div>-->
+                        <!--<div class="person-message">Thanks for your help today</div><!--conversation message-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <!--write message-->
+            <div class="col-lg-12 col-md-12 well well-sm write-message">
+                <div class="col-lg-12 col-md-12 form-group">
+                    <textarea class="form-control" id="writeMessage" name="writeMessage" rows="2" cols="100%" placeholder="Write something..." ng-model="message"></textarea><!--write message textarea-->
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <a href="" class="btn btn-purple pull-right" ng-click="sendMessage(message)">Reply</a><!--write message reply button-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
