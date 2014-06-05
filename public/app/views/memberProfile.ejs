@@ -24,11 +24,11 @@
     <!--member profile message feed-->
     <div class="col-lg-12 col-md-12 border1">
         <div class="col-lg-12 col-md-12 border1">
-            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write message..."></textarea><!--member profile message text-->
+            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write message..." ng-model="message"></textarea><!--member profile message text-->
         </div>
         <!--member profile message send button-->
         <div class="col-lg-12 col-md-12 border1">
-            <a href="" class="btn btn-purple pull-right">Send</a>
+            <a href="" class="btn btn-purple pull-right" ng-click="sendMessage(message)">Send</a>
         </div>
     </div>
 

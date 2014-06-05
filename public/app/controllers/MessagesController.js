@@ -4,7 +4,7 @@
 
 angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity', 'zcMessages',
     function($scope, zcIdentity, zcMessages){
-        //Models
+
         var church = {};
         var conversations = [];
         var selectedConversation = {};
@@ -29,22 +29,38 @@ angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity'
             });
         }
 
-        //Display conversation messages
         $scope.displayConversation = function(index){
             selectedConversation = conversations[index];
+            selectedConversation['index'] = index;
             $scope.selectedConversation = selectedConversation;
         }
 
-        //Send A Message
-        $scope.sendMessage = function(message){
-            var members = [];
-            selectedConversation.members.forEach(function(member){
-                members.push(member._id);
+        $scope.deleteConversation = function(){
+            $scope.deleteConversationConfirmationMessage = false;
+            var promise = zcMessages.deleteConversation(selectedConversation);
+            promise.then(function(result){
+                selectedConversation = {};
+                $scope.selectedConversation = {};
+                $scope.deleteConversationSuccessMessage = true;
+            }, function(error){
+                $scope.deleteConversationFailureMessage = true;
             });
+        }
 
-            zcMessages.sendMessage(church, members, message);
+        $scope.sendMessage = function(message){
+            if(message){
+                var members = [];
+                selectedConversation.members.forEach(function(member){
+                    members.push(member._id);
+                });
 
-            $scope.message = "";
+                zcMessages.sendMessage(church, members, message);
+                $scope.message = "";
+            }
+        }
+
+        $scope.deleteMessage = function(index){
+            zcMessages.deleteMessage(selectedConversation, index);
         }
 
     }])

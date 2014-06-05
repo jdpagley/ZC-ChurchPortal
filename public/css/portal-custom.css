@@ -8,6 +8,10 @@ body {
     height:100%;
 }
 
+.post-link-list {
+    padding:5px 0 0 0;
+}
+
 .post-link {
     color:mediumpurple;
     font-size:12px;
@@ -160,6 +164,23 @@ body {
     text-align:left;
 }
 
+.portal-shell-top .dropdown-container .see-all-messages-area {
+    text-align:center;
+}
+
+.portal-shell-top .dropdown-container .see-all-messages-area .see-all-link {
+    color:mediumpurple;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.portal-shell-top .dropdown-container .see-all-messages-area .see-all-link:hover {
+    color:mediumpurple;
+    font-size:12px;
+    text-decoration:underline;
+    font-weight:bold;
+}
+
 /*portal news feed**********************************************************/
 
 
@@ -176,11 +197,52 @@ body {
     padding:0px;
 }
 
+.portal-news-feed-posting {
+    margin-bottom:10px;
+    padding:10px;
+}
+
 .feed-main-posting {
     border-bottom:1px #ddd solid;
     padding-bottom:5px;
     margin-bottom:5px;
 }
+
+.feed-main-posting .feed-posting-body {
+    padding:7px 0;
+}
+
+.feed-main-posting .church-photo {
+    width:50px;
+}
+
+.feed-main-posting .church-name {
+    font-weight:bold;
+}
+
+.feed-main-posting .church-date {
+    color:#aaa;
+    font-size:11px;
+}
+
+.feed-main-posting .church-text {
+    font-size:14px;
+    padding-top:10px;
+}
+
+.comment-name {
+    font-weight:bold;
+}
+
+.comment-date {
+    color:#aaa;
+    font-size:11px;
+}
+
+.comment-text {
+    font-size:14px;
+}
+
 
 
 /*portal settings form******************************************************/
@@ -376,8 +438,29 @@ body {
      height:500px;
  }
 
+.live-conversation .live-conversation-members {
+    border-bottom: 1px #ddd solid;
+    padding: 5px 20px;
+    overflow: hidden;
+}
+
+.live-conversation .live-conversation-members .conversation-head {
+    font-weight:bold;
+    font-size:11px;
+    float:left;
+    margin-right:5px;
+}
+
+.live-conversation .live-conversation-members .conversation-member {
+    font-weight:bold;
+    font-size:11px;
+    color:mediumpurple;
+    float:left;
+    margin-right:5px;
+}
+
 .live-conversation .live-conversation-messages {
-    height:374px;
+    height:348px;
     overflow-y: scroll;
     overflow:auto;
 }
@@ -403,6 +486,11 @@ body {
     float:right;
     color:#aaa;
     font-size:11px;
+}
+
+.single-conversation-message .message-remove {
+    float:right;
+    margin:-2px 0 0 5px;
 }
 
 .single-conversation-message .person-message {

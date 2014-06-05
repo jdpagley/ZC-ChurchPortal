@@ -21,7 +21,6 @@ var messageSchema = new Schema({
     sender_type:     {type: String, enum: senderTypes},
     sender_church:   {type: Schema.Types.ObjectId, ref: 'Church'},
     sender_member:   {type: Schema.Types.ObjectId, ref: 'Member'},
-    subject:         String,
     message:         String,
     createdAt:       Date
 });

@@ -12,79 +12,74 @@ var Conversation = require('../models/conversation.js');
 // 'message': {'sender_name': string, 'sender_type': String, 'sender': id, 'recipient':id, 'message': string}}
 exports.createConversation = function(req, res){
     var msgObj = req.body;
+    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error':'POST body is required.'});
     }
 
-    if(!msgObj.members){
-        return res.json(200, {'error': 'Conversation members are required.'});
+    if(!msgObj.sender){
+        return res.json(200, {'error': 'sender is required.'});
     }
 
-    if(msgObj.members.length < 2){
-        return res.json(200, {'error': 'Conversation must contain at least two members.'});
+    if(!msgObj.conversationQueries){
+        return res.json(200, {'error': 'Conversation must contain recipients.'});
     }
 
-    var newConversation = {};
-    newConversation['members'] = [];
-    newConversation['messages'] = [];
+    if(msgObj.conversationQueries.length < 1){
+        return res.json(200, {'error': 'Conversation must contain at least one recipient.'});
+    }
 
-    //Todo: Check to see if conversation already exists between these two members.
-    //IF it does already exist, just take the message and add it to the conversation.
-    async.parallel([
-        function(done){
-            async.each(msgObj.members,
-                function(member, done){
-                    console.log(member);
-                    if(member.account_type == 'church'){
-                        newConversation.members.push({
-                            account_type: 'church',
-                            account_church: member.account_church,
-                            account_name: member.account_name
-                        });
+    if(!msgObj.message){
+        return res.json(200, {'error': 'Message is required.'});
+    }
 
-                        done();
-                    } else {
-                        newConversation.members.push({
-                            account_type: 'member',
-                            account_member: member.account_member,
-                            account_name: member.account_name
-                        });
-
-                        done();
-                    }
-                },
-                function(error){
-                    if(error) res.json(500, {'error': error});
-
-                    done();
-                });
-        },
-        function(done){
-            if(msgObj.message){
-                newConversation.messages.push({
-                    sender_type: msgObj.message.sender_type,
-                    sender_name: msgObj.message.sender_name,
-                    sender: msgObj.message.sender,
-                    recipient: msgObj.message.recipient,
-                    message: msgObj.message.message
-                });
-                done();
-            } else {
-                done();
-            }
-        }],
-        function(error){
-            if(error) return res.json(500, {'error': error});
-
-            Conversation.create(newConversation, function(error, conversation){
+    //Looking for existing conversation objects
+    var ownerConversation = {};
+    async.each(msgObj.conversationQueries,
+        function(element, done){
+            Conversation.findOne({'owner': element[0].owner, members: {$all: element.slice(1), $size: element.slice(1).length}}, function(error, conversation){
                 if(error){
-                    return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                    done(error);
+                } else if (conversation){
+                    conversation.messages.push(msgObj.message);
+                    conversation.save(function(error){
+                        if(error){
+                            done(error);
+                        } else {
+                            done();
+                        }
+                    });
                 } else {
-                    return res.json(200, {'conversation': conversation});
+                    var conversationObj = {
+                        owner: element[0].owner,
+                        members: element.slice(1),
+                        messages: [msgObj.message]
+                    };
+
+                    Conversation.create(conversationObj, function(error, newConversation){
+                        if(error){
+                            done(error);
+                        } else {
+                            if(element[0].owner == msgObj.sender){
+                                ownerConversation = newConversation;
+                                done();
+                            } else {
+                                done();
+                            }
+                        }
+                    });
                 }
-            })
-        })
+            });
+        },
+        function(error){
+            if(error){
+                return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+            } else {
+                return res.json(200, {'success': 'Successfully created new conversation.', 'conversation': ownerConversation});
+            }
+        });
+
 }
 
 //{'conversation': id, 'member': id}
@@ -180,21 +175,19 @@ exports.retrieveConversations = function(req, res){
         return res.json(400, {'error':'POST body is required.'});
     }
 
-    if(!msgObj.account_type){
-        return res.json(400, {'error':'Account type id is required.'});
+    if(!msgObj.owner){
+        return res.json(400, {'error':'owner is required.'});
     }
 
-    if(!msgObj.account){
-        return res.json(400, {'error':'Account is required.'});
-    }
-
-    if(msgObj.account_type == 'church'){
-        Conversation.find({$or: [{'messages.account_church': msgObj.account}]});
-    } else if (msgObj.account_type == 'member'){
-        Conversation.find({$or: [{'messages.account_member': msgObj.account}]})
-    } else {
-        return res.json(400, {'error': 'Please specify either "church" or "member" for account type.'});
-    }
+    Conversation.find({'owner': msgObj.owner}, function(error, conversations){
+        if(error){
+            return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+        } else if (!conversations){
+            return res.json(400, {'error': 'No conversations for that owner.'});
+        } else {
+            return res.json(200, {'conversations': conversations});
+        }
+    })
 
 }
 

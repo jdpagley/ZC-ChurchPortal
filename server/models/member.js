@@ -23,6 +23,7 @@ var memberSchema = new Schema({
     gender:                   String,
     relationshipStatus:       String,
     bio:                      String,
+    interests:                [String],
     memberships:              [{type: Schema.Types.ObjectId, ref: 'Church'}],
     notifications:            {
         author_type:          String,

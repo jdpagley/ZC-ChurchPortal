@@ -32,6 +32,7 @@ var sermonSchema = new Schema({
     video:                      String,
     likes:                      [likeSchema],
     comments:                   [sermonCommentSchema],
+    tags:                       [String],
     createdAt:                  Date,
     updatedAt:                  Date
 });

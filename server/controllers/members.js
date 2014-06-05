@@ -22,7 +22,6 @@ exports.retrieve = function(req, res){
             console.log('No members for that church id.');
             return res.json(400, {'error': 'No members for that church id.'});
         } else {
-            console.log(members);
             return res.json(200, {'members': members});
         }
     });
@@ -99,7 +98,6 @@ exports.retrieveMemberById = function(req, res){
             console.log('No member with that id.');
             return res.json(400, {'error': 'No member with that id.'});
         } else {
-            console.log(member);
             return res.json(200, {'member': member});
         }
     });

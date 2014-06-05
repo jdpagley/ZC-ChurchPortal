@@ -38,6 +38,7 @@ var churchSchema = new Schema({
         day:                  String,
         time:                 String
     }],
+    denomination:             String,
     createdAt:                Date,
     UpdatedAt:                Date
 });
