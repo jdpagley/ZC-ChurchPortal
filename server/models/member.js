@@ -6,10 +6,12 @@ var mongoose = require("mongoose");
 var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
+var notificationTypes = ['post.comment', 'post.like', 'comment.like'];
+
 var memberSchema = new Schema({
     name:                     String,
     email:                    {type: String, unique: true, required: true},
-    password:                 {type: String, required: true},
+   // password:                 {type: String, required: true},
     address:                  {
         street:               String,
         city:                 String,
@@ -17,10 +19,22 @@ var memberSchema = new Schema({
         zip:                  String
     },
     phone:                    String,
-    birthday:                 String,
+    birthdate:                String,
     gender:                   String,
     relationshipStatus:       String,
     bio:                      String,
+    interests:                [String],
+    memberships:              [{type: Schema.Types.ObjectId, ref: 'Church'}],
+    notifications:            {
+        author_type:          String,
+        author_member:        {type: Schema.Types.ObjectId, ref: 'Member'},
+        author_church:        {type: Schema.Types.ObjectId, ref: 'Church'},
+        message:              String,
+        type:                 {type: String, enum: notificationTypes},
+        post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},
+        sermon_id:            {type: Schema.Types.ObjectId, ref: 'Sermon'},
+        sermon_comment_id:    Schema.Types.ObjectId
+    },
     createdAt:                Date,
     UpdatedAt:                Date
 });

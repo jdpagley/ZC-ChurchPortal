@@ -1,14 +1,14 @@
 /**
- * Created by Josh Pagley on 2/25/14.
+ * Created by Josh Pagley on 5/7/14.
  */
 
-angular.module('zcApp').controller('SermonsController', ['$scope', 'zcIdentity', 'zcSermons',
-    function($scope, zcIdentity, zcSermons){
+angular.module('zcApp').controller('MembersController', ['$scope', 'zcIdentity', 'zcMembers',
+    function($scope, zcIdentity, zcMembers){
         //Current User Object
         $scope.currentUser = {};
 
         //Sermon List
-        $scope.sermons = [];
+        $scope.members = [];
 
         //Retrieve User Profile From Server On Page Refresh
         if(!$scope.currentUser.email){
@@ -17,12 +17,12 @@ angular.module('zcApp').controller('SermonsController', ['$scope', 'zcIdentity',
             promise.then(function(result){
                 $scope.currentUser = result;
 
-                //Retrieve Sermons Associated With Current User ID.
-                if($scope.currentUser._id && $scope.sermons.length < 1){;
+                //Retrieve Members that have a membership ID associated with this church ID.
+                if($scope.currentUser._id && $scope.members.length < 1){;
                     var promise;
-                    promise = zcSermons.retrieveSermons($scope.currentUser._id);
+                    promise = zcMembers.retrieveMembers($scope.currentUser._id);
                     promise.then(function(result){
-                        $scope.sermons = result.sermons;
+                        $scope.members = result.members;
                         console.log(result);
                     }, function(error){
                         console.log('Error: ' + error);

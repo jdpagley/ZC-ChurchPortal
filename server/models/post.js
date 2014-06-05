@@ -23,7 +23,7 @@ var authorTypes = ['church', 'member'];
 var postSchema = new Schema({
     author_type:                {type: String, enum: authorTypes},
     author_church:              {type: Schema.Types.ObjectId, ref: 'Church'},
-    //author_member:              {type: Schema.Types.ObjectId, ref: 'Member'},
+    author_member:              {type: Schema.Types.ObjectId, ref: 'Member'},
     author_name:                String,
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
     comments:                   [commentSchema],

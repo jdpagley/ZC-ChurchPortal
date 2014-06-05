@@ -96,7 +96,7 @@ exports.retrieveAllSermons = function(req, res){
     }
 }
 
-// {'id': id}
+// {'id': sermonId}
 exports.retrieveSermonById = function(req, res){
     var msgObj = req.query;
     console.log(msgObj);
