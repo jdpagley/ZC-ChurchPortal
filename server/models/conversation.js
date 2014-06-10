@@ -16,7 +16,7 @@ var messageSchema = require('./message.js');
 
 var conversationSchema = new Schema({
     owner:                Schema.Types.ObjectId,
-    members:              [Schema.Types.ObjectId],
+    members:          [Schema.Types.ObjectId],
     messages:             [messageSchema],
     createdAt:            Date,
     updatedAt:            Date

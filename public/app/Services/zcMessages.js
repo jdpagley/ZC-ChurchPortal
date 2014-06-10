@@ -155,7 +155,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
             conversation.members.forEach(function(member){
                 //Below where it says 'member.id' is where you can change
                 //the field that gets searched for pre-existing conversations.
-                members.push(member._id);
+                members.push(member);
             });
 
             var alreadyExists = recipients.every(function(name){
@@ -182,8 +182,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
         }
     }
 
-    function createConversation(sender, recipients, message){
-        //Populate conversationQueries.
+    function createConversationQueries(sender, recipients){
         var conversationQueries = [];
 
         recipients.push(sender._id);
@@ -196,6 +195,13 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
 
             conversationQueries.push(members);
         });
+
+        return conversationQueries;
+    }
+
+    function createConversation(sender, recipients, message){
+        //Populate conversationQueries.
+        var conversationQueries = createConversationQueries(sender, recipients);
 
         var conversationObj = {
             "sender": sender._id,
@@ -233,7 +239,6 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
                 //Get conversations from server.
                 conversationsResource.get({'owner': churchID}, function(result){
                     console.log('Getting conversations from server.');
-                    console.log(result);
                     conversations = result.conversations;
                     promise.resolve(conversations);
                 }, function(error){
@@ -245,7 +250,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
         },
         deleteConversation: function(conversation){
             var promise = $q.defer();
-            conversationsResource.delete({'id': conversation._id}, function(result){
+            conversationsResource.delete({'conversation': conversation._id}, function(result){
                 conversations.splice(conversation.index, 1);
                 promise.resolve(result);
             }, function(error){
@@ -259,10 +264,13 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
             var preExistingConversation = checkForPreExistingConversation(recipients);
 
             if(preExistingConversation){
-                console.log('pre existing conversation exists.')
-                //Conversation already exists
+                console.log('pre existing conversation exists.');
+
+                var conversationQueries = createConversationQueries(sender, recipients);
+
                 var msgObj = {
                     "conversation": preExistingConversation._id,
+                    "conversationQueries": conversationQueries,
                     "message": {
                         "sender_name": sender.name,
                         "sender_type": "church",
@@ -276,12 +284,13 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
                     conversations[preExistingConversation.index].messages.push(result.message);
                     promise.resolve(result.message);
                 }, function(error){
+                    console.log(error);
                     promise.reject(error);
                 });
 
                 return promise.promise;
             } else {
-                console.log('Pre existing conversation does not exist.')
+                console.log('Pre existing conversation does not exist.');
                 //Conversation does not exist
                 return createConversation(sender, recipients, message);
             }
@@ -290,11 +299,10 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
            var message = conversations[conversation.index].messages[messageIndex];
 
             var promise = $q.defer();
-            messagesResource.delete({'conversationID': conversation._id, 'messageID': message._id}, function(result){
+            messagesResource.delete({'conversation': conversation._id, 'message': message._id}, function(result){
                 conversations[conversation.index].messages.splice(messageIndex, 1);
                 promise.resolve(result);
             }, function(error){
-                console.log(error);
                 promise.reject(error);
             });
 
