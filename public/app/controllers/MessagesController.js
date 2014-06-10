@@ -48,10 +48,10 @@ angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity'
         }
 
         $scope.sendMessage = function(message){
-            if(message){
+            if(message && church){
                 var members = [];
                 selectedConversation.members.forEach(function(member){
-                    members.push(member._id);
+                    members.push(member);
                 });
 
                 zcMessages.sendMessage(church, members, message);

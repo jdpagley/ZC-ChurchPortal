@@ -12,8 +12,6 @@ angular.module('zcApp').factory('zcMembers', ['$resource', '$q', function($resou
             console.log('retrieving posts from server.')
             var promise = $q.defer();
             retrieveAllMembersResource.get({'id': churchID}, function(result){
-                console.log('zcMembers members: ');
-                console.log(result.members);
                 promise.resolve(result);
             }, function(error){
                 promise.reject(error);
@@ -24,8 +22,6 @@ angular.module('zcApp').factory('zcMembers', ['$resource', '$q', function($resou
         retrieveMemberById: function(memberID){
             var promise = $q.defer();
             membersResource.get({'id': memberID}, function(result){
-                console.log('zcMember member: ');
-                console.log(result.member);
                 promise.resolve(result);
             }, function(error){
                 promise.reject(error);

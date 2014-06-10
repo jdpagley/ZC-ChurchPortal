@@ -7,12 +7,12 @@ var _ = require('underscore');
 
 //Models
 var Conversation = require('../models/conversation.js');
+var Member = require('../models/member.js');
 
-//{'members': [{'account_type': string, 'account_church': id, 'account_member': id, 'account_name': string}],
+//{'conversationQueries': [[{'owner': id}, id, id], [{'owner':id}, id, id], etc.], 'sender': id,
 // 'message': {'sender_name': string, 'sender_type': String, 'sender': id, 'recipient':id, 'message': string}}
 exports.createConversation = function(req, res){
     var msgObj = req.body;
-    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error':'POST body is required.'});
@@ -36,6 +36,7 @@ exports.createConversation = function(req, res){
 
     //Looking for existing conversation objects
     var ownerConversation = {};
+
     async.each(msgObj.conversationQueries,
         function(element, done){
             Conversation.findOne({'owner': element[0].owner, members: {$all: element.slice(1), $size: element.slice(1).length}}, function(error, conversation){
@@ -62,7 +63,13 @@ exports.createConversation = function(req, res){
                             done(error);
                         } else {
                             if(element[0].owner == msgObj.sender){
-                                ownerConversation = newConversation;
+                                ownerConversation['createdAt'] = newConversation.createdAt;
+                                ownerConversation['updatedAt'] = newConversation.updatedAt;
+                                ownerConversation['owner'] = newConversation.owner;
+                                ownerConversation['_id'] = newConversation._id;
+                                ownerConversation['messages'] = newConversation.messages;
+                                ownerConversation['members'] = newConversation.members;
+                                ownerConversation['memberObjects'] = [];
                                 done();
                             } else {
                                 done();
@@ -76,13 +83,35 @@ exports.createConversation = function(req, res){
             if(error){
                 return res.json(500, {'error': 'Server Error.', 'mongoError': error});
             } else {
-                return res.json(200, {'success': 'Successfully created new conversation.', 'conversation': ownerConversation});
+                if(ownerConversation){
+                    async.each(ownerConversation.members,
+                        function(member, done){
+                            //Todo: Return profile avatar for the members of the conversation when doing the findById
+                            Member.findById(member, 'name', function(error, member){
+                                if(error){
+                                    done(error);
+                                } else if (!member) {
+                                    done(new Error('Not able to retrieve conversation member.'));
+                                } else {
+                                    ownerConversation['memberObjects'].push({'_id': member._id, 'name': member.name});
+                                    done();
+                                }
+                            });
+                        },
+                        function(error){
+                            if(error){
+                                return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                            } else {
+                                return res.json(200, {'conversation': ownerConversation});
+                            }
+                        })
+                }
             }
         });
 
 }
 
-//{'conversation': id, 'member': id}
+//{'conversation': id}
 exports.deleteConversation = function(req, res){
     var msgObj = req.query;
 
@@ -94,80 +123,16 @@ exports.deleteConversation = function(req, res){
         return res.json(400, {'error':'Conversation id is required.'});
     }
 
-    if(!msgObj.member){
-        return res.json(400, {'error':'Member id is required.'});
-    }
-
-    Conversation.findById(msgObj.conversation, function(error, conversation){
+    Conversation.findByIdAndRemove(msgObj.conversation, function(error){
         if(error){
-            return res.json(500, {'error': 'Server Error', 'mongoError': error});
-        } else if (!conversation) {
-            return res.json(400, {'error': 'No conversation with that id.'});
+            return res.json(500, {'error': 'Server Error.', 'mongoError': error});
         } else {
-            if(conversation.members.length === 1){
-                if(conversation.members[0].type == 'church'){
-                    if(conversation.members[0].account_church == msgObj.member){
-                        conversation.remove(function(error){
-                            if(error){
-                                return res.json(500, {'error': 'Server Error', 'mongoError': error});
-                            } else {
-                                return res.json(200, {'success': 'Conversation deleted.'});
-                            }
-                        })
-                    }
-                } else if (conversation.members[0].type == 'member') {
-                    if(conversation.members[0].account_member == msgObj.member){
-                        conversation.remove(function(error){
-                            if(error){
-                                return res.json(500, {'error': 'Server Error', 'mongoError': error});
-                            } else {
-                                return res.json(200, {'success': 'Conversation deleted.'});
-                            }
-                        })
-                    }
-                }
-            } else if (conversation.members.length > 1){
-                async.each(conversation.members,
-                    function(member, done){
-                        if(member.type == 'church'){
-                            if(member.account_church == msgObj.member){
-                                conversation.members.id(msgObj.member).remove(function(error){
-                                    if(error){
-                                        done(error);
-                                    } else {
-                                        done();
-                                    }
-                                });
-                            } else {
-                                done();
-                            }
-                        } else if (member.type == 'member') {
-                            if(member.account_member == msgObj.member){
-                                conversation.members.id(msgObj.member).remove(function(error){
-                                    if(error){
-                                        done(error);
-                                    } else {
-                                        done();
-                                    }
-                                });
-                            } else {
-                                done();
-                            }
-                        }
-                    },
-                    function(error){
-                        if(error){
-                            return res.json(500, {'error': 'Server Error', 'mongoError': error});
-                        } else {
-                            return res.json(200, {'success': 'Successfully removed member from conversation.'});
-                        }
-                    });
-            }
+            return res.json(200, {'success': 'Successfully removed conversation.'});
         }
     });
-
 }
 
+//{'owner': id}
 exports.retrieveConversations = function(req, res){
     var msgObj = req.query;
 
@@ -185,13 +150,57 @@ exports.retrieveConversations = function(req, res){
         } else if (!conversations){
             return res.json(400, {'error': 'No conversations for that owner.'});
         } else {
-            return res.json(200, {'conversations': conversations});
+            var populatedConversationsArray = [];
+
+            async.each(conversations,
+                function(conversation, done){
+
+                    var memberPopulatedConversation = {};
+                    memberPopulatedConversation['_id'] = conversation._id;
+                    memberPopulatedConversation['owner'] = conversation.owner;
+                    memberPopulatedConversation['messages'] = conversation.messages;
+                    memberPopulatedConversation['members'] = conversation.members;
+                    memberPopulatedConversation['createdAt'] = conversation.createdAt;
+                    memberPopulatedConversation['updatedAt'] = conversation.updatedAt;
+                    memberPopulatedConversation['memberObjects'] = [];
+
+                    async.each(conversation.members,
+                        function(member, done){
+                            //Todo: Return profile avatar for the members of the conversation when doing the findById
+                            Member.findById(member, 'name', function(error, member){
+                                if(error){
+                                    done(error);
+                                } else if (!member) {
+                                    done(new Error('Not able to retrieve conversation member.'));
+                                } else {
+                                    memberPopulatedConversation['memberObjects'].push({'_id': member._id, 'name': member.name});
+                                    done();
+                                }
+                            });
+                        },
+                        function(error){
+                            if(error){
+                                done(error);
+                            } else {
+                                populatedConversationsArray.push(memberPopulatedConversation);
+                                done();
+                            }
+                        })
+                },
+                function(error){
+                    if(error){
+                        return res.json(500, {'error': error});
+                    } else {
+                        return res.json(200, {'conversations': populatedConversationsArray});
+                    }
+                });
         }
     })
 
 }
 
-//{'conversation': id, message: {'sender_name': string, 'sender': id, 'recipient':id, 'message': string}}
+//{'conversation': id, conversationQueries': [[{'owner': id}, id, id],
+// message: {'sender_name': string, 'sender': id, 'recipient':id, 'message': string}}
 exports.createMessage = function(req, res){
     var msgObj = req.body;
 
@@ -203,6 +212,10 @@ exports.createMessage = function(req, res){
         return res.json(400, {'error':'Conversation id is required.'});
     }
 
+    if(!msgObj.conversationQueries){
+        return res.json(400, {'error':'Conversation queries are required.'});
+    }
+
     if(!msgObj.message){
         return res.json(400, {'error':'Message Object is required.'});
     }
@@ -211,47 +224,56 @@ exports.createMessage = function(req, res){
         return res.json(400, {'error':'Message Object sender_name is required.'});
     }
 
-    if(!msgObj.message.sender){
-        return res.json(400, {'error':'Message Object sender is required.'});
-    }
-
-    if(!msgObj.message.recipient){
-        return res.json(400, {'error':'Message Object recipient is required.'});
-    }
-
     if(!msgObj.message.message){
         return res.json(400, {'error':'Message Object message is required.'});
     }
 
-    Conversation.findById(msgObj.conversation, function(error, conversation){
-        if(error){
-            return res.json(500, {'error': 'Server Error', 'mongoError': error});
-        } else if(!conversation) {
-            return res.json(200, {'error': 'No conversation with that id.'})
-        } else {
-            conversation.messages.push({
-                sender_name: msgObj.message.sender_name,
-                sender: msgObj.message.sender,
-                recipient: msgObj.message.recipient,
-                message: msgObj.message.message
-            });
-
-            conversation.save(function(error, conversation){
+    var newMessage = {};
+    async.each(msgObj.conversationQueries,
+        function(element, done){
+            Conversation.findOne({'owner': element[0].owner, members: {$all: element.slice(1), $size: element.slice(1).length}}, function(error, conversation){
                 if(error){
-                    return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                    done(error);
+                } else if (conversation){
+                    conversation.messages.push(msgObj.message);
+                    conversation.save(function(error, conversation){
+                        if(error){
+                            done(error);
+                        } else {
+                            newMessage = conversation.messages[conversation.messages.length - 1];
+                            done();
+                        }
+                    });
                 } else {
-                    var messagesLength = conversation.messages.length;
-                    console.log(conversation.messages[messagesLength - 1]);
-                    return res.json(200, {'message': conversation.messages[messagesLength - 1]});
+                    var conversationObj = {
+                        owner: element[0].owner,
+                        members: element.slice(1),
+                        messages: [msgObj.message]
+                    };
+
+                    Conversation.create(conversationObj, function(error){
+                        if(error){
+                            done(error);
+                        } else {
+                            done();
+                        }
+                    });
                 }
             });
-        }
-    });
+        },
+        function(error){
+            if(error){
+                return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+            } else {
+                return res.json(200, {'message': newMessage});
+            }
+        });
 }
 
 //{'conversation': id, 'message': id}
 exports.deleteMessage = function(req, res){
     var msgObj = req.query;
+    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error':'Deletion Query is required.'});
@@ -278,7 +300,13 @@ exports.deleteMessage = function(req, res){
                 if(error){
                     return res.json(500, {'error': 'Server Error', 'mongoError': error});
                 } else {
-                    return res.json(200, {'success': 'Successfully deleted message.'});
+                    conversation.save(function(error){
+                        if(error){
+                            return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                        } else {
+                            return res.json(200, {'success': 'Successfully deleted message.'});
+                        }
+                    });
                 }
             });
 
