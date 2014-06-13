@@ -10,6 +10,9 @@ var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
 var notificationTypes = ['post.comment', 'post.like', 'comment.like'];
+var authorizationLevels = ['admin', 'limited']
+
+//Todo: Create a notifications schema for the notification subdocs.
 
 var churchSchema = new Schema({
     name:                     String,
@@ -24,10 +27,12 @@ var churchSchema = new Schema({
     phone:                    String,
     website:                  String,
     bio:                      String,
+    administrators:           [{
+        member:               {type: Schema.Types.ObjectId, ref: 'Member'},
+        authorization:        {type: String, enum: authorizationLevels}
+    }],
     notifications:            {
-        author_type:          String,
-        author_member:        {type: Schema.Types.ObjectId, ref: 'Member'},
-        author_church:        {type: Schema.Types.ObjectId, ref: 'Church'},
+        author:               {type: Schema.Types.ObjectId, ref: 'Member'},
         type:                 {type: String, enum: notificationTypes},
         message:              String,
         post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},

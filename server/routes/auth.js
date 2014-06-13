@@ -14,7 +14,7 @@ module.exports = function(app, passport){
     // Signup ================================================
     //========================================================
     authenticationRouter.get('/signup', isAuthorizedToViewProfile, function(req, res){
-        res.render('website/signup.ejs', {message: req.flash('signupMessage')} );
+        res.render('auth/signup.ejs', {message: req.flash('signupMessage')} );
     });
 
     //process the signup form
@@ -27,13 +27,13 @@ module.exports = function(app, passport){
     //========================================================
     // Login =================================================
     //========================================================
-    authenticationRouter.get('/login', isAuthorizedToViewProfile, function(req, res){
-        res.render('website/login.ejs', {message: req.flash('loginMessage')});
+    authenticationRouter.get('/', isAuthorizedToViewProfile, function(req, res){
+        res.render('auth/login.ejs', {message: req.flash('loginMessage')});
     });
 
     authenticationRouter.post('/login', passport.authenticate('local-login', {
         successRedirect: '/portal',
-        failureRedirect: '/login',
+        failureRedirect: '/',
         failureFlash: true
     }));
 

@@ -7,6 +7,11 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
     var conversationsResource = $resource('/api/zionconnect/v1/church/conversation');
     var messagesResource = $resource('/api/zionconnect/v1/church/messages');
 
+//    var socket = io.connect('http://localhost:3000');
+//    socket.on('message', function(data){
+//        console.log(data);
+//    });
+
     var conversations = [];
 
     var testConversations = [{
