@@ -2,11 +2,12 @@
 
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy,
-    validator = require('validator'),
-    churchs = require('../controllers/churchs.js');
+    churchs = require('../controllers/churchs.js'),
+    members = require('../controllers/members.js');
 
 // load up the church model
-var Church = require('../models/church.js');
+var Church = require('../models/church.js'),
+    Member = require('../models/member.js')
 
 // expose this function to our app
 module.exports = function(passport){
@@ -15,28 +16,49 @@ module.exports = function(passport){
     //passport needs the ability to serialize and unserialize users out of a session
 
     //used to serialize the user for session
-    passport.serializeUser(function(church, done){
-        done(null, church.id);
+    passport.serializeUser(function(member, done){
+        done(null, member.id);
     });
 
     passport.deserializeUser(function(id, done){
-        Church.findById(id, function(error, church){
+        Member.findById(id, function(error, church){
             done(error, church);
         });
     });
 
+//    passport.use('local-signup', new LocalStrategy({
+//        usernameField: 'accountEmail',
+//        passwordField: 'accountPassword',
+//        passReqToCallback: true
+//    }, function(req, email, password, done){
+//            process.nextTick(function(){
+//                // controllers/churchs.js will handle creating new church.
+//                churchs.create(req, email, password, done);
+//            });
+//    }));
+
     passport.use('local-signup', new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: 'accountEmail',
+        passwordField: 'accountPassword',
         passReqToCallback: true
     }, function(req, email, password, done){
             process.nextTick(function(){
                 // controllers/churchs.js will handle creating new church.
-                churchs.create(req, email, password, done);
+                churchs.create(req, done);
             });
     }));
 
     // Local Login =====================================================
+//    passport.use('local-login', new LocalStrategy({
+//        usernameField: 'email',
+//        passwordField: 'password',
+//        passReqToCallback: true
+//    }, function(req, email, password, done){
+//        // controllers/churchs.js will handle retrieving user account
+//        // and sending it to the client.
+//        churchs.retrieve(req, email, password, done);
+//    }));
+
     passport.use('local-login', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
@@ -44,6 +66,6 @@ module.exports = function(passport){
     }, function(req, email, password, done){
         // controllers/churchs.js will handle retrieving user account
         // and sending it to the client.
-        churchs.retrieve(req, email, password, done);
+        members.retrieveChurchAdminMember(req, email, password, done);
     }));
 }

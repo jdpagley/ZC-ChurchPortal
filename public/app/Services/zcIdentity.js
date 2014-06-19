@@ -7,22 +7,24 @@ angular.module('zcApp').factory('zcIdentity', ['$window', '$resource', '$q', fun
     var churchResource = $resource('/api/zionconnect/v1/church/session');
 
     var churchObject = {};
+    var adminObject = {};
 
     return {
         getIdentity: function(){
             var promise = $q.defer();
             // If churchObject is populated with current account info
             // then return churchObject.
-            if(churchObject.email){
+            if(adminObject._id){
                 console.log('Returning existing churchObject in zcIdentity');
-                promise.resolve(churchObject);
+                promise.resolve({ admin: adminObject, church: churchObject});
             } else {
                 //If churchObject is empty then make call to the server.
                 churchResource.get({}, function(result){
                     console.log('Getting church data from the server with session key.');
                     console.log(result);
                     churchObject = result.church;
-                    promise.resolve(result.church);
+                    adminObject = result.admin;
+                    promise.resolve(result);
                 }, function(error){
                     console.log(error);
                     promise.reject(error);
@@ -33,9 +35,19 @@ angular.module('zcApp').factory('zcIdentity', ['$window', '$resource', '$q', fun
         },
         //Set the churchObject with the new updated churchObject to make
         //it available to rest of the app.
-        setIdentity: function(updatedChurchObject){
+        setChurch: function(updatedChurchObject){
             churchObject = updatedChurchObject;
             return churchObject;
+        },
+        getChurch: function(){
+            return churchObject;
+        },
+        setAdmin: function(newAdmin){
+            adminObject = newAdmin;
+            return adminObject;
+        },
+        getAdmin: function(){
+            return adminObject;
         }
     }
 }]);

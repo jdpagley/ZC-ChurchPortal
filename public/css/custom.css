@@ -167,6 +167,18 @@ h1, h2, h3, h4, h5, h6, p, a {
     display: none;
 }
 
+.hide-step3-form-validation-error{
+    display: none;
+}
+
+.hide-response-popup-error {
+    display: none;
+}
+
+#responsePopup {
+    clear: both;
+}
+
 
 
 

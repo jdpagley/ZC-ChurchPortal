@@ -19,16 +19,8 @@ exports.create = function(req, res){
         return res.json(400, {'error': 'POST body is required.'});
     }
 
-    if(!msgObj.authorType){
-        return res.json(400, {'error': 'authorType required.'});
-    }
-
     if(!msgObj.author){
         return res.json(400, {'error': 'postAuthor required.'});
-    }
-
-    if(!msgObj.authorName){
-        return res.json(400, {'error': 'post name required.'});
     }
 
     if(!msgObj.owner){
@@ -40,9 +32,7 @@ exports.create = function(req, res){
     }
 
     var newPost = {
-        'author_type': msgObj.authorType,
-        'author_church': msgObj.author,
-        'author_name': msgObj.authorName,
+        'author': msgObj.author,
         'owner': msgObj.owner,
         'body': msgObj.body
     }
@@ -51,8 +41,13 @@ exports.create = function(req, res){
         if(error){
             return res.json(500, {'error': 'Server Error', 'mongoError': error});
         } else {
-            console.log('new post: ' + post);
-            return res.json(200, {'success': 'Successfully created new post.', 'post': post});
+            Post.findById(post._id).populate('author').exec(function(error, populatedPost){
+                if(error){
+                    return res.json(500, {'error': 'Server Error', 'mongoError': error});
+                } else {
+                    return res.json(200, {'success': 'Successfully created new post.', 'post': populatedPost});
+                }
+            })
         }
     });
 }
@@ -71,7 +66,7 @@ exports.retrieve = function(req, res){
     if(msgObj.churchID){
 
         var options = [
-            {path: 'author_church'}
+            {path: 'author'}
         ];
 
         Post.find({'owner': msgObj.churchID}).populate(options).sort({'createdAt': -1}).exec(function(error, posts){
@@ -94,10 +89,6 @@ exports.createComment = function(req, res){
 
     if(!msgObj){
         return res.json(400, {'error': 'POST body is required.'});
-    }
-
-    if(!msgObj.authorType){
-        return res.json(400, {'error': 'Author Type is required.'});
     }
 
     if(!msgObj.author){
@@ -124,8 +115,7 @@ exports.createComment = function(req, res){
         } else {
 
             post.comments.push({
-                'authorType': msgObj.authorType,
-                'author_church': msgObj.author,
+                'author': msgObj.author,
                 'author_name': msgObj.authorName,
                 'body': msgObj.body
             });

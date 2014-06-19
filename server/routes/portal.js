@@ -89,7 +89,6 @@ module.exports = function(app) {
         res.send(404);
     });
 
-
     // Require Routers
     app.use('/', viewsRouter);
     app.use('/', churchRouter);
@@ -104,6 +103,8 @@ module.exports = function(app) {
 function isLoggedIn(req, res, next){
     //If user is logged in continue,
     //if not redirect to "/".
+    console.log(req.user);
+
     if(req.isAuthenticated()){
         return next();
     }

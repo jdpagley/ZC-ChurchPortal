@@ -10,22 +10,25 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
     function($scope, $window, zcIdentity, zcFeed, zcNotifications){
 
         //Current User Object
-        $scope.currentUser = {};
+        //$scope.currentUser = {};
+        var admin = {};
+        var church = {};
 
         //Current Posts
         $scope.posts = [];
 
         //Retrieve Current User Object From Server
-        if(!$scope.currentUser.email){
+        if(!admin.email){
             var promise = zcIdentity.getIdentity();
             promise.then(function(result){
-                //set currentUser with userObject returned from server.
-                $scope.currentUser = result;
+                //set admin and church objects with accounts returned from server.
+                admin = result.admin;
+                church = result.church;
 
                 //Retrieve Posts Associated With Current User ID.
-                if($scope.currentUser._id && $scope.posts.length < 1){;
+                if(church._id && $scope.posts.length < 1){;
                     var promise;
-                    promise = zcFeed.retrievePosts($scope.currentUser._id);
+                    promise = zcFeed.retrievePosts(church._id);
                     promise.then(function(result){
                         $scope.posts = result.posts;
                         console.log(result);
@@ -39,63 +42,67 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
             });
         }
 
+        /**
+         * Create New Post
+         */
 
-        //Creating a new post on feed.
+        var newPost = {};
+        $scope.createPost = function(body){
+            if(church._id){
+                if(admin._id){
+                    if(body != ""){
+                        newPost['author'] = admin._id;
+                        newPost['owner'] = church._id;
+                        newPost['body'] = body;
 
-        //Object that view is binding to to create
-        //new post on feed.
-        $scope.newPostObj = {};
+                        var promise = zcFeed.createPost(newPost);
 
-        $scope.createPost = function(){
-            if($scope.currentUser._id && $scope.newPostObj.message !== ""){
-
-                //Default properties for newPostObj for church.
-                $scope.newPostObj['authorType'] = 'church';
-                $scope.newPostObj['author'] = $scope.currentUser._id;
-                $scope.newPostObj['owner'] = $scope.currentUser._id;
-                $scope.newPostObj['authorName'] = $scope.currentUser.name;
-
-                var promise = zcFeed.createPost($scope.newPostObj);
-
-                promise.then(function(result){
-                    $scope.posts.unshift(result.post);
-
-                    $scope.newPostObj = {};
-                }, function(error){
-                    console.log('Error: ' + error);
-                });
+                        promise.then(function(result){
+                            $scope.posts.unshift(result.post);
+                            $scope.newPostObj = {};
+                            newPost = {};
+                        }, function(error){
+                            console.log(error);
+                        });
+                    } else {
+                        console.log('post body is empty.');
+                    }
+                } else {
+                    console.log('admin._id is undefined.');
+                }
+            } else {
+                console.log('church._id is undefined.');
             }
         }
 
-        //Add Comments To post
+        /**
+         * Create New Comment
+         */
         $scope.newCommentObj = {};
 
         $scope.createComment = function(owner, index){
             var newCommentObj = {};
 
-            newCommentObj['authorType'] = 'church';
-            newCommentObj['author'] = $scope.currentUser._id;
-            newCommentObj['authorName'] = $scope.currentUser.name;
+            newCommentObj['author'] = admin._id;
             newCommentObj['owner'] = owner;
+            newCommentObj['authorName'] = admin.name;
             //The view puts the comment body in the the newCommentObj key under the posts id.
             newCommentObj['body'] = $scope.newCommentObj[owner];
-
-            console.log(newCommentObj);
 
             var promise = zcFeed.createComment(newCommentObj);
 
             promise.then(function(result){
                 $scope.posts[index].comments.unshift(result.comment);
 
-                var newNotification = {};
-                newNotification['sender'] = $scope.currentUser._id;
-                newNotification['recipient'] = owner;
-
-                zcNotifications.createNotification()
+//                var newNotification = {};
+//                newNotification['sender'] = $scope.currentUser._id;
+//                newNotification['recipient'] = owner;
+//
+//                zcNotifications.createNotification()
 
                 $scope.newCommentObj = {};
             }, function(error){
-                console.log('Error: ' + error);
+                console.log(error);
             });
         }
 

@@ -16,9 +16,7 @@ var authorTypes = ['church', 'member'];
  */
 
 var commentSchema = new Schema({
-    author_type:                {type: String, enum: authorTypes},
-    author_church:              {type: Schema.Types.ObjectId, ref: 'Church'},
-    author_member:              {type: Schema.Types.ObjectId, ref: 'Member'},
+    author:                     {type: Schema.Types.ObjectId, ref: 'Member'},
     author_name:                String,
     body:                       String,
     createdAt:                  Date

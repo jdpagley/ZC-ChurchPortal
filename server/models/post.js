@@ -18,13 +18,23 @@ var likeSchema = require('./like.js');
  body: the body of the post.
  */
 
-var authorTypes = ['church', 'member'];
+//var authorTypes = ['church', 'member'];
+//
+//var postSchema = new Schema({
+//    author_type:                {type: String, enum: authorTypes},
+//    author_church:              {type: Schema.Types.ObjectId, ref: 'Church'},
+//    author_member:              {type: Schema.Types.ObjectId, ref: 'Member'},
+//    author_name:                String,
+//    owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
+//    comments:                   [commentSchema],
+//    likes:                      [likeSchema],
+//    body:                       String,
+//    createdAt:                  Date,
+//    updatedAt:                  Date
+//});
 
 var postSchema = new Schema({
-    author_type:                {type: String, enum: authorTypes},
-    author_church:              {type: Schema.Types.ObjectId, ref: 'Church'},
-    author_member:              {type: Schema.Types.ObjectId, ref: 'Member'},
-    author_name:                String,
+    author:                     {type: Schema.Types.ObjectId, ref: 'Member'},
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
     comments:                   [commentSchema],
     likes:                      [likeSchema],

@@ -5,6 +5,37 @@
 //Models
 var Member = require('../models/member.js');
 
+exports.create = function(req, res, callback){
+    var msgObj = req.body;
+
+    if(callback){
+       if(typeof callback === 'function'){
+           if(!msgObj.accountEmail){
+               return callback(new Error('Account email is required.'), null);
+           }
+
+           if(!msgObj.accountPassword){
+               return callback(new Error('Account password is required.'), null);
+           }
+
+           var newMember = new Member();
+           newMember['name'] = msgObj.name;
+           newMember['email'] = msgObj.accountEmail;
+           newMember['password'] = newMember.generateHash(msgObj.accountPassword);
+
+           newMember.save(function(error, member){
+               if(error){
+                   callback(error, null);
+               } else {
+                   callback(null, member);
+               }
+           })
+       } else {
+           console.log('callback is not a function.');
+       }
+    }
+}
+
 //{'id': churchId}
 exports.retrieve = function(req, res){
     var msgObj = req.query;
@@ -100,5 +131,29 @@ exports.retrieveMemberById = function(req, res){
         } else {
             return res.json(200, {'member': member});
         }
+    });
+}
+
+exports.retrieveChurchAdminMember = function(req, email, password, done){
+    // Find church whose email is the same as the forms email
+    // we are checking to see if the church trying to login exists.
+    Member.findOne({'email': email}).populate('admin_of').exec(function(error, member){
+        // if there are any errors, return the error before anything else
+        if(error){
+            return done(error);
+        }
+
+        // If no church is found then return the message
+        if(!member){
+            return done(null, false, req.flash('loginMessage', 'No Administrative user found.'));
+        }
+
+        //If church is found but password is wrong
+        if (!member.validPassword(password)){
+            return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+        }
+
+        // all is well, return successful church
+        return done(null, member);
     });
 }

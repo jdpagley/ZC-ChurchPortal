@@ -10,7 +10,7 @@
         <!--post action bar-->
         <div class="col-lg-12 col-md-12">
             <div class="col-lg-1 col-md-1"><a href="#"><span class="glyphicon glyphicon-picture glyphicon1"></span></a></div><!--post select image-->
-            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createPost()">Post</a></div><!--post button-->
+            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createPost(newPostObj.body)">Post</a></div><!--post button-->
         </div>
     </div>
     <!--portal news feed posting-->
@@ -23,7 +23,7 @@
                     <img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/><!--church posting image-->
                 </div>
                 <div class="media-body feed-posting-body">
-                    <div class="media-heading"><h5 class="church-name">{{post.author_name}}</h5></div><!--church name-->
+                    <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
                     <div><p class="church-date">{{post.createdAt | date:short}}</p></div><!--church posting date-->
                 </div>
             </div>

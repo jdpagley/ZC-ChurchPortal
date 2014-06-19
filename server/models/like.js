@@ -14,9 +14,7 @@ var Schema = mongoose.Schema;
  */
 
 var likeSchema = new Schema({
-    author_church:           {type: Schema.Types.ObjectId, ref: 'Church'},
-    author_member:           {type: Schema.Types.ObjectId, ref: 'Member'},
-    author_name:             String,
+    author:                  {type: Schema.Types.ObjectId, ref: 'Member'},
     createdAt:               Date
 });
 

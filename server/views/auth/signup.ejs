@@ -123,7 +123,7 @@
             <div class="panel panel-default">
                 <!--service time head-->
                 <div class="panel-heading">
-                    <h3 class="panel-title purple-header">Add Service Times</h3>
+                    <h3 class="panel-title purple-header">Add Church Services</h3>
                 </div>
                 <!--service time body-->
                 <div class="panel-body">
@@ -134,15 +134,13 @@
                             <div class="well well-sm clearfix">
                                 <!--service time single time-->
                                 <div class="col-lg-12 col-md-12">
-                                    <div class="alert-dismissable services">
-
-                                    </div>
+                                    <div id="serviceList" class="alert-dismissable services"></div>
                                 </div>
                             </div>
                             <!--service time add-->
                             <div class="col-lg-12 col-md-12 form-group">
                                 <!--service time day-->
-                                <div class="col-lg-5 col-md-5">
+                                <div class="col-lg-4 col-md-4">
                                     <select id="serviceDay" class="form-control" name="serviceDay" title="Sunday"><!--service time day select-->
                                         <option>Sunday</option>
                                         <option>Monday</option>
@@ -154,10 +152,16 @@
                                     </select><!--service time day select-->
                                 </div>
                                 <!--service time hour-->
-                                <div class="col-lg-5 col-md-5 add-service">
+                                <div class="col-lg-4 col-md-4 add-service">
                                     <input class="form-control" id="serviceTime" type="text" />
                                 </div>
-                                <div class="col-lg-2 col-md-2 add-service"><button class="btn btn-success btn-block"><span class="glyphicon glyphicon-plus"></span> Add</button></div><!--add another service time link-->
+                                <div class="col-lg-2 col-md-2 add-service">
+                                    <select id="serviceTimePeriod" class="form-control" title="am">
+                                        <option>am</option>
+                                        <option>pm</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-2 add-service"><button id="addServiceButton" class="btn btn-success btn-block"><span class="glyphicon glyphicon-plus"></span> Add</button></div><!--add another service time link-->
                             </div>
                         </div>
                     </div>
@@ -172,6 +176,8 @@
         <h1 style="color: #808080">Final Step</h1>
         <br />
         <!--authentication container-->
+        <p style="color: #808080"><span class="glyphicon glyphicon-info-sign"></span> The administration account is the account that you will use to login to the church management portal. </p>
+        <br />
         <div class="col-lg-12 col-md-12 single-settings-form">
             <div class="panel panel-default">
                 <!--authentication head-->
@@ -184,20 +190,32 @@
                     <form>
                         <!--authentication email-->
                         <div class="form-group">
-                            <label class="control-label" for="accountEmail">Email</label>
-                            <input type="email" class="form-control" id="adminEmail" name="accountEmail" />
+                            <label class="control-label" for="accountEmail">Email</label> <span id="accountEmailError" style="color: red" class="glyphicon glyphicon-asterisk hide-form-validation-error"></span>
+                            <input id="accountEmail" type="email" class="form-control" id="adminEmail" name="accountEmail" />
                         </div>
                         <!--authentication current password-->
                         <div class="form-group">
-                            <label class="control-label" for="currentPassword">Password</label>
-                            <input type="password" class="form-control" id="adminPassword" name="currentPassword" />
+                            <label class="control-label" for="accountPassword">Password</label> <span id="accountPasswordError" style="color: red" class="glyphicon glyphicon-asterisk hide-form-validation-error"></span>
+                            <input id="accountPassword" type="password" class="form-control" id="adminPassword" name="currentPassword" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <button id="step3BackButton" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
-        <button id="step3Button" class="btn btn-default btn-lg">Finish<span class="glyphicon glyphicon-ok"></span></button>
+
+        <!--Validation Error Message-->
+        <div id="step3ValidationErrorMessage"  class="alert alert-danger alert-dismissable hide-step3-form-validation-error">
+            <span>Please fill out required fields.</span><!--validation failed error paragraph-->
+            <button id="step3ValidationErrorMessageButton" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--validation failed error x icon-->
+        </div>
+
+        <div id="responsePopup"  class="alert alert-danger alert-dismissable hide-response-popup-error">
+            <span id="responsePopupMessage"></span><!--validation failed error paragraph-->
+            <button id="responsePopupButton" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--validation failed error x icon-->
+        </div>
+
+        <button id="step3BackButton" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-chevron-left"></span> Back</button>
+        <button id="step3Button" class="btn btn-default btn-lg">Finish <span class="glyphicon glyphicon-ok"></span></button>
     </div>
 
     <hr>
