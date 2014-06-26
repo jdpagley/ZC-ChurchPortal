@@ -57,59 +57,160 @@ exports.retrieve = function(req, res){
         }
     });
 
-//    Member.findOne({'email': 'jdpagley@yahoo.com'}, function(error, members){
-//        if(error){
-//            console.log(error);
-//        } else if (!members || members.length < 1) {
-//            console.log('no members.');
-//            console.log(members);
-//        } else {
-//            console.log(members);
-//            members.memberships.push(msgObj.id);
-//
-//            members.save(function(error){
-//                if(error){
-//                    console.log(error);
-//                }
-//            })
-//        }
-//    });
-//
-//    Member.findOne({'email': 'pagleyjohn@yahoo.com'}, function(error, members){
-//        if(error){
-//            console.log(error);
-//        } else if (!members || members.length < 1) {
-//            console.log('no members.');
-//            console.log(members);
-//        } else {
-//            console.log(members);
-//            members.memberships.push(msgObj.id);
-//
-//            members.save(function(error){
-//                if(error){
-//                    console.log(error);
-//                }
-//            })
-//        }
-//    });
-//
-//    Member.findOne({'email': 'jkpagley@yahoo.com'}, function(error, members){
-//        if(error){
-//            console.log(error);
-//        } else if (!members || members.length < 1) {
-//            console.log('no members.');
-//            console.log(members);
-//        } else {
-//            console.log(members);
-//            members.memberships.push(msgObj.id);
-//
-//            members.save(function(error){
-//                if(error){
-//                    console.log(error);
-//                }
-//            })
-//        }
-//    });
+   /* Member.findOne({'email': 'jdpagley@yahoo.com'}, function(error, members){
+        if(error){
+            console.log(error);
+        } else if (!members || members.length < 1) {
+            console.log('no members.');
+            console.log(members);
+        } else {
+            console.log(members);
+            members.memberships.push(msgObj.id);
+
+            members.save(function(error){
+                if(error){
+                    console.log(error);
+                }
+            })
+        }
+    });
+
+    Member.findOne({'email': 'pagleyjohn@yahoo.com'}, function(error, members){
+        if(error){
+            console.log(error);
+        } else if (!members || members.length < 1) {
+            console.log('no members.');
+            console.log(members);
+        } else {
+            console.log(members);
+            members.memberships.push(msgObj.id);
+
+            members.save(function(error){
+                if(error){
+                    console.log(error);
+                }
+            })
+        }
+    });
+
+    Member.findOne({'email': 'jkpagley@yahoo.com'}, function(error, members){
+        if(error){
+            console.log(error);
+        } else if (!members || members.length < 1) {
+            console.log('no members.');
+            console.log(members);
+        } else {
+            console.log(members);
+            members.memberships.push(msgObj.id);
+
+            members.save(function(error){
+                if(error){
+                    console.log(error);
+                }
+            })
+        }
+    }); */
+
+   /* Member.create({
+        type: 'member',
+        name: 'Josh Pagley',
+        email: 'jdpagley@yahoo.com',
+        password: 'josh',
+        address: {
+            street: '6312 SE 10th PL',
+            city: 'Ocala',
+            state: 'FL',
+            'zip': '34472'
+        },
+        phone: '111-222-3333',
+        birthdate: '1/16/95',
+        gender: 'Male',
+        relationshipStatus: 'single',
+        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
+        interests: ['javascript', 'startups', 'software', 'tech', 'programming'],
+        memberships: ["53a2fe4b32a9281b1d2605bb"]
+    }, function(error){
+        if(error){
+            console.log(error);
+        }
+        console.log('success');
+    });
+
+    Member.create({
+        type: 'member',
+        name: 'John Pagley',
+        email: 'pagleyjohn@yahoo.com',
+        password: 'john',
+        address: {
+            street: '6312 SE 10th PL',
+            city: 'Ocala',
+            state: 'FL',
+            'zip': '34472'
+        },
+        phone: '111-222-3333',
+        birthdate: '1/16/95',
+        gender: 'Male',
+        relationshipStatus: 'single',
+        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
+        interests: ['marketing', 'startups', 'html', 'css', 'google', 'seo'],
+        memberships: ["53a2fe4b32a9281b1d2605bb"]
+    }, function(error){
+        if(error){
+            console.log(error);
+        }
+        console.log('success');
+    });
+
+    Member.create({
+        type: 'member',
+        name: 'Jeremy Pagley',
+        email: 'jkpagley@yahoo.com',
+        password: 'jeremy',
+        address: {
+            street: '6312 SE 10th PL',
+            city: 'Ocala',
+            state: 'FL',
+            'zip': '34472'
+        },
+        phone: '111-222-3333',
+        birthdate: '1/16/95',
+        gender: 'Male',
+        relationshipStatus: 'single',
+        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
+        interests: ['photoshop', 'ios', 'games', 'programming', 'business'],
+        memberships: ["53a2fe4b32a9281b1d2605bb"]
+    }, function(error){
+        if(error){
+            console.log(error);
+        }
+        console.log('success');
+    });
+
+    Member.create({
+        type: 'member',
+        name: 'Jeff Pagley',
+        email: 'jeffjr@jenkinscars.com',
+        password: 'jeff',
+        address: {
+            street: '6312 SE 10th PL',
+            city: 'Ocala',
+            state: 'FL',
+            'zip': '34472'
+        },
+        phone: '111-222-3333',
+        birthdate: '1/16/95',
+        gender: 'Male',
+        relationshipStatus: 'single',
+        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
+        interests: ['information technology', 'microsoft', 'security', 'working out'],
+        memberships: ["53a2fe4b32a9281b1d2605bb"]
+    }, function(error){
+        if(error){
+            console.log(error);
+        }
+        console.log('success');
+    }); */
+
 }
 
 //{'id': memberId}

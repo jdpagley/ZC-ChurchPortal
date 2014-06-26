@@ -220,11 +220,11 @@ exports.createMessage = function(req, res){
         return res.json(400, {'error':'Message Object is required.'});
     }
 
-    if(!msgObj.message.sender_name){
+    if(!msgObj.message.name){
         return res.json(400, {'error':'Message Object sender_name is required.'});
     }
 
-    if(!msgObj.message.message){
+    if(!msgObj.message.msg){
         return res.json(400, {'error':'Message Object message is required.'});
     }
 

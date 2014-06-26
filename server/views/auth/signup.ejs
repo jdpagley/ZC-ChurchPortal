@@ -15,6 +15,13 @@
         <h1 style="color: #808080">Step 1</h1>
         <br/>
         <div class="form-group">
+            <image id="profileAvatar" style="margin-left: auto; margin-right: auto;"></image>
+        </div>
+        <div class="form-group">
+            <label>Profile Picture</label>
+            <input type="file" class="form-control" id="avatar" onchange="displayProfileAvatar(this)" required="required">
+        </div>
+        <div class="form-group">
             <label>Name</label> <span id="nameError" style="color: red" class="glyphicon glyphicon-asterisk hide-form-validation-error"></span>
             <input type="text" class="form-control" name="name" id="name" autofocus="autofocus" required="required">
         </div>

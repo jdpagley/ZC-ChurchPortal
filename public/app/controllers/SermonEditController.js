@@ -3,30 +3,18 @@
  */
 angular.module('zcApp').controller('SermonEditController', ['$scope', '$routeParams', 'zcIdentity', 'zcSermons',
     function($scope, $routeParams, zcIdentity, zcSermons){
-        //Current User Object
-        $scope.currentUser = {};
 
         //Sermon Object
-        $scope.sermon = null;
-
-        //Retrieve User Profile From Server On Page Refresh
-        if(!$scope.currentUser.email){
-            var promise;
-            promise = zcIdentity.getIdentity();
-            promise.then(function(result){
-                $scope.currentUser = result;
-            }, function(error){
-                console.log(error);
-            });
-        }
+        var sermon = null;
 
         //Retrieve Sermon Associated With Sermon ID In URL Parameters.
-        if(!$scope.sermon){
+        if(!sermon){
             var promise;
             promise = zcSermons.retrieveSermonById($routeParams.id);
             promise.then(function(result){
-                $scope.sermonObject = result.sermon;
-                $scope.sermon = result.sermon;
+                sermon = result.sermon;
+                sermon.tags = result.sermon.tags.join(', ');
+                $scope.sermonObject = sermon;
             }, function(error){
                 console.log(error);
             });
@@ -36,10 +24,24 @@ angular.module('zcApp').controller('SermonEditController', ['$scope', '$routePar
         $scope.sermonObject = {};
         $scope.sermonCreatedSuccessfully = false;
         $scope.sermonCreationFailure = false;
+        var newSermon = {};
 
         $scope.updateSermon = function(){
 
-            var promise = zcSermons.updateSermon($scope.sermonObject);
+            newSermon['_id'] = $scope.sermonObject._id;
+            newSermon['owner'] = $scope.sermonObject.owner;
+            newSermon['part'] = $scope.sermonObject.part;
+            newSermon['title'] = $scope.sermonObject.title;
+            newSermon['series'] = $scope.sermonObject.series;
+            newSermon['notes'] = $scope.sermonObject.notes;
+            newSermon['speaker'] = $scope.sermonObject.speaker;
+            newSermon['video'] = $scope.sermonObject.video;
+            newSermon['audio'] = $scope.sermonObject.audio;
+
+            var tagsArray = $scope.sermonObject.tags.split(',');
+            newSermon['tags'] = tagsArray;
+
+            var promise = zcSermons.updateSermon(newSermon);
             promise.then(function(result){
                 if(result.sermon){
                     $scope.sermonCreatedSuccessfully = true;

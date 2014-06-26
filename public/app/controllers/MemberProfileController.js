@@ -5,6 +5,7 @@ angular.module('zcApp').controller('MemberProfileController', ['$scope', '$route
     function($scope, $routeParams, zcIdentity, zcMembers, zcMessages){
         //Current User Object
         var church = {};
+        var admin = {};
 
         //Member Object
         var member = null;
@@ -15,7 +16,8 @@ angular.module('zcApp').controller('MemberProfileController', ['$scope', '$route
             var promise;
             promise = zcIdentity.getIdentity();
             promise.then(function(result){
-                church = result;
+                church = result.church;
+                admin = result.admin;
             }, function(error){
                 console.log(error);
             });
@@ -37,7 +39,7 @@ angular.module('zcApp').controller('MemberProfileController', ['$scope', '$route
         $scope.sendMessage = function(message){
             if(message){
                 var members = [member._id];
-                zcMessages.sendMessage(church, members, message);
+                zcMessages.sendMessage(admin, members, message);
                 $scope.message = "";
             }
         }

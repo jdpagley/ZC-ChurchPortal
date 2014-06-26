@@ -17,7 +17,7 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
         //Current Posts
         $scope.posts = [];
 
-        //Retrieve Current User Object From Server
+        //Retrieve Admin User and Church Object From Server
         if(!admin.email){
             var promise = zcIdentity.getIdentity();
             promise.then(function(result){

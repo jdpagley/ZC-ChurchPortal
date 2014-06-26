@@ -287,4 +287,21 @@ $(document).ready(function(){
         $('#responsePopup').addClass('hide-response-popup-error');
     });
 
-})
+
+
+});
+
+function displayProfileAvatar(input){
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#profileAvatar')
+                .attr('src', e.target.result)
+                .width(200)
+                .height(200);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}

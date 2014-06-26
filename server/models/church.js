@@ -14,10 +14,42 @@ var authorizationLevels = ['admin', 'limited']
 
 //Todo: Create a notifications schema for the notification subdocs.
 
+//var churchSchema = new Schema({
+//    name:                     String,
+//    email:                    {type: String, unique: true, required: true},
+//    address:                  {
+//        street:               String,
+//        city:                 String,
+//        state:                String,
+//        zip:                  String
+//    },
+//    phone:                    String,
+//    website:                  String,
+//    bio:                      String,
+//    administrators:           [{
+//        member:               {type: Schema.Types.ObjectId, ref: 'Member'},
+//        authorization:        {type: String, enum: authorizationLevels}
+//    }],
+//    notifications:            {
+//        author:               {type: Schema.Types.ObjectId, ref: 'Member'},
+//        type:                 {type: String, enum: notificationTypes},
+//        message:              String,
+//        post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},
+//        sermon_id:            {type: Schema.Types.ObjectId, ref: 'Sermon'},
+//        sermon_comment_id:    Schema.Types.ObjectId
+//    },
+//    services:                 [{
+//        day:                  String,
+//        time:                 String
+//    }],
+//    denomination:             String,
+//    createdAt:                Date,
+//    UpdatedAt:                Date
+//});
+
 var churchSchema = new Schema({
     name:                     String,
     email:                    {type: String, unique: true, required: true},
-    //password:                 {type: String, required: true},
     address:                  {
         street:               String,
         city:                 String,

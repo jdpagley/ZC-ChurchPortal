@@ -9,9 +9,10 @@ var _ = require('underscore');
 var Sermon = require('../models/sermon.js');
 var Church = require('../models/church.js');
 
-//{'owner': id, 'title': string, 'series': string, 'part': number, 'speaker': string, 'notes': string, 'audio': url, 'video':url}
+//{'owner': id, 'title': string, 'series': string, 'part': number, 'speaker': string, 'notes': string, 'audio': url, 'video':url, tags: [string]}
 exports.create = function(req, res){
     var msgObj = req.body;
+    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {"error": "POST body is required with valid parameters"});
@@ -48,6 +49,7 @@ exports.create = function(req, res){
             if(msgObj.audio){ newSermon.audio = msgObj.audio; }
             if(msgObj.notes){ newSermon.notes = msgObj.notes; }
             if(msgObj.video){ newSermon.video = msgObj.video}
+            if(msgObj.tags){ newSermon.tags = msgObj.tags}
 
             callback();
         }],
@@ -153,13 +155,13 @@ exports.update = function(req, res){
                 if(msgObj.speaker){ sermon.speaker = msgObj.speaker; }
                 if(msgObj.audio){ sermon.audio = msgObj.audio; }
                 if(msgObj.notes){ sermon.notes = msgObj.notes; }
-                if(msgObj.video){ sermon.video = msgObj.video}
+                if(msgObj.video){ sermon.video = msgObj.video; }
+                if(msgObj.tags){ sermon.tags = msgObj.tags; }
 
                 sermon.save(function(error, updatedSermon){
                     if(error){
                         return res.json(500, {'error': 'Server Error.', 'mongoError': error});
                     } else {
-                        console.log('Successfully updated sermon: ' + JSON.stringify(updatedSermon));
                         return res.json(200, {'success': 'Successfully updated sermon.', 'sermon': updatedSermon});
                     }
                 })

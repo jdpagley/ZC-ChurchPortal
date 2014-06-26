@@ -6,6 +6,7 @@ angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity'
     function($scope, zcIdentity, zcMessages){
 
         var church = {};
+        var admin = {};
         var conversations = [];
         var selectedConversation = {};
 
@@ -13,15 +14,16 @@ angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity'
         if(!church.email){
             var promise = zcIdentity.getIdentity();
             promise.then(function(result){
-                church = result;
+                church = result.church;
+                admin = result.admin;
 
                 //If conversations are empty then retrieve them from server.
                 if(conversations.length === 0){
-                    var promise = zcMessages.getConversations(church._id);
+                    var promise = zcMessages.getConversations(admin._id);
                     promise.then(function(result){
                         conversations = result;
                         $scope.conversations = conversations;
-                    })
+                    });
                 };
 
             }, function(error){
@@ -54,7 +56,7 @@ angular.module('zcApp').controller('MessagesController', ['$scope', 'zcIdentity'
                     members.push(member);
                 });
 
-                zcMessages.sendMessage(church, members, message);
+                zcMessages.sendMessage(admin, members, message);
                 $scope.message = "";
             }
         }
