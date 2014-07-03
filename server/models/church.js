@@ -10,11 +10,46 @@ var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
 var notificationTypes = ['post.comment', 'post.like', 'comment.like'];
+var authorizationLevels = ['admin', 'limited']
+
+//Todo: Create a notifications schema for the notification subdocs.
+
+//var churchSchema = new Schema({
+//    name:                     String,
+//    email:                    {type: String, unique: true, required: true},
+//    address:                  {
+//        street:               String,
+//        city:                 String,
+//        state:                String,
+//        zip:                  String
+//    },
+//    phone:                    String,
+//    website:                  String,
+//    bio:                      String,
+//    administrators:           [{
+//        member:               {type: Schema.Types.ObjectId, ref: 'Member'},
+//        authorization:        {type: String, enum: authorizationLevels}
+//    }],
+//    notifications:            {
+//        author:               {type: Schema.Types.ObjectId, ref: 'Member'},
+//        type:                 {type: String, enum: notificationTypes},
+//        message:              String,
+//        post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},
+//        sermon_id:            {type: Schema.Types.ObjectId, ref: 'Sermon'},
+//        sermon_comment_id:    Schema.Types.ObjectId
+//    },
+//    services:                 [{
+//        day:                  String,
+//        time:                 String
+//    }],
+//    denomination:             String,
+//    createdAt:                Date,
+//    UpdatedAt:                Date
+//});
 
 var churchSchema = new Schema({
     name:                     String,
     email:                    {type: String, unique: true, required: true},
-    password:                 {type: String, required: true},
     address:                  {
         street:               String,
         city:                 String,
@@ -24,23 +59,26 @@ var churchSchema = new Schema({
     phone:                    String,
     website:                  String,
     bio:                      String,
+    denomination:             String,
+    administrators:           [{
+        member:               {type: Schema.Types.ObjectId, ref: 'Member'},
+        authorization:        {type: String, enum: authorizationLevels}
+    }],
+    services:                 [{
+        day:                  String,
+        time:                 String
+    }],
+    blocked:                  [{type: Schema.Types.ObjectId, ref: 'Member'}],
+    createdAt:                Date,
+    updatedAt:                Date,
     notifications:            {
-        author_type:          String,
-        author_member:        {type: Schema.Types.ObjectId, ref: 'Member'},
-        author_church:        {type: Schema.Types.ObjectId, ref: 'Church'},
+        author:               {type: Schema.Types.ObjectId, ref: 'Member'},
         type:                 {type: String, enum: notificationTypes},
         message:              String,
         post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},
         sermon_id:            {type: Schema.Types.ObjectId, ref: 'Sermon'},
         sermon_comment_id:    Schema.Types.ObjectId
-    },
-    services:                 [{
-        day:                  String,
-        time:                 String
-    }],
-    denomination:             String,
-    createdAt:                Date,
-    UpdatedAt:                Date
+    }
 });
 
 churchSchema.pre('save', function(next){

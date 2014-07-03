@@ -6,7 +6,6 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 //NOTE: Not using any specific subdoc schema for the conversation members
-//var conversationMemberSchema = require('./conversationMember.js');
 var messageSchema = require('./message.js');
 
 /*
@@ -16,7 +15,7 @@ var messageSchema = require('./message.js');
 
 var conversationSchema = new Schema({
     owner:                Schema.Types.ObjectId,
-    members:          [Schema.Types.ObjectId],
+    members:              [Schema.Types.ObjectId],
     messages:             [messageSchema],
     createdAt:            Date,
     updatedAt:            Date

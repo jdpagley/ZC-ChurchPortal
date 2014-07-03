@@ -42,9 +42,9 @@
                 <div class="media-body single-message-body">
                     <div class="clearfix">
                         <div><h5 class="media-heading person-name">{{conversation.memberObjects[0].name}}</h5></div><!--group message person name-->
-                        <div><p class="message-date">{{conversation.messages[conversation.messages.length - 1].createdAt | date:'MMM d'}}</p></div><!--group message message date-->
+                        <div><p class="message-date">{{conversation.messages[conversation.messages.length - 1].ts | date:'MMM d'}}</p></div><!--group message message date-->
                     </div>
-                    <div class="person-message">{{conversation.messages[conversation.messages.length - 1].message}}</div><!--group message partial message-->
+                    <div class="person-message">{{conversation.messages[conversation.messages.length - 1].msg}}</div><!--group message partial message-->
                 </div>
             </div>
             <!--messages single group message-->
@@ -92,13 +92,13 @@
                     </div>
                     <div class="media-body single-conversation-body">
                         <div class="clearfix">
-                            <div><h5 class="media-heading person-name">{{message.sender_name}}</h5></div><!--conversation person name-->
+                            <div><h5 class="media-heading person-name">{{message.name}}</h5></div><!--conversation person name-->
                             <div>
                                 <button class="close message-remove" ng-click="deleteMessage($index)">&times;</button><!--conversation message remove x-->
-                                <span class="message-date">{{message.createdAt | date:"MMM d"}}</span><!--conversation message date-->
+                                <span class="message-date">{{message.ts | date:"MMM d"}}</span><!--conversation message date-->
                             </div>
                         </div>
-                        <div class="person-message">{{message.message}}</div><!--conversation message-->
+                        <div class="person-message">{{message.msg}}</div><!--conversation message-->
                     </div>
                 </div>
                 <!--conversation single message-->

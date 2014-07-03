@@ -4,7 +4,8 @@
  * Auth routes control all authentication operations for the portal
  */
 
-var express = require('express');
+var express = require('express'),
+    church = require('../controllers/churchs.js');
 
 module.exports = function(app, passport){
 
@@ -14,26 +15,41 @@ module.exports = function(app, passport){
     // Signup ================================================
     //========================================================
     authenticationRouter.get('/signup', isAuthorizedToViewProfile, function(req, res){
-        res.render('website/signup.ejs', {message: req.flash('signupMessage')} );
+        res.render('auth/signup.ejs', {message: req.flash('signupMessage')} );
     });
 
     //process the signup form
-    authenticationRouter.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/portal',
-        failureRedirect: '/signup',
-        failureFlash: true
-    }));
+//    authenticationRouter.post('/signup', passport.authenticate('local-signup', {
+//        successRedirect: '/portal',
+//        failureRedirect: '/signup',
+//        failureFlash: true
+//    }));
 
+    authenticationRouter.post('/signup', function(req, res, next){
+        passport.authenticate('local-signup', function(error, user, info){
+            if(user === false){
+                return res.json(500, {'error': info.message});
+            } else if (user) {
+                req.login(user, function(error){
+                    if(error){
+                        return res.json(500, {'error': 'Could not automatically log you in. Please try to login on the login page.'})
+                    } else {
+                        return res.json(200, {'success': 'Successfully created account.'});
+                    }
+                })
+            }
+        })(req, res, next);
+    });
     //========================================================
     // Login =================================================
     //========================================================
-    authenticationRouter.get('/login', isAuthorizedToViewProfile, function(req, res){
-        res.render('website/login.ejs', {message: req.flash('loginMessage')});
+    authenticationRouter.get('/', isAuthorizedToViewProfile, function(req, res){
+        res.render('auth/login.ejs', {message: req.flash('loginMessage')});
     });
 
     authenticationRouter.post('/login', passport.authenticate('local-login', {
         successRedirect: '/portal',
-        failureRedirect: '/login',
+        failureRedirect: '/',
         failureFlash: true
     }));
 

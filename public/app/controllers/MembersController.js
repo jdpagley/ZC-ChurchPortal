@@ -4,23 +4,27 @@
 
 angular.module('zcApp').controller('MembersController', ['$scope', 'zcIdentity', 'zcMembers',
     function($scope, zcIdentity, zcMembers){
-        //Current User Object
-        $scope.currentUser = {};
 
         //Sermon List
         $scope.members = [];
 
-        //Retrieve User Profile From Server On Page Refresh
-        if(!$scope.currentUser.email){
-            var promise;
-            promise = zcIdentity.getIdentity();
+        //Current User Object
+        //$scope.currentUser = {};
+        var admin = {};
+        var church = {};
+
+        //Retrieve Current User Object From Server
+        if(!admin.email){
+            var promise = zcIdentity.getIdentity();
             promise.then(function(result){
-                $scope.currentUser = result;
+                //set admin and church objects with accounts returned from server.
+                admin = result.admin;
+                church = result.church;
 
                 //Retrieve Members that have a membership ID associated with this church ID.
-                if($scope.currentUser._id && $scope.members.length < 1){;
+                if(church._id && $scope.members.length < 1){
                     var promise;
-                    promise = zcMembers.retrieveMembers($scope.currentUser._id);
+                    promise = zcMembers.retrieveMembers(church._id);
                     promise.then(function(result){
                         $scope.members = result.members;
                         console.log(result);

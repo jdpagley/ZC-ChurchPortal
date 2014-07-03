@@ -85,16 +85,9 @@ module.exports = function(app) {
     var notificationRouter = express.Router();
     notificationRouter.post('/api/zionconnect/v1/church/notification', isLoggedIn, notifications.create);
 
-    //===========================================================
-    //Messages Routes ============================================
-    //===========================================================
-    var messageRouter = express.Router();
-    messageRouter.post('/api/zionconnect/v1/church/conversation', messages.createConversation);
-    messageRouter.get('/api/zionconnect/v1/church/conversation', messages.retrieveConversations);
-    messageRouter.delete('/api/zionconnect/v1/church/conversation', messages.deleteConversation);
-    messageRouter.post('/api/zionconnect/v1/church/messages', messages.createMessage);
-    messageRouter.delete('/api/zionconnect/v1/church/messages', messages.deleteMessage);
-
+    notificationRouter.all('/api/*', function(req, res){
+        res.send(404);
+    });
 
     // Require Routers
     app.use('/', viewsRouter);
@@ -104,14 +97,14 @@ module.exports = function(app) {
     app.use('/', checkinRouter);
     app.use('/', memberRouter);
     app.use('/', notificationRouter);
-    app.use('/', messageRouter);
-
 
 }
 
 function isLoggedIn(req, res, next){
     //If user is logged in continue,
     //if not redirect to "/".
+    console.log(req.user);
+
     if(req.isAuthenticated()){
         return next();
     }

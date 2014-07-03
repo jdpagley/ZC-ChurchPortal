@@ -7,9 +7,14 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
     var conversationsResource = $resource('/api/zionconnect/v1/church/conversation');
     var messagesResource = $resource('/api/zionconnect/v1/church/messages');
 
+//    var socket = io.connect('http://localhost:3000');
+//    socket.on('message', function(data){
+//        console.log(data);
+//    });
+
     var conversations = [];
 
-    var testConversations = [{
+   /* var testConversations = [{
         _id: 1,
         owner: 12345,
         members: [{'name': 'jeremy Pagley', '_id': 1234}],
@@ -145,7 +150,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
                 'Hi jeremy, I just wanted to say thanks for your help tonight with the tech. It was a pleasure having your there.',
             createdAt: new Date('5/11/2014')
         }]
-    }]
+    }] */
 
     function checkForPreExistingConversation(recipients){
         var preExistingConversation;
@@ -207,10 +212,9 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
             "sender": sender._id,
             "conversationQueries": conversationQueries,
             "message": {
-                "sender_name": sender.name,
-                "sender_type": "church",
-                "sender_church": sender._id,
-                "message": message
+                "name": sender.name,
+                "sender": sender._id,
+                "msg": message
             }
         };
 
@@ -229,7 +233,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
     }
 
     return {
-        getConversations: function(churchID){
+        getConversations: function(adminID){
             var promise = $q.defer();
             //Check for local conversations first.
             if(conversations.length > 0){
@@ -237,7 +241,7 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
                 promise.resolve(conversations);
             } else {
                 //Get conversations from server.
-                conversationsResource.get({'owner': churchID}, function(result){
+                conversationsResource.get({'owner': adminID}, function(result){
                     console.log('Getting conversations from server.');
                     conversations = result.conversations;
                     promise.resolve(conversations);
@@ -272,15 +276,15 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
                     "conversation": preExistingConversation._id,
                     "conversationQueries": conversationQueries,
                     "message": {
-                        "sender_name": sender.name,
-                        "sender_type": "church",
-                        "sender_church": sender._id,
-                        "message": message
+                        "name": sender.name,
+                        "sender": sender._id,
+                        "msg": message
                     }
                 }
 
                 var promise = $q.defer();
                 messagesResource.save(msgObj, function(result){
+                    console.log(result);
                     conversations[preExistingConversation.index].messages.push(result.message);
                     promise.resolve(result.message);
                 }, function(error){

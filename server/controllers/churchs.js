@@ -4,90 +4,232 @@
  * "CRUD" operations for churches.
  */
 
-var validator = require('validator');
-var async = require('async');
-var _ = require('underscore');
+var validator = require('validator'),
+    async = require('async'),
+    _ = require('underscore'),
+    members = require('./members.js');
 
 //Models
-var Church = require('../models/church.js');
+var Church = require('../models/church.js'),
+    Member = require('../models/member.js');
+
+//// Create New Church expects json object in req.body
+//// {'email': email, 'password': password, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
+//exports.create = function(req, email, password, done){
+//    var msgObj = req.body;
+//    console.log(msgObj);
+//
+//    if(!msgObj){
+//        return done(null, false, req.flash('signupMessage', 'POST Body is required'))
+//    }
+//
+//    if(!msgObj.email){
+//        return done(null, false, req.flash('signupMessage', 'Please provide an Email Address.'));
+//    } else {
+//        try {
+//            validator.isEmail(msgObj.email)
+//        } catch (exception){
+//            return done(null, false, req.flash('signupMessage', 'Please use a valid Email Address.'));
+//        }
+//    }
+//
+//    if(!msgObj.password){
+//        return done(null, false, req.flash('signupMessage', 'Please provide a password that has more than 3 characters.'));
+//    }
+//
+//    if(!msgObj.name){
+//        return done(null, false, req.flash('signupMessage', 'Please provide a church name.'));
+//    }
+//
+//    if(!msgObj.address){
+//        return done(null, false, req.flash('signupMessage', 'Please provide a street address.'));
+//    }
+//
+//    if(!msgObj.city){
+//        return done(null, false, req.flash('signupMessage', 'Please provide the city.'));;
+//    }
+//
+//    if(!msgObj.state){
+//        return done(null, false, req.flash('signupMessage', 'Please select a state.'));
+//    }
+//
+//    if(!msgObj.zip){
+//        return done(null, false, req.flash('signupMessage', 'Please provide a zip.'));
+//    }
+//
+//    // This method is checking to see if the church email the church is using to create
+//    // a new account with already exists with another church.
+//    Church.findOne({'email': email}, function(error, church){
+//        if(error){
+//            return done(error);
+//        }
+//        // Check to see if there is already a church with that email
+//        if(church){
+//            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+//        } else {
+//            // If there is no church with that email then create the church.
+//            var newChurch = new Church();
+//
+//            if(email){ newChurch.email = email; }
+//            if(password){ newChurch.password = newChurch.generateHash(password); }
+//            if(msgObj.name){ newChurch.name = msgObj.name; }
+//            if(msgObj.address){ newChurch.address.street = msgObj.address; }
+//            if(msgObj.city){ newChurch.address.city = msgObj.city; }
+//            if(msgObj.state){ newChurch.address.state = msgObj.state; }
+//            if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
+//            if(msgObj.website){ newChurch.website = msgObj.website; }
+//            if(msgObj.phone){ newChurch.phone = msgObj.phone; }
+//            if(msgObj.bio){ newChurch.bio = msgObj.bio; }
+//
+//            // save the church
+//            newChurch.save(function(error){
+//                if(error){
+//                    console.log('Error creating new church: ' + error);
+//                    throw error;
+//                }
+//
+//                return done(null, newChurch);
+//            });
+//
+//        }
+//    });
+//};
 
 // Create New Church expects json object in req.body
-// {'email': email, 'password': password, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
-exports.create = function(req, email, password, done){
+// {'email': email, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone,
+// 'website': url, 'denomination': denomination, 'bio': bio, 'services': [{'day': day, 'time': time}], 'accountEmail': email,
+// 'accountPassword': password}
+exports.create = function(req, done){
     var msgObj = req.body;
     console.log(msgObj);
 
     if(!msgObj){
-        return done(null, false, req.flash('signupMessage', 'POST Body is required'))
+        return done(null, false, {message: 'POST body is required.'});
     }
 
     if(!msgObj.email){
-        return done(null, false, req.flash('signupMessage', 'Please provide an Email Address.'));
+        return done(null, false, {message: 'Email is required.'})
     } else {
         try {
             validator.isEmail(msgObj.email)
         } catch (exception){
-            return done(null, false, req.flash('signupMessage', 'Please use a valid Email Address.'));
+            return done(null, false, {message: 'Please specify a valid email for your church email address.'});
         }
-    }
-
-    if(!msgObj.password){
-        return done(null, false, req.flash('signupMessage', 'Please provide a password that has more than 3 characters.'));
     }
 
     if(!msgObj.name){
-        return done(null, false, req.flash('signupMessage', 'Please provide a church name.'));
+        return done(null, false, {message: 'Church name is required.'})
     }
 
     if(!msgObj.address){
-        return done(null, false, req.flash('signupMessage', 'Please provide a street address.'));
+        return done(null, false, {message: 'Church address is required.'});
     }
 
     if(!msgObj.city){
-        return done(null, false, req.flash('signupMessage', 'Please provide the city.'));;
+        return done(null, false, {message: 'City is required.'})
     }
 
     if(!msgObj.state){
-        return done(null, false, req.flash('signupMessage', 'Please select a state.'));
+        return done(null, false, {message: 'State is required.'})
     }
 
     if(!msgObj.zip){
-        return done(null, false, req.flash('signupMessage', 'Please provide a zip.'));
+        return done(null, false, {message: 'Zip code is required.'})
     }
 
-    // This method is checking to see if the church email the church is using to create
-    // a new account with already exists with another church.
-    Church.findOne({'email': email}, function(error, church){
-        if(error){
-            return done(error);
+    if(!msgObj.accountEmail){
+        return done(null, false, {message: 'Administrative account email is required.'});
+    } else {
+        try {
+            validator.isEmail(msgObj.email)
+        } catch (exception){
+            return done(null, false, {message: 'Please specify a valid email for your church administration account.'});
         }
-        // Check to see if there is already a church with that email
+    }
+
+    if(!msgObj.accountPassword){
+        return done(null, false, {message: 'Administrative account password is required.'});
+    }
+
+    //This method is checking to see if the email for administration account already exists.
+    Member.findOne({'email': msgObj.accountEmail}, function(error, church){
+        if(error){
+            return done(null, false, {code: 500, message: 'Oops! We are having trouble creating your account at this time. Please try again later.'});
+        }
         if(church){
-            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+            return done(null, false, {message: 'Administration account email is already in use.'});
         } else {
-            // If there is no church with that email then create the church.
-            var newChurch = new Church();
+            async.waterfall([
+                function(callback){
+                    //Second create new church organization
+                    var newChurch = new Church();
 
-            if(email){ newChurch.email = email; }
-            if(password){ newChurch.password = newChurch.generateHash(password); }
-            if(msgObj.name){ newChurch.name = msgObj.name; }
-            if(msgObj.address){ newChurch.address.street = msgObj.address; }
-            if(msgObj.city){ newChurch.address.city = msgObj.city; }
-            if(msgObj.state){ newChurch.address.state = msgObj.state; }
-            if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
-            if(msgObj.website){ newChurch.website = msgObj.website; }
-            if(msgObj.phone){ newChurch.phone = msgObj.phone; }
-            if(msgObj.bio){ newChurch.bio = msgObj.bio; }
+                    if(msgObj.email){ newChurch.email = msgObj.email; }
+                    if(msgObj.name){ newChurch.name = msgObj.name; }
+                    if(msgObj.address){ newChurch.address.street = msgObj.address; }
+                    if(msgObj.city){ newChurch.address.city = msgObj.city; }
+                    if(msgObj.state){ newChurch.address.state = msgObj.state; }
+                    if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
+                    if(msgObj.website){ newChurch.website = msgObj.website; }
+                    if(msgObj.phone){ newChurch.phone = msgObj.phone; }
+                    if(msgObj.denomination){ newChurch.denomination = msgObj.denomination; }
+                    if(msgObj.bio){ newChurch.bio = msgObj.bio; }
 
-            // save the church
-            newChurch.save(function(error){
-                if(error){
-                    console.log('Error creating new church: ' + error);
-                    throw error;
-                }
+                    async.each(msgObj.services,
+                        function(service, done){
+                            newChurch.services.push({day: service.day, time: service.time});
+                            done();
+                        },
+                        function(error){
+                            newChurch.save(function(error, church){
+                                if(error){
+                                    callback(error);
+                                }
+                                return callback(null, church);
+                            });
+                        });
 
-                return done(null, newChurch);
-            });
+                },
+                function(church, callback){
+                    //First create new admin account for church.
+                    var newMember = new Member();
+                    newMember['name'] = msgObj.name;
+                    newMember['email'] = msgObj.accountEmail;
+                    newMember['password'] = newMember.generateHash(msgObj.accountPassword);
+                    newMember['metadata']['admin_of'].push(church._id);
+                    newMember['metadata']['type'] = 'admin';
+
+
+                    newMember.save(function(error, member){
+                        if(error){
+                            callback(error, null);
+                        } else {
+                            var newAdmin = { member: member._id, authorization: 'admin'};
+                            Church.findByIdAndUpdate(church._id, {$push: {administrators: newAdmin}}, function(error, church){
+                                if(error){
+                                    callback(error);
+                                } else if (!church) {
+                                    callback(new Error('No account updated.'));
+                                } else {
+                                    callback(null, member, church);
+                                }
+                            });
+                        }
+                    });
+                }],
+                function(error, member, church){
+                    if(error){
+                        console.log(error);
+                        return done(null, false, {code: 500, message: 'Oops! We are having trouble creating your account at this time. Please try again later.'});
+                    } else if(!member){
+                        console.log('No member exists.');
+                        return done(null, false, {code: 500, message: 'Oops! We are having some trouble at this time. Please try again later.'});
+                    } else {
+                        console.log('Member exists!');
+                        console.log(member);
+                        return done(null, member);
+                    }
+                });
 
         }
     });
@@ -192,9 +334,19 @@ exports.delete = function(req, res){
 
 exports.retrieveFromSession = function(req, res){
     if(req.user){
-        return res.json(200, {'success': 'Retrieved church from session', "church": req.user});
+        console.log('retrieve church from session.')
+        Member.findById(req.user._id).populate('metadata.admin_of').exec(function(error, member){
+            if(error){
+                return res.json(500, {'error': 'Error retrieving account information from session.'});
+            } else if (!member){
+                return res.json(500, {'error': 'No administrative account with that Id.'});
+            } else {
+                console.log(member);
+                return res.json(200, {'success': 'Retrieved account from session.', "church": member.metadata.admin_of[0], 'admin': member});
+            }
+        });
     } else {
-        return res.json(400, {'error': 'No church in session.'});
+        return res.json(400, {'error': 'No account in session.'});
     }
 }
 
