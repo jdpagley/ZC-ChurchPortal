@@ -1,68 +1,89 @@
 <!--created by John Pagley on 3/27/14-->
 
 <!--sermonhome container-->
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 border2">
+<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
 
     <!--sermonhome list single sermon-->
-    <div class="col-lg-12 col-md-12 border1">
+    <div class="col-lg-12 col-md-12 sh-single-sermon">
         <!--sermonhome series logo-->
-        <div class="col-lg-1 col-md-1 border2">
-            <img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg" />
+        <div class="col-lg-1 col-md-1">
+            <img class="img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" />
         </div>
         <!--sermonhome series name-->
-        <div class="col-lg-10 col-md-10 border2">
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-1 col-md-1 border1"><h3>{{sermon.part}}</h3></div><!--sermonhome series count-->
-                <div class="col-lg-11 col-md-11 border1"><h3>{{sermon.title}}</h3></div><!--sermonhome series sermon name-->
+        <div class="col-lg-9 col-md-9">
+            <div class="col-lg-1 col-md-1 sh-sermon-number">
+                <div class="col-lg-12 col-md-12 sh-sermon-number-inner"><h3 class="color-aaa text-center bold">{{sermon.part}}</h3></div><!--sermonhome series count-->
             </div>
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermonhome series name-->
-                <div class="col-lg-12 col-md-12 border1">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermonhome series speaker-->
+            <div class="col-lg-11 col-md-11">
+                <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><a href="#/sermons/{{sermon._id}}"><h3 class="bold">{{sermon.title}}</h3></a></div><!--sermonhome series sermon name-->
+                <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermonhome series name-->
+                <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermonhome series speaker-->
             </div>
         </div>
-        <!--sermonhome series action section-->
-        <div class="col-lg-1 col-md-1 border1">
-            <!--sermonhome series edit button-->
-            <div class="col-lg-12 col-md-12 border2"><a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a></div>
+        <div class="col-lg-2 col-md-2">
+            <a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
         </div>
     </div>
-
     <!--sermonhome news feed post-->
-    <div class="col-lg-12 col-md-12 portal-news-feed-post border1">
+    <div class="col-lg-12 col-md-12 well well-sm portal-news-feed-post">
         <!--sermonhome post text box-->
-        <div class="col-lg-12 col-md-12 border1">
-            <textarea class="col-lg-12 col-md-12" rows="5" placeholder="Write something..." ng-model="newCommentObj.body"></textarea><!--sermonhome post text-->
+        <div class="col-lg-12 col-md-12 form-group">
+            <textarea class="form-control" rows="5" placeholder="Write something..." ng-model="newCommentObj.body"></textarea><!--sermonhome post text-->
         </div>
         <!--sermonhome post button-->
-        <div class="col-lg-12 col-md-12 border1"><a class="btn btn-purple pull-right" ng-click="createComment(sermon._id)">Post</a></div>
+        <div class="col-lg-12 col-md-12">
+            <div class="col-lg-1 col-md-1"><a href="#"><span class="glyphicon glyphicon-picture glyphicon1"></span></a></div><!--post select image-->
+            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createComment(sermon._id)">Post</a></div><!--post button-->
+        </div>
     </div>
-
     <!--sermonhome news feed posting-->
-    <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 portal-news-feed-posting border1" ng-repeat="comment in sermon.comments">
+    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-sh-posting">
         <!--sermonhome posting from church-->
-        <div class="col-lg-12 col-md-12 border1">
+        <div class="col-lg-12 col-md-12 sh-main-posting">
             <!--sermonhome church info-->
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-1 col-md-1 border1"><img class="col-lg-12 col-md-12" src="./images/meatowbrooklogo.jpg"/></div><!--sermonhome church posting image-->
-                <div class="col-lg-11 col-md-11 border1">
-                    <h4>{{comment.author_name}}</h4><!--sermonhome church name-->
-                    <h6>{{comment.createdAt | date:short}}</h6><!--sermonhome church posting date-->
+            <div class="media">
+                <div class="pull-left">
+                    <img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/><!--sermonhome church posting image-->
+                </div>
+                <div class="media-body sh-posting-body">
+                    <div class="media-heading"><h5 class="church-name">Church Name</h5></div><!--sermonhome church name-->
+                    <div><p class="church-date">June 10, 2014</p></div><!--sermonhome church posting date-->
                 </div>
             </div>
             <!--sermonhome posting text box-->
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="col-lg-12 col-md-12 border1"><p>{{comment.body}}</p></div><!--sermonhome posting text-->
+            <div class="col-lg-12 col-md-12 church-text">This is the text text text.</div>
+            <!--sermonhome posting interation links-->
+            <div class="col-lg-12 col-md-12">
+                <ul class="list-inline post-link-list">
+                    <li><a href="" class="post-link">Like</a></li><!--like link-->
+                    <li><a href="" class="post-link">Dislike</a></li><!--dislike link-->
+                    <li><a href="" class="post-link">Comment</a> <span class="badge">1</span></li><!--comment link-->
+                </ul>
             </div>
-            <!--sermonhome posting interactions-->
-            <div class="col-lg-12 col-md-12 border1">
-                <div class="col=lg-12 col-md-12 border1">{{comment.likes.length}}</div><!--sermonhome posting likes total-->
-                <!--sermonhome posting interaction links-->
-                <div class="col=lg-12 col-md-12 border1">
-                    <ul class="list-inline">
-                        <li><a href="" class="post-link" ng-click="likeComment(sermon._id, comment._id, $index)">Like</a></li><!--like link-->
-                        <li><a href="" class="post-link">Dislike</a></li><!--dislike link-->
-                        <li><a href="" class="post-link">Comment</a></li><!--comment link-->
-                    </ul>
+        </div>
+        <!--sermonhome posting comments-->
+        <div class="col-lg-12 col-md-12 sm-posting-comments">
+            <!--sermonhome comments from users-->
+            <div class="col-lg-12 col-md-12">
+                <!--sermonhome comments all posted-->
+                <div class="col-lg-12 col-md-12 padding-5-0">
+                    <!--sermonhome single comment-->
+                    <div class="media">
+                        <div class="media-body">
+                            <div class="media-heading"><h5 class="comment-name">John Doe</h5></div><!--sermonhome comments first name-->
+                            <div><p class="comment-date">June 11, 2014</p></div><!--sermonhome comments date-->
+                        </div>
+                        <div class="comment-text"><p>This is a comment from the user.</p></div><!--sermonhome comments comment-->
+                    </div>
+                </div>
+                <!--sermonhome comments text box-->
+                <div class="col-lg-12 col-md-12 padding-5-0">
+                    <div class="col-lg-11 col-md-11 padding-0-5-0-0">
+                        <input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." /><!--sermonhome comments textarea-->
+                    </div>
+                    <div class="col-lg-1 col-md-1">
+                        <a href="" class="btn btn-purple btn-block" type="submit">Post</a><!--sermonhome comments post button-->
+                    </div>
                 </div>
             </div>
         </div>
