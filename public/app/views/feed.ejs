@@ -24,11 +24,11 @@
                 </div>
                 <div class="media-body feed-posting-body">
                     <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
-                    <div><p class="church-date">{{post.createdAt | date:short}}</p></div><!--church posting date-->
+                    <div><p class="church-date">{{post.ts | date:short}}</p></div><!--church posting date-->
                 </div>
             </div>
             <!--posting text box-->
-            <div class="col-lg-12 col-md-12 church-text">{{post.body}}</div>
+            <div class="col-lg-12 col-md-12 church-text">{{post.detail.text}}</div>
             <!--posting interation links-->
             <div class="col-lg-12 col-md-12">
                 <ul class="list-inline post-link-list">
@@ -42,7 +42,7 @@
             <!--comments from users-->
             <div class="col-lg-12 col-md-12">
                 <!--comments all posted-->
-                <div class="col-lg-12 col-md-12 padding-5-0" ng-repeat="comment in post.comments | orderBy:'createdAt':true">
+                <div class="col-lg-12 col-md-12 padding-5-0" ng-repeat="comment in post.comments  | orderBy:'createdAt':false">
                     <!--single comment-->
                     <div class="media">
                         <div class="media-body">

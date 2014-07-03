@@ -59,10 +59,18 @@ var churchSchema = new Schema({
     phone:                    String,
     website:                  String,
     bio:                      String,
+    denomination:             String,
     administrators:           [{
         member:               {type: Schema.Types.ObjectId, ref: 'Member'},
         authorization:        {type: String, enum: authorizationLevels}
     }],
+    services:                 [{
+        day:                  String,
+        time:                 String
+    }],
+    blocked:                  [{type: Schema.Types.ObjectId, ref: 'Member'}],
+    createdAt:                Date,
+    updatedAt:                Date,
     notifications:            {
         author:               {type: Schema.Types.ObjectId, ref: 'Member'},
         type:                 {type: String, enum: notificationTypes},
@@ -70,14 +78,7 @@ var churchSchema = new Schema({
         post_id:              {type: Schema.Types.ObjectId, ref: 'Post'},
         sermon_id:            {type: Schema.Types.ObjectId, ref: 'Sermon'},
         sermon_comment_id:    Schema.Types.ObjectId
-    },
-    services:                 [{
-        day:                  String,
-        time:                 String
-    }],
-    denomination:             String,
-    createdAt:                Date,
-    UpdatedAt:                Date
+    }
 });
 
 churchSchema.pre('save', function(next){

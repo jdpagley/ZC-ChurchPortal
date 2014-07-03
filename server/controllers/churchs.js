@@ -196,8 +196,8 @@ exports.create = function(req, done){
                     newMember['name'] = msgObj.name;
                     newMember['email'] = msgObj.accountEmail;
                     newMember['password'] = newMember.generateHash(msgObj.accountPassword);
-                    newMember['admin_of'].push(church._id);
-                    newMember['type'] = 'admin';
+                    newMember['metadata']['admin_of'].push(church._id);
+                    newMember['metadata']['type'] = 'admin';
 
 
                     newMember.save(function(error, member){
@@ -334,14 +334,15 @@ exports.delete = function(req, res){
 
 exports.retrieveFromSession = function(req, res){
     if(req.user){
-
-        Member.findById(req.user._id).populate('admin_of').exec(function(error, member){
+        console.log('retrieve church from session.')
+        Member.findById(req.user._id).populate('metadata.admin_of').exec(function(error, member){
             if(error){
                 return res.json(500, {'error': 'Error retrieving account information from session.'});
             } else if (!member){
                 return res.json(500, {'error': 'No administrative account with that Id.'});
             } else {
-                return res.json(200, {'success': 'Retrieved account from session.', "church": member.admin_of[0], 'admin': member});
+                console.log(member);
+                return res.json(200, {'success': 'Retrieved account from session.', "church": member.metadata.admin_of[0], 'admin': member});
             }
         });
     } else {

@@ -33,7 +33,7 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
                         $scope.posts = result.posts;
                         console.log(result);
                     }, function(error){
-                        console.log('Error: ' + error);
+                        console.log(error);
                     });
                 }
 
@@ -47,13 +47,13 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
          */
 
         var newPost = {};
-        $scope.createPost = function(body){
+        $scope.createPost = function(text){
             if(church._id){
                 if(admin._id){
-                    if(body != ""){
+                    if(text != ""){
                         newPost['author'] = admin._id;
                         newPost['owner'] = church._id;
-                        newPost['body'] = body;
+                        newPost['text'] = text;
 
                         var promise = zcFeed.createPost(newPost);
 
@@ -80,14 +80,14 @@ angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcId
          */
         $scope.newCommentObj = {};
 
-        $scope.createComment = function(owner, index){
+        $scope.createComment = function(postID, index){
             var newCommentObj = {};
 
             newCommentObj['author'] = admin._id;
-            newCommentObj['owner'] = owner;
+            newCommentObj['post'] = $scope.posts[index];
             newCommentObj['authorName'] = admin.name;
             //The view puts the comment body in the the newCommentObj key under the posts id.
-            newCommentObj['body'] = $scope.newCommentObj[owner];
+            newCommentObj['body'] = $scope.newCommentObj[postID];
 
             var promise = zcFeed.createComment(newCommentObj);
 
