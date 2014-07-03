@@ -327,6 +327,91 @@ body {
 }
 
 
+/*portal sermons home**************************************************/
+
+.sh-single-sermon {
+    padding-bottom:10px;
+}
+
+.sh-sermon-number {
+    padding:5px 0px 5px 25px;
+}
+
+.sh-sermon-number .sh-sermon-number-inner {
+    border:3px #aaa solid;
+    border-radius:100%;
+    width:31px;
+    height:31px;
+}
+
+@media (max-width: 1400px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:29px;
+        height:29px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner h3 {
+        font-size:22px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:27px;
+        height:27px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner h3 {
+        font-size:20px;
+    }
+}
+
+.portal-sh-posting {
+    margin-bottom:10px;
+    padding:10px;
+}
+
+.sh-main-posting {
+    border-bottom:1px #ddd solid;
+    padding-bottom:5px;
+    margin-bottom:5px;
+}
+
+.sh-main-posting .sh-posting-body {
+    padding:7px 0;
+}
+
+.sh-main-posting .church-photo {
+    width:50px;
+}
+
+.sh-main-posting .church-name {
+    font-weight:bold;
+}
+
+.sh-main-posting .church-date {
+    color:#aaa;
+    font-size:11px;
+}
+
+.sh-main-posting .church-text {
+    font-size:14px;
+    padding-top:10px;
+}
+
+
 /*portal sermon edit**************************************************/
 
 .sermon-edit .sermon-edit-label label {
