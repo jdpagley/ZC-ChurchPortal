@@ -8,21 +8,6 @@ body {
     height:100%;
 }
 
-.post-link-list {
-    padding:5px 0 0 0;
-}
-
-.post-link {
-    color:mediumpurple;
-    font-size:12px;
-}
-
-.post-link:hover {
-    color:mediumpurple;
-    font-size:12px;
-    text-decoration:underline;
-}
-
 
 /*bootstrap overrides******************************************************/
 
@@ -86,6 +71,16 @@ body {
 
 .dropdown-menu > li > a .secondary {
     font-size:10px;
+}
+
+.dropdown-menu > li > h6 {
+    display: block;
+    padding: 3px 12px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: inherit;
+    white-space: nowrap;
 }
 
 /*portal shell*************************************************************/
@@ -230,6 +225,16 @@ body {
     padding-top:10px;
 }
 
+.feed-main-posting-likes {
+    border-bottom:1px #ddd solid;
+    padding-bottom:5px;
+    margin-bottom:5px;
+}
+
+.feed-main-posting-all-comments {
+    margin-bottom:5px;
+}
+
 .comment-name {
     font-weight:bold;
 }
@@ -237,6 +242,8 @@ body {
 .comment-date {
     color:#aaa;
     font-size:11px;
+    float:left;
+    margin-left:10px;
 }
 
 .comment-text {
