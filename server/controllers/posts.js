@@ -11,7 +11,16 @@ var Post = require('../models/post.js');
 var CommentPage = require('../models/commentPage.js')
 
 // create expects a json object in req.body
-// {'authorType': ['member', 'church'], 'author': authorID, 'authorName': authorName, 'owner': ownerID, 'body': body}
+//
+/**
+ * Create New Post
+ *
+ * req body: {'author': authorID, 'owner': ownerID, 'text': postText}
+ *
+ * author: This is the person who created the post. This could be the church or a member.
+ * owner: This is the church id of where the post was posted to. This is always a church.
+ * text: This is the content of the post.
+ */
 exports.create = function(req, res){
     var msgObj = req.body;
     console.log(msgObj);
@@ -78,16 +87,92 @@ exports.retrieve = function(req, res){
                 console.log(error);
                 return res.json(500, {'error': 'Server Error', 'mongoError': error});
             } else {
-                res.json(200, {'success': 'Successfully retrieved posts.', 'posts': posts});
-                return;
+                return res.json(200, {'success': 'Successfully retrieved posts.', 'posts': posts});
             }
         })
     }
 }
 
-//{'node_id': postID, 'author': id, 'authorName': name, 'body': commentText }
+/**
+ * Delete Post
+ *
+ * This will delete the post and all comment pages
+ * belonging to this post.
+ *
+ * req.query: {'postID': id}
+ */
+exports.delete = function(req, res){
+    var msgObj = req.query;
+    console.log(msgObj);
+
+    if(!msgObj){
+        return res.json(400, {'error': 'POST body is required.'});
+    }
+
+    if(!msgObj.postID){
+        return res.json(400, {'error': 'postAuthor required.'});
+    }
+
+    Post.findById(msgObj.postID, function(error, post){
+        if(error){
+            console.log(error);
+            return res.json(500, {'error': 'Server Error', 'mongoError': error});
+        } else if(!post) {
+            return res.json(400, {'error': 'No post for that post ID'});
+        } else {
+            async.parallel([
+                function(done){
+                    post.remove(function(error){
+                        if(error){
+                            done(error);
+                        } else {
+                            done();
+                        }
+                    });
+                },
+                function(done){
+                    if(msgObj.postID){
+                        CommentPage.remove({'node_id': msgObj.postID}, function(error){
+                            if(error){
+                                done(error);
+                            } else {
+                                done();
+                            }
+                        });
+                    } else {
+                        done(new Error('No post id to query comment pages.'));
+                    }
+
+                }],
+                function(error){
+                    if(error){
+                        console.log(error);
+                        return res.json(500, {'error': error});
+                    } else {
+                        return res.json(200, {'success': 'Successfully deleted post.'});
+                    }
+                });
+        }
+    });
+}
+
+/**
+ * Create Comment
+ *
+ * This function handles creating comments on the posts in the main feed.
+ * It will create/update comment pages depending on what is needed for the operation.
+ * This will also add the most recent comments into the post's comments cache.
+ *
+ * req body: {'node_id': postID, 'author': id, 'authorName': name, 'body': commentText }
+ *
+ * node_id: This is the id of the post that the comment was added to.
+ * author: The id of the person who created the comment.
+ * authorName: This the name of the person who created the comment.
+ * body: This is the text of the comment.
+ */
 exports.createComment = function(req, res){
     var msgObj = req.body;
+    console.log('Create comment hit');
     console.log(msgObj);
 
     if(!msgObj){
@@ -113,7 +198,9 @@ exports.createComment = function(req, res){
     var comment = {
         'author': msgObj.author,
         'author_name': msgObj.authorName,
-        'body': msgObj.body
+        'body': msgObj.body,
+        'page': msgObj.post.num_comment_pages,
+        'ts': new Date()
     };
 
     CommentPage.update({
@@ -128,6 +215,7 @@ exports.createComment = function(req, res){
             console.log(error);
             return res.json(500, {'error': 'Server Error.', 'mongoError': error});
         } else if (raw.updatedExisting){
+            console.log('Updated existing.');
             /**
              * If currently existing Comment Page can be updated instead of creating a new page.
              * raw.updatedExisting will return true it updated a document.
@@ -187,9 +275,10 @@ exports.createComment = function(req, res){
                     console.log('Updated existing comment page.');
                     console.log(newComment);
                     if(error){
+                        console.log(error);
                         return res.json(500, {'error': error});
                     } else {
-                        return res.json(200, {'success': 'Successfully added new comment.', 'comment': newComment});
+                        return res.json(200, {'success': 'Successfully added new comment.', 'updatedExistingCommentPage': true,  'comment': newComment});
                     }
                 })
         } else if (!raw.updatedExisting){
@@ -209,6 +298,8 @@ exports.createComment = function(req, res){
 
             async.waterfall([
                 function(done){
+                    comment['page'] = msgObj.post.num_comment_pages + 1;
+
                     var newCommentPage = {
                         'node_id': msgObj.post._id,
                         'page': msgObj.post.num_comment_pages + 1,
@@ -244,7 +335,7 @@ exports.createComment = function(req, res){
                                     if(error){
                                         done(error);
                                     } else {
-                                        done(null, newComment);
+                                        done(null, newComment, post.num_comment_pages);
                                     }
                                 });
                             } else {
@@ -256,77 +347,100 @@ exports.createComment = function(req, res){
                                     if(error){
                                         done(error);
                                     } else {
-                                        done(null, newComment);
+                                        done(null, newComment, post.num_comment_pages);
                                     }
                                 });
                             }
                         }
                     });
                 }],
-                function(error, newComment){
+                function(error, newComment, numCommentPages){
                     console.log('created new comment page.');
                     if(error){
+                        console.log(error);
                         return res.json(500, {'error': error});
                     } else {
                         console.log(newComment);
-                        return res.json(200, {'success': 'Successfully added new comment.', 'comment': newComment});
+                        console.log(numCommentPages);
+                        return res.json(200, {'success': 'Successfully added new comment.', 'updatedExistingCommentPage': false, 'numCommentPages': numCommentPages, 'comment': newComment});
                     }
                 });
         }
     });
-
 }
 
-/*
-// create function expects req.body to contain json object:
-// { 'author': id, 'authorName': name, 'owner': id, 'body': string  }
-exports.createComment = function(req, res){
-    var msgObj = req.body;
-    console.log(msgObj)
+/**
+ * Delete Comment From Post
+ *
+ * This will delete the comment from the comment page that contains it.
+ * If it is also in the Post's comment cache it will delete it from there
+ * also.
+ *
+ * req.query: {'comment': object, 'postID': id, 'page': number}
+ */
+exports.deleteComment = function(req, res){
+    var msgObj = req.query;
 
     if(!msgObj){
-        return res.json(400, {'error': 'POST body is required.'});
+        return res.json(400, {'error': 'Query is required.'});
     }
 
-    if(!msgObj.author){
-        return res.json(400, {'error': 'Author is required.'});
+    if(!msgObj.comment){
+        return res.json(400, {'error': 'Comment is required.'});
     }
 
-    if(!msgObj.authorName){
-        return res.json(400, {'error': 'Author name is required.'});
+    if(!msgObj.postID){
+        return res.json(400, {'error': 'Post id is required.'});
     }
 
-    if(!msgObj.owner){
-        return res.json(400, {'error': 'Owner is required.'});
+    if(!msgObj.page){
+        return res.json(400, {'error': 'Page number is required.'});
     }
 
-    if(!msgObj.body){
-        return res.json(400, {'error': 'Body is required.'});
-    }
-
-    Post.findById(msgObj.owner, function(error, post){
+    CommentPage.findOne({'node_id': msgObj.postID, 'page': msgObj.page}, function(error, page){
         if(error){
-            return res.json(500, {'error': 'Server Error.', 'mongoError': error});
-        } else if (!post){
-            return res.json(400, {'error': 'No post with that owner ID'});
+            return res.json(500, {'error': 'Server error.', 'mongoError': error});
+        } else if (!page){
+            return res.json(500, {'error': 'No comment page matches those query parameters.'});
         } else {
+            async.parallel([
+                function(done){
+                    if(msgObj.comment._id){
+                        page.comments.id(msgObj.comment._id).remove();
+                        done();
+                    } else {
+                        done(new Error('No comment _id.'));
+                    }
 
-            post.comments.push({
-                'author': msgObj.author,
-                'author_name': msgObj.authorName,
-                'body': msgObj.body
-            });
+                },
+                function(done){
+                    Post.findById(msgObj.postID, function(error, post){
+                        if(error){
+                            done(error);
+                        } else if(!post){
+                            done(new Error('No post for that _id'));
+                        } else {
+                            post.comments.forEach(function(element, index){
+                                if(element.author == msgObj.comment.author && element.body == msg.comment.body){
+                                    page.comments.splice(index, 1);
+                                    done();
+                                } else {
+                                    done();
+                                }
+                            });
+                        }
+                    });
 
-            post.save(function(error, post){
-                if(error){
-                    return res.json(500, {'error': 'Server Error.', 'mongoError': error});
-                } else {
-                    console.log('New comment created on post: ' + post.comments[post.comments.length - 1]);
-                    return res.json(200, {'success': 'Successfully added new comment.', 'comment': post.comments[post.comments.length - 1]});
-                }
-            });
+                }],
+                function(error){
+                    if(error){
+                        return res.json(500, {error: 'Error deleting comment.'});
+                    } else {
+                        return res.json(200, {'success': 'Successfully deleted comment.'});
+                    }
+                })
         }
-    });
-}
+    })
 
-*/
+
+}

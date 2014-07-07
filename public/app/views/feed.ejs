@@ -14,7 +14,7 @@
         </div>
     </div>
     <!--portal news feed posting-->
-    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-news-feed-posting" data-ng-repeat="post in posts | orderBy:post.createdAt:reverse">
+    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-news-feed-posting" data-ng-repeat="post in posts | orderBy:'ts':true">
         <!--posting from church-->
         <div class="col-lg-12 col-md-12 feed-main-posting">
             <!--church info-->
@@ -24,7 +24,7 @@
                 </div>
                 <div class="media-body feed-posting-body">
                     <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
-                    <div><p class="church-date">{{post.ts | date:short}}</p></div><!--church posting date-->
+                    <div><p class="church-date">{{post.ts | date:'MMMM d, h:mma'}}</p></div><!--church posting date-->
                 </div>
             </div>
             <!--posting text box-->
@@ -42,12 +42,12 @@
             <!--comments from users-->
             <div class="col-lg-12 col-md-12">
                 <!--comments all posted-->
-                <div class="col-lg-12 col-md-12 padding-5-0" ng-repeat="comment in post.comments  | orderBy:'createdAt':false">
+                <div class="col-lg-12 col-md-12 padding-5-0" ng-repeat="comment in post.comments  | orderBy:'ts':false">
                     <!--single comment-->
                     <div class="media">
                         <div class="media-body">
                             <div class="media-heading"><h5 class="comment-name">{{comment.author_name}}</h5></div><!--comments first name-->
-                            <div><p class="comment-date">{{comment.createdAt | date:short}}</p></div><!--comments date-->
+                            <div><p class="comment-date">{{comment.ts | date:short}}</p></div><!--comments date-->
                         </div>
                         <div class="comment-text"><p>{{comment.body}}</p></div><!--comments comment-->
                     </div>
@@ -55,10 +55,10 @@
                 <!--comments text box-->
                 <div class="col-lg-12 col-md-12 padding-5-0">
                     <div class="col-lg-11 col-md-11 padding-0-5-0-0">
-                        <input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." data-ng-model="newCommentObj[post._id]" /><!--comments textarea-->
+                        <input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." ng-model="commentText" /><!--comments textarea-->
                     </div>
                     <div class="col-lg-1 col-md-1">
-                        <a href="" class="btn btn-purple btn-block" type="submit" ng-click="createComment(post._id, $index)">Post</a><!--comments post button-->
+                        <a href="" class="btn btn-purple btn-block" type="submit" ng-click="createComment(commentText, post, $index); commentText = '';">Post</a><!--comments post button-->
                     </div>
                 </div>
             </div>

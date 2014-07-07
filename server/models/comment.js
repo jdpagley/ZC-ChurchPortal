@@ -19,12 +19,13 @@ var commentSchema = new Schema({
     author:                     {type: Schema.Types.ObjectId, ref: 'Member'},
     author_name:                String,
     body:                       String,
-    createdAt:                  Date
+    page:                       Number,
+    ts:                         Date
 });
 
 commentSchema.pre('save', function(next){
-    if (!this.createdAt){
-        this.createdAt = new Date();
+    if (!this.ts){
+        this.ts = new Date();
     }
     next();
 });

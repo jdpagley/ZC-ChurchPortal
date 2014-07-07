@@ -13,88 +13,6 @@ var validator = require('validator'),
 var Church = require('../models/church.js'),
     Member = require('../models/member.js');
 
-//// Create New Church expects json object in req.body
-//// {'email': email, 'password': password, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone}
-//exports.create = function(req, email, password, done){
-//    var msgObj = req.body;
-//    console.log(msgObj);
-//
-//    if(!msgObj){
-//        return done(null, false, req.flash('signupMessage', 'POST Body is required'))
-//    }
-//
-//    if(!msgObj.email){
-//        return done(null, false, req.flash('signupMessage', 'Please provide an Email Address.'));
-//    } else {
-//        try {
-//            validator.isEmail(msgObj.email)
-//        } catch (exception){
-//            return done(null, false, req.flash('signupMessage', 'Please use a valid Email Address.'));
-//        }
-//    }
-//
-//    if(!msgObj.password){
-//        return done(null, false, req.flash('signupMessage', 'Please provide a password that has more than 3 characters.'));
-//    }
-//
-//    if(!msgObj.name){
-//        return done(null, false, req.flash('signupMessage', 'Please provide a church name.'));
-//    }
-//
-//    if(!msgObj.address){
-//        return done(null, false, req.flash('signupMessage', 'Please provide a street address.'));
-//    }
-//
-//    if(!msgObj.city){
-//        return done(null, false, req.flash('signupMessage', 'Please provide the city.'));;
-//    }
-//
-//    if(!msgObj.state){
-//        return done(null, false, req.flash('signupMessage', 'Please select a state.'));
-//    }
-//
-//    if(!msgObj.zip){
-//        return done(null, false, req.flash('signupMessage', 'Please provide a zip.'));
-//    }
-//
-//    // This method is checking to see if the church email the church is using to create
-//    // a new account with already exists with another church.
-//    Church.findOne({'email': email}, function(error, church){
-//        if(error){
-//            return done(error);
-//        }
-//        // Check to see if there is already a church with that email
-//        if(church){
-//            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-//        } else {
-//            // If there is no church with that email then create the church.
-//            var newChurch = new Church();
-//
-//            if(email){ newChurch.email = email; }
-//            if(password){ newChurch.password = newChurch.generateHash(password); }
-//            if(msgObj.name){ newChurch.name = msgObj.name; }
-//            if(msgObj.address){ newChurch.address.street = msgObj.address; }
-//            if(msgObj.city){ newChurch.address.city = msgObj.city; }
-//            if(msgObj.state){ newChurch.address.state = msgObj.state; }
-//            if(msgObj.zip){ newChurch.address.zip = msgObj.zip; }
-//            if(msgObj.website){ newChurch.website = msgObj.website; }
-//            if(msgObj.phone){ newChurch.phone = msgObj.phone; }
-//            if(msgObj.bio){ newChurch.bio = msgObj.bio; }
-//
-//            // save the church
-//            newChurch.save(function(error){
-//                if(error){
-//                    console.log('Error creating new church: ' + error);
-//                    throw error;
-//                }
-//
-//                return done(null, newChurch);
-//            });
-//
-//        }
-//    });
-//};
-
 // Create New Church expects json object in req.body
 // {'email': email, 'name': name, 'address': streetAddress, 'city': city, 'state': state, 'zip': zip, 'phone': phone,
 // 'website': url, 'denomination': denomination, 'bio': bio, 'services': [{'day': day, 'time': time}], 'accountEmail': email,
@@ -309,7 +227,6 @@ exports.update = function(req, res){
 };
 
 exports.delete = function(req, res){
-    console.log('church deletion method hit.');
     var msgObj = req.query;
 
     Church.findOne({'email': msgObj.email}, function(error, account){
@@ -334,14 +251,12 @@ exports.delete = function(req, res){
 
 exports.retrieveFromSession = function(req, res){
     if(req.user){
-        console.log('retrieve church from session.')
         Member.findById(req.user._id).populate('metadata.admin_of').exec(function(error, member){
             if(error){
                 return res.json(500, {'error': 'Error retrieving account information from session.'});
             } else if (!member){
                 return res.json(500, {'error': 'No administrative account with that Id.'});
             } else {
-                console.log(member);
                 return res.json(200, {'success': 'Retrieved account from session.', "church": member.metadata.admin_of[0], 'admin': member});
             }
         });

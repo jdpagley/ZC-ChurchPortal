@@ -2,57 +2,32 @@
  * Created by Josh Pagley on 2/27/14.
  */
 
-angular.module('zcApp').factory('identityFactory', ['$window', '$resource', '$q', function($window, $resource, $q) {
+angular.module('zcApp').factory('IdentityFactory', ['$resource', '$q', function IdentityFactory($resource, $q) {
 
     var churchResource = $resource('/api/zionconnect/v1/church/session');
 
-    var church = {};
-    var admin = {};
+    var vm = {};
 
-    function getIdentity(){
+    vm.church = {};
+    vm.admin = {};
 
-    }
-
-    return {
-        getIdentity: function(){
-            // If churchObject is populated with current account info
-            // then return churchObject.
-            var promise = $q.defer();
-            if(admin._id){
-                console.log('Returning existing churchObject in zcIdentity');
-                promise.resolve({ admin: admin, church: church});
-            } else {
-                //If churchObject is empty then make call to the server.
-                churchResource.get({}, function(result){
-                    church = result.church;
-                    admin = result.admin;
-                    promise.resolve(result);
-                }, function(error){
-                    console.log(error);
-                    promise.reject(error);
-                });
-            }
-
-            return promise.promise;
-        },
-        //Set the churchObject with the new updated churchObject to make
-        //it available to rest of the app.
-        setChurch: function(updatedChurchObject){
-            church = updatedChurchObject;
-            return church;
-        },
-        getChurch: function(){
-            if(church._id){
-                return church;
-            }
-
-        },
-        setAdmin: function(newAdmin){
-            admin = newAdmin;
-            return admin;
-        },
-        getAdmin: function(){
-            return admin;
+    vm.getIdentity = function(){
+        var promise = $q.defer();
+        if(vm.admin._id){
+            promise.resolve();
+        } else {
+            churchResource.get({}, function(result){
+                vm.church = result.church;
+                vm.admin = result.admin;
+                promise.resolve();
+            }, function(error){
+                //Todo: Create an error handling factory for IdentityFactory Errors.
+                console.log(error);
+                promise.reject();
+            });
         }
-    }
+        return promise.promise;
+    };
+
+    return vm;
 }]);
