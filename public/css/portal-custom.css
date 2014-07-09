@@ -8,21 +8,6 @@ body {
     height:100%;
 }
 
-.post-link-list {
-    padding:5px 0 0 0;
-}
-
-.post-link {
-    color:mediumpurple;
-    font-size:12px;
-}
-
-.post-link:hover {
-    color:mediumpurple;
-    font-size:12px;
-    text-decoration:underline;
-}
-
 
 /*bootstrap overrides******************************************************/
 
@@ -86,6 +71,16 @@ body {
 
 .dropdown-menu > li > a .secondary {
     font-size:10px;
+}
+
+.dropdown-menu > li > h6 {
+    display: block;
+    padding: 3px 12px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: inherit;
+    white-space: nowrap;
 }
 
 /*portal shell*************************************************************/
@@ -230,6 +225,16 @@ body {
     padding-top:10px;
 }
 
+.feed-main-posting-likes {
+    border-bottom:1px #ddd solid;
+    padding-bottom:5px;
+    margin-bottom:5px;
+}
+
+.feed-main-posting-all-comments {
+    margin-bottom:5px;
+}
+
 .comment-name {
     font-weight:bold;
 }
@@ -237,6 +242,8 @@ body {
 .comment-date {
     color:#aaa;
     font-size:11px;
+    float:left;
+    margin-left:10px;
 }
 
 .comment-text {
@@ -324,6 +331,91 @@ body {
     .sermon-number .sermon-number-inner h3 {
         font-size:20px;
     }
+}
+
+
+/*portal sermons home**************************************************/
+
+.sh-single-sermon {
+    padding-bottom:10px;
+}
+
+.sh-sermon-number {
+    padding:5px 0px 5px 25px;
+}
+
+.sh-sermon-number .sh-sermon-number-inner {
+    border:3px #aaa solid;
+    border-radius:100%;
+    width:31px;
+    height:31px;
+}
+
+@media (max-width: 1400px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:29px;
+        height:29px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner h3 {
+        font-size:22px;
+    }
+}
+
+@media (max-width: 1300px) {
+    .sermon-info {
+        padding:0px 0px 0px 10px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner {
+        border:3px #aaa solid;
+        border-radius:100%;
+        width:27px;
+        height:27px;
+    }
+
+    .sh-sermon-number .sh-sermon-number-inner h3 {
+        font-size:20px;
+    }
+}
+
+.portal-sh-posting {
+    margin-bottom:10px;
+    padding:10px;
+}
+
+.sh-main-posting {
+    border-bottom:1px #ddd solid;
+    padding-bottom:5px;
+    margin-bottom:5px;
+}
+
+.sh-main-posting .sh-posting-body {
+    padding:7px 0;
+}
+
+.sh-main-posting .church-photo {
+    width:50px;
+}
+
+.sh-main-posting .church-name {
+    font-weight:bold;
+}
+
+.sh-main-posting .church-date {
+    color:#aaa;
+    font-size:11px;
+}
+
+.sh-main-posting .church-text {
+    font-size:14px;
+    padding-top:10px;
 }
 
 
@@ -501,4 +593,20 @@ body {
 .write-message {
     border-radius: 0;
     padding:10px;
+}
+
+.zion-connect-popup {
+    display: block;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    width: 400px;
+    height: 120px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #d3d3d3;
+    /*background-color: rgb(68,64,97);*/
+    z-index:2002;
+    overflow: auto;
 }

@@ -206,7 +206,7 @@ exports.createComment = function(req, res){
     CommentPage.update({
         'node_id': msgObj.post._id,
         'page': msgObj.post.num_comment_pages,
-        'count': {$lt: 5}},{
+        'count': {$lt: 100}},{
         $inc: {'count': 1},
         $push: {'comments': comment}
     }, function(error, numberAffected, raw){
@@ -376,7 +376,7 @@ exports.createComment = function(req, res){
  * If it is also in the Post's comment cache it will delete it from there
  * also.
  *
- * req.query: {'comment': object, 'postID': id, 'page': number}
+ * req.query: {'_id': commentID, 'postID': id, 'page': number, 'author': commentAuthor, 'body':commentBody, 'ts': commentDate, 'author_name': commentAuthor}
  */
 exports.deleteComment = function(req, res){
     var msgObj = req.query;
@@ -385,8 +385,16 @@ exports.deleteComment = function(req, res){
         return res.json(400, {'error': 'Query is required.'});
     }
 
-    if(!msgObj.comment){
-        return res.json(400, {'error': 'Comment is required.'});
+    if(!msgObj._id){
+        return res.json(400, {'error': '_id is required.'});
+    }
+
+    if(!msgObj.author){
+        return res.json(400, {'error': 'author is required.'});
+    }
+
+    if(!msgObj.body){
+        return res.json(400, {'error': 'body is required.'});
     }
 
     if(!msgObj.postID){
@@ -405,9 +413,15 @@ exports.deleteComment = function(req, res){
         } else {
             async.parallel([
                 function(done){
-                    if(msgObj.comment._id){
-                        page.comments.id(msgObj.comment._id).remove();
-                        done();
+                    if(msgObj._id){
+                        page.comments.id(msgObj._id).remove(function(error){
+                            if(error){
+                                done(error);
+                            } else {
+                                page.count -= 1;
+                                done();
+                            }
+                        });
                     } else {
                         done(new Error('No comment _id.'));
                     }
@@ -420,25 +434,48 @@ exports.deleteComment = function(req, res){
                         } else if(!post){
                             done(new Error('No post for that _id'));
                         } else {
-                            post.comments.forEach(function(element, index){
-                                if(element.author == msgObj.comment.author && element.body == msg.comment.body){
-                                    page.comments.splice(index, 1);
+                            async.series([
+                                function(done){
+                                    post.comments.forEach(function(element, index){
+                                        if(element.author == msgObj.author && element.body == msgObj.body){
+                                            post.comments.splice(index, 1);
+                                        }
+                                    });
                                     done();
-                                } else {
-                                    done();
-                                }
-                            });
+                                },
+                                function(done){
+                                    post.save(function(error){
+                                        if(error){
+                                            done(error);
+                                        } else {
+                                            done();
+                                        }
+                                    });
+                                }],
+                                function(error){
+                                    if(error){
+                                        done(error);
+                                    } else {
+                                        done();
+                                    }
+                                });
                         }
                     });
 
                 }],
                 function(error){
                     if(error){
-                        return res.json(500, {error: 'Error deleting comment.'});
+                        return res.json(500, {error: error});
                     } else {
-                        return res.json(200, {'success': 'Successfully deleted comment.'});
+                        page.save(function(error){
+                            if(error){
+                                return res.json(500, {error: error});
+                            } else {
+                                return res.json(200, {'success': 'Successfully deleted comment.'});
+                            }
+                        });
                     }
-                })
+                });
         }
     })
 

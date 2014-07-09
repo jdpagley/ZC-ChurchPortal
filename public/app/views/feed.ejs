@@ -5,40 +5,71 @@
     <div class="col-lg-12 col-md-12 well well-sm portal-news-feed-post">
         <!--post text box-->
         <div class="col-lg-12 col-md-12 form-group">
-            <textarea class="form-control" rows="5" placeholder="Write something..." data-ng-model="newPostObj.body"></textarea><!--post text-->
+            <textarea class="form-control" rows="5" placeholder="Write something..." data-ng-model="newPost"></textarea><!--post text-->
         </div>
         <!--post action bar-->
         <div class="col-lg-12 col-md-12">
             <div class="col-lg-1 col-md-1"><a href="#"><span class="glyphicon glyphicon-picture glyphicon1"></span></a></div><!--post select image-->
-            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createPost(newPostObj.body)">Post</a></div><!--post button-->
+            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createPost(newPost); newPost = '';">Post</a></div><!--post button-->
         </div>
     </div>
     <!--portal news feed posting-->
     <div class="col-lg-12 col-md-12 well well-sm well-inner portal-news-feed-posting" data-ng-repeat="post in posts | orderBy:'ts':true">
         <!--posting from church-->
         <div class="col-lg-12 col-md-12 feed-main-posting">
-            <!--church info-->
+            <!--posting church info-->
             <div class="media">
                 <div class="pull-left">
                     <img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/><!--church posting image-->
                 </div>
-                <div class="media-body feed-posting-body">
-                    <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
-                    <div><p class="church-date">{{post.ts | date:'MMMM d, h:mma'}}</p></div><!--church posting date-->
+                <div class="media-body">
+                    <div class="col-lg-11 col-md-11 feed-posting-body">
+                        <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
+                        <div><p class="church-date">{{post.ts | date:'MMMM d, h:mma'}}</p></div><!--church posting date-->
+                    </div>
+                    <div class="col-lg-1 col-md-1 pull-right"><button class="close" ng-click="deletePostPopup(post); displayDeletePostConfirmationPopup = true;">&times;</button></div><!--church posting remove x-->
                 </div>
             </div>
             <!--posting text box-->
             <div class="col-lg-12 col-md-12 church-text">{{post.detail.text}}</div>
-            <!--posting interation links-->
+            <!--posting interaction links-->
             <div class="col-lg-12 col-md-12">
                 <ul class="list-inline post-link-list">
                     <li><a href="" class="post-link" ng-click="likeComment(sermon._id, comment._id, $index)">Like</a></li><!--like link-->
-                    <li><a href="" class="post-link">Comment</a> <span class="badge">{{post.comments.length}}</span></li><!--comment link-->
                 </ul>
             </div>
         </div>
+        <!--posting all likes-->
+        <div class="col-lg-12 col-md-12 feed-main-posting-likes">
+            <div class="dropdown">
+                <a href="" class="dropdown-toggle post-link" id="dropdownMenu1" data-toggle="dropdown">4 people like this</a><!--posting all likes link-->
+                <!--likes dropdown menu-->
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <!--likes dropdown single user-->
+                    <li>
+                        <h6 role="menuitem">John Doe</h6>
+                    </li>
+                    <!--likes dropdown single user-->
+                    <li>
+                        <h6 role="menuitem">Jane Peterson</h6>
+                    </li>
+                    <!--likes dropdown single user-->
+                    <li>
+                        <h6 role="menuitem">Larry Lee</h6>
+                    </li>
+                    <!--likes dropdown single user-->
+                    <li>
+                        <h6 role="menuitem">Nick Johnson</h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--posting all comments-->
+        <div class="col-lg-12 col-md-12 feed-main-posting-all-comments">
+            <div><a href="" class="post-link">View all 3 comments</a></div><!--posting all comments link-->
+        </div>
         <!--posting comments-->
-        <div class="col-lg-12 col-md-12 feed-posting-comments">
+        <div class="col-lg-12 col-md-12 feed-posting-comments ">
             <!--comments from users-->
             <div class="col-lg-12 col-md-12">
                 <!--comments all posted-->
@@ -46,8 +77,11 @@
                     <!--single comment-->
                     <div class="media">
                         <div class="media-body">
-                            <div class="media-heading"><h5 class="comment-name">{{comment.author_name}}</h5></div><!--comments first name-->
-                            <div><p class="comment-date">{{comment.ts | date:short}}</p></div><!--comments date-->
+                            <div class="col-lg-11 col-md-11">
+                                <div class="media-heading pull-left"><h5 class="comment-name">{{comment.author_name}}</h5></div><!--comments by name-->
+                                <div><p class="comment-date">{{comment.ts | date:short}}</p></div><!--comments date-->
+                            </div>
+                            <div class="col-lg-1 col-md-1 pull-right"><button class="close" ng-click="deleteCommentPopup(comment, post._id); displayDeleteCommentConfirmationPopup = true;">&times;</button></div><!--comment remove x-->
                         </div>
                         <div class="comment-text"><p>{{comment.body}}</p></div><!--comments comment-->
                     </div>
@@ -63,6 +97,18 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="postConfirmationPopup" class="zion-connect-popup" ng-show="displayDeletePostConfirmationPopup">
+        <p>Are you sure you want to delete this post?</p>
+        <br/>
+        <a href="" class="btn btn-success btn-sm" data-ng-click="deletePost(); displayDeletePostConfirmationPopup = false;"> Yes</a>
+        <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeletePostConfirmationPopup = false;">No</button>
+    </div>
+    <div id="postConfirmationPopup" class="zion-connect-popup" ng-show="displayDeleteCommentConfirmationPopup">
+        <p>Are you sure you want to delete this comment?</p>
+        <br/>
+        <a href="" class="btn btn-success btn-sm" data-ng-click="deleteComment(); displayDeleteCommentConfirmationPopup = false;"> Yes</a>
+        <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeleteCommentConfirmationPopup = false;">No</button>
     </div>
 </div>
 

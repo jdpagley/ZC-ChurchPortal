@@ -37,8 +37,6 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
             }
         }
 
-
-
         /**
          * Create New Post
          */
@@ -47,11 +45,52 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
         }
 
         /**
+         * Delete Post
+         */
+
+        var post = {};
+
+        $scope.displayDeletePostConfirmationPopup = false;
+
+        $scope.deletePostPopup = function(postToDelete){
+            post = postToDelete;
+            $scope.displayDeletePostConfirmationPopup = true;
+        }
+
+        $scope.deletePost = function(){
+            if(post){
+                FeedFactory.deletePost(post);
+            }
+            $scope.displayDeletePostConfirmationPopup = false;
+        }
+
+        /**
          * Create New Comment
          */
         $scope.createComment = function(text, post, index){
            FeedFactory.createComment(text, post, index);
         };
+
+        /**
+         * Delete Comment
+         */
+        var comment = {};
+
+        $scope.displayDeleteCommentConfirmationPopup = false;
+
+        $scope.deleteCommentPopup = function(commentToDelete, postID){
+            comment = commentToDelete;
+            comment['postID'] = postID;
+            $scope.displayDeleteCommentConfirmationPopup = true;
+        }
+
+        $scope.deleteComment = function(){
+            if(comment){
+                FeedFactory.deleteComment(comment);
+            }
+            $scope.displayDeleteCommentConfirmationPopup = false;
+        }
+
 
 //        //Current Posts
 //        $scope.posts = [];

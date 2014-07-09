@@ -52,7 +52,9 @@ module.exports = function(app) {
     var postsRouter = express.Router();
     postsRouter.get('/api/zionconnect/v1/church/posts', isLoggedIn, posts.retrieve);
     postsRouter.post('/api/zionconnect/v1/church/posts', isLoggedIn, posts.create);
+    postsRouter.delete('/api/zionconnect/v1/church/posts', isLoggedIn, posts.delete);
     postsRouter.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, posts.createComment); //Create Comment on a Post
+    postsRouter.delete('/api/zionconnect/v1/church/posts/comment', isLoggedIn, posts.deleteComment); //Create Comment on a Post
 
     //===========================================================
     //Sermon Routes =============================================

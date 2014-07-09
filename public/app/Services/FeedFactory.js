@@ -61,6 +61,31 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
         }
     }
 
+    vm.deletePost = function(post){
+        if(post._id){
+
+            var promise = $q.defer();
+            postsResource.delete({'postID': post._id}, function(result){
+
+                vm.posts.forEach(function(element, index){
+                    if(element._id == post._id){
+                        vm.posts.splice(index, 1);
+                    }
+                });
+
+                promise.resolve();
+            }, function(error){
+                //todo: Error popup if they cant create a new post.
+                console.log(error);
+            });
+
+            return promise.promise;
+        }  else {
+            //todo: Error notification when not able to delete post.
+            console.log('No post _id. No able to delete post.');
+        }
+    }
+
     vm.createComment = function(text, post, index){
         if(IdentityFactory.admin._id){
             var newComment = {};
@@ -69,14 +94,11 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             newComment['authorName'] = IdentityFactory.admin.name;
             newComment['body'] = text;
 
-            console.log(post);
-
             var promise = $q.defer();
             commentsResource.save(newComment, function(result){
-                console.log(result);
 
                 vm.posts.forEach(function(element, index){
-                    if(element._id){
+                    if(element._id == post._id){
                         if(!result.updatedExistingCommentPage){
                             vm.posts[index].num_comment_pages = result.numCommentPages;
                         }
@@ -97,6 +119,49 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
         }
 
 
+    }
+
+    vm.deleteComment = function(deleteComment, post){
+        console.log('vm.deleteComment hit.');
+        console.log(deleteComment);
+        if(deleteComment._id){
+            var commentObj = {
+                _id: deleteComment._id,
+                ts: deleteComment.ts,
+                body: deleteComment.body,
+                author_name: deleteComment.author_name,
+                author: deleteComment.author,
+                page: deleteComment.page,
+                postID: deleteComment.postID
+            }
+
+            var promise = $q.defer();
+            commentsResource.delete(commentObj, function(result){
+
+                vm.posts.forEach(function(post, postIndex){
+                    if(post._id == deleteComment.postID){
+                        console.log('Post match.')
+                        post.comments.forEach(function(comment, index){
+                            if(comment._id == deleteComment._id){
+                                console.log('Comment match.')
+                                vm.posts[postIndex].comments.splice(index, 1);
+                                return;
+                            }
+                        });
+                    }
+                });
+
+                promise.resolve();
+            }, function(error){
+                //todo: Error popup if they cant create a new post.
+                console.log(error);
+            });
+
+            return promise.promise;
+        }  else {
+            //todo: Error notification when not able to delete post.
+            console.log('No post _id. No able to delete post.');
+        }
     }
 
     return vm;
