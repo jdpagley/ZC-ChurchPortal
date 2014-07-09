@@ -6,7 +6,7 @@
 angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFactory', function($resource, $q, IdentityFactory) {
 
     var postsResource = $resource('/api/zionconnect/v1/church/posts');
-    var commentsResource = $resource('/api/zionconnect/v1/church/posts/comment');
+    var commentsResource = $resource('/api/zionconnect/v1/church/comments');
 
     var vm = {};
 

@@ -8,6 +8,7 @@
 var express = require('express'),
     churchs = require('../controllers/churchs.js'),
     posts = require('../controllers/posts.js'),
+    comments = require('../controllers/comments.js'),
     sermons = require('../controllers/sermons.js'),
     checkins = require('../controllers/checkins.js'),
     member = require('../controllers/members.js'),
@@ -53,8 +54,13 @@ module.exports = function(app) {
     postsRouter.get('/api/zionconnect/v1/church/posts', isLoggedIn, posts.retrieve);
     postsRouter.post('/api/zionconnect/v1/church/posts', isLoggedIn, posts.create);
     postsRouter.delete('/api/zionconnect/v1/church/posts', isLoggedIn, posts.delete);
-    postsRouter.post('/api/zionconnect/v1/church/posts/comment', isLoggedIn, posts.createComment); //Create Comment on a Post
-    postsRouter.delete('/api/zionconnect/v1/church/posts/comment', isLoggedIn, posts.deleteComment); //Create Comment on a Post
+
+    //===========================================================
+    //Comment Routes ============================================
+    //===========================================================
+    var commentsRouter = express.Router();
+    commentsRouter.post('/api/zionconnect/v1/church/comments', isLoggedIn, comments.create);
+    commentsRouter.delete('/api/zionconnect/v1/church/comments', isLoggedIn, comments.delete);
 
     //===========================================================
     //Sermon Routes =============================================
@@ -95,10 +101,12 @@ module.exports = function(app) {
     app.use('/', viewsRouter);
     app.use('/', churchRouter);
     app.use('/', postsRouter);
+    app.use('/', commentsRouter);
     app.use('/', sermonRouter);
     app.use('/', checkinRouter);
     app.use('/', memberRouter);
     app.use('/', notificationRouter);
+
 
 }
 
