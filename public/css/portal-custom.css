@@ -250,7 +250,22 @@ body {
     font-size:14px;
 }
 
+.portal-news-feed-more-link {
+    text-align:center;
+}
 
+.portal-news-feed-more-link .see-all-link {
+    color:mediumpurple;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.portal-news-feed-more-link .see-all-link:hover {
+    color:mediumpurple;
+    font-size:12px;
+    text-decoration:underline;
+    font-weight:bold;
+}
 
 /*portal settings form******************************************************/
 
