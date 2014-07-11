@@ -6,103 +6,171 @@
  with the feed.
  */
 
-angular.module('zcApp').controller('FeedController', ['$scope', '$window', 'zcIdentity', 'zcFeed', 'zcNotifications',
-    function($scope, $window, zcIdentity, zcFeed, zcNotifications){
-
-        //Current User Object
-        //$scope.currentUser = {};
-        var admin = {};
-        var church = {};
+angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory', 'FeedFactory', 'zcNotifications',
+    function($scope, IdentityFactory, FeedFactory, zcNotifications){
 
         //Current Posts
         $scope.posts = [];
 
-        //Retrieve Admin User and Church Object From Server
-        if(!admin.email){
-            var promise = zcIdentity.getIdentity();
-            promise.then(function(result){
-                //set admin and church objects with accounts returned from server.
-                admin = result.admin;
-                church = result.church;
-
-                //Retrieve Posts Associated With Current User ID.
-                if(church._id && $scope.posts.length < 1){;
-                    var promise;
-                    promise = zcFeed.retrievePosts(church._id);
-                    promise.then(function(result){
-                        $scope.posts = result.posts;
-                        console.log(result);
+        if(!IdentityFactory.admin._id){
+            /**
+             * Retrieve Identity from server and then retrieve posts.
+             */
+            var promise = IdentityFactory.getIdentity();
+            promise.then(function(){
+                if(IdentityFactory.church._id && FeedFactory.posts.length < 1){
+                    var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
+                    promise.then(function(){
+                        $scope.posts = FeedFactory.posts;
                     }, function(error){
-                        console.log(error);
+                        return displayError('Not able to load posts at this time. Please try again later.');
                     });
                 }
+            }, function(error){});
+        } else {
+            /**
+             * Retrieve Posts With Church ID
+             */
+            if(IdentityFactory.church._id && FeedFactory.posts.length < 1){
+                var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
+                promise.then(function(){
+                    $scope.posts = FeedFactory.posts;
+                }, function(error){
+                    return displayError('Not able to load posts at this time. Please try again later.');
+                });
+            }
+        }
 
-            }, function(error){
-                console.log('Error: ' + error);
+        /**
+         * Display Error Message
+         */
+        $scope.displayErrorMessagePopup = false;
+        $scope.errorMessage = "";
+
+        function displayError(message){
+            $scope.errorMessage = "Sorry! " + message;
+            $scope.displayErrorMessagePopup = true;
+        }
+
+        /**
+         * Check is user has liked post already.
+         */
+        $scope.alreadyLikedPost = function(post){
+            var firstTimeLike = post.likes.every(function(like){
+                if(like.by == IdentityFactory.admin._id){
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
+            return firstTimeLike;
+        }
+
+        /**
+         * See more posts
+         */
+        $scope.seeMorePosts = function(){
+            var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
+            promise.then(function(){
+                $scope.posts = FeedFactory.posts;
+            }, function(){
+               return displayError('Not able to load any more posts at this time. Please try again later.');
             });
         }
 
         /**
          * Create New Post
          */
-
-        var newPost = {};
         $scope.createPost = function(text){
-            if(church._id){
-                if(admin._id){
-                    if(text != ""){
-                        newPost['author'] = admin._id;
-                        newPost['owner'] = church._id;
-                        newPost['text'] = text;
+           var promise = FeedFactory.createPost(text);
+            promise.then(function(){}, function(){
+                return displayError('Not able to create a new post at this time. Please try again later.');
+            })
+        }
 
-                        var promise = zcFeed.createPost(newPost);
+        /**
+         * Delete Post
+         */
+        var post = {};
 
-                        promise.then(function(result){
-                            $scope.posts.unshift(result.post);
-                            $scope.newPostObj = {};
-                            newPost = {};
-                        }, function(error){
-                            console.log(error);
-                        });
-                    } else {
-                        console.log('post body is empty.');
-                    }
-                } else {
-                    console.log('admin._id is undefined.');
-                }
-            } else {
-                console.log('church._id is undefined.');
+        $scope.displayDeletePostConfirmationPopup = false;
+
+        $scope.deletePostPopup = function(postToDelete){
+            post = postToDelete;
+            $scope.displayDeletePostConfirmationPopup = true;
+        }
+
+        $scope.deletePost = function(){
+            if(post){
+                var promise = FeedFactory.deletePost(post);
+                promise.then(function(){}, function(){
+                    displayError('Not able to delete post at this time. Please try again later.');
+                })
             }
+            $scope.displayDeletePostConfirmationPopup = false;
         }
 
         /**
          * Create New Comment
          */
-        $scope.newCommentObj = {};
+        $scope.createComment = function(text, post, index){
+           var promise = FeedFactory.createComment(text, post, index);
+            promise.then(function(){}, function(){
+               return displayError('Not able to comment at this time. Please try again later.');
+            });
+        };
 
-        $scope.createComment = function(postID, index){
-            var newCommentObj = {};
+        /**
+         * Delete Comment
+         */
+        var comment = {};
 
-            newCommentObj['author'] = admin._id;
-            newCommentObj['post'] = $scope.posts[index];
-            newCommentObj['authorName'] = admin.name;
-            //The view puts the comment body in the the newCommentObj key under the posts id.
-            newCommentObj['body'] = $scope.newCommentObj[postID];
+        $scope.displayDeleteCommentConfirmationPopup = false;
 
-            var promise = zcFeed.createComment(newCommentObj);
+        $scope.deleteCommentPopup = function(commentToDelete, postID){
+            comment = commentToDelete;
+            comment['postID'] = postID;
+            $scope.displayDeleteCommentConfirmationPopup = true;
+        }
 
-            promise.then(function(result){
-                $scope.posts[index].comments.unshift(result.comment);
+        $scope.deleteComment = function(){
+            if(comment){
+                var promise = FeedFactory.deleteComment(comment);
+                promise.then(function(){}, function(){
+                    return displayError('Not able to delete comment at this time. Please try again later.');
+                });
+            }
+            $scope.displayDeleteCommentConfirmationPopup = false;
+        }
 
-//                var newNotification = {};
-//                newNotification['sender'] = $scope.currentUser._id;
-//                newNotification['recipient'] = owner;
-//
-//                zcNotifications.createNotification()
+        /**
+         * Retrieve Comments
+         */
+        $scope.retrieveComments = function(post){
+            var promise = FeedFactory.retrieveComments(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to retrieve the comments for this post at this time. Please try again later.')
+            })
+        }
 
-                $scope.newCommentObj = {};
-            }, function(error){
-                console.log(error);
+        /**
+         * Like Post
+         */
+        $scope.like = function(post){
+            var promise = FeedFactory.like(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to like post at this time. Please try again later.');
+            })
+        }
+
+        /**
+         * Unlike Post
+         */
+        $scope.unlike = function(post){
+            var promise = FeedFactory.unlike(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to unlike post at this time. Please try again later.');
             });
         }
 

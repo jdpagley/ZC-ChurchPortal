@@ -5,22 +5,21 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-/*
- author_type: they type of account that created the comment - church or member.
- author_church: the id of the church if it authored the comment.
- author_member: the id of the member if he/she authored the comment.
- author_name: the name of the member/church that authored the comment.
- body: the body of the comment.
+/**
+ * by: ID of the account that created the like.
+ * name: Name of the account that created the like.
+ * ts: Date like was created.
  */
 
 var likeSchema = new Schema({
-    author:                  {type: Schema.Types.ObjectId, ref: 'Member'},
-    createdAt:               Date
+    by:                      {type: Schema.Types.ObjectId, ref: 'Member'},
+    name:                    String,
+    ts:                      Date
 });
 
 likeSchema.pre('save', function(next){
-    if (!this.createdAt){
-        this.createdAt = new Date();
+    if (!this.ts){
+        this.ts = new Date();
     }
     next();
 });
