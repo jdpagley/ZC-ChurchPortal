@@ -14,25 +14,32 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
     vm.posts = [];
 
     vm.retrievePosts = function(){
+        var promise = $q.defer();
         if(IdentityFactory.church._id){
-            var promise = $q.defer();
             postsResource.get({'churchID': IdentityFactory.church._id, 'num_posts': vm.posts.length}, function(result){
-                vm.posts = result.posts;
+                if(vm.posts.length > 0){
+                    console.log(result.posts);
+                    vm.posts = vm.posts.concat(result.posts);
+                    console.log(vm.posts);
+                } else {
+                    vm.posts = result.posts;
+                }
                 promise.resolve();
             }, function(error){
                 //Todo: Create Error Notification for retrieving posts error.
                 console.log(error);
                 promise.reject();
             });
-
-            return promise.promise;
         } else {
             //Todo: Create Error Notification for retrieving posts error.
             console.log('Could not retrieve posts.');
+            promise.reject();
         }
+        return promise.promise;
     }
 
     vm.createPost = function(text){
+        var promise = $q.defer();
         if(IdentityFactory.church._id){
             if(IdentityFactory.admin._id){
                 if(text != ""){
@@ -41,7 +48,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                     newPost['owner'] = IdentityFactory.church._id;
                     newPost['text'] = text;
 
-                    var promise = $q.defer();
                     postsResource.save(newPost, function(result){
                         vm.posts.unshift(result.post);
                         promise.resolve();
@@ -51,23 +57,25 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                         promise.reject();
                     });
 
-                    return promise.promise;
-
                 } else {
                     console.log('post text is empty.');
+                    promise.reject();
                 }
             } else {
                 console.log('IdentityFactory.admin._id is undefined.');
+                promise.reject();
             }
         } else {
             console.log('IdentityFactory.church._id is undefined.');
+            promise.reject();
         }
+
+        return promise.promise;
     }
 
     vm.deletePost = function(post){
+        var promise = $q.defer();
         if(post._id){
-
-            var promise = $q.defer();
             postsResource.delete({'postID': post._id}, function(result){
 
                 vm.posts.forEach(function(element, index){
@@ -83,14 +91,16 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                 promise.reject();
             });
 
-            return promise.promise;
         }  else {
             //todo: Error notification when not able to delete post.
             console.log('No post _id. No able to delete post.');
+            promise.reject();
         }
+        return promise.promise;
     }
 
     vm.createComment = function(text, post, index){
+        var promise = $q.defer();
         if(IdentityFactory.admin._id){
             var newComment = {};
             newComment['author'] = IdentityFactory.admin._id;
@@ -98,7 +108,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             newComment['authorName'] = IdentityFactory.admin.name;
             newComment['body'] = text;
 
-            var promise = $q.defer();
             commentsResource.save(newComment, function(result){
 
                 vm.posts.forEach(function(element, index){
@@ -119,16 +128,17 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                 promise.reject();
             });
 
-            return promise.promise;
         } else {
             //todo: Error notification when not able to comment.
             console.log('No Identity. Cannot create comment.');
+            promise.reject();
         }
 
-
+        return promise.promise;
     }
 
     vm.deleteComment = function(deleteComment, post){
+        var promise = $q.defer();
         if(deleteComment._id){
             var commentObj = {
                 _id: deleteComment._id,
@@ -140,7 +150,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                 postID: deleteComment.postID
             }
 
-            var promise = $q.defer();
             commentsResource.delete(commentObj, function(result){
 
                 vm.posts.forEach(function(post, postIndex){
@@ -164,14 +173,18 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                 promise.reject();
             });
 
-            return promise.promise;
         }  else {
             //todo: Error notification when not able to delete post.
             console.log('No post _id. No able to delete post.');
+            promise.reject();
         }
+
+        return promise.promise;
     };
 
     vm.retrieveComments = function(post){
+        var promise = $q.defer();
+
         if(post._id){
             var promise = $q.defer();
             commentsResource.get({'postID': post._id}, function(result){
@@ -187,14 +200,18 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                 promise.reject();
             });
 
-            return promise.promise;
         } else {
             //Todo: Error notification when not able to retrieve comments.
-            console.log('No able to retrieve comments for post.')
+            console.log('No able to retrieve comments for post.');
+            promise.reject();
         }
+
+        return promise.promise;
     };
 
     vm.like = function(post){
+        var promise = $q.defer();
+
         var firstTimeLike = post.likes.every(function(like){
             if(like.by == IdentityFactory.admin._id){
                 return false;
@@ -211,7 +228,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                     newLike['name'] = IdentityFactory.admin.name;
                     newLike['by'] = IdentityFactory.admin._id;
 
-                    var promise = $q.defer();
                     likesResource.save(newLike, function(result){
 
                         vm.posts.forEach(function(element, index){
@@ -229,21 +245,27 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                         promise.reject();
                     });
 
-                    return promise.promise;
                 } else {
                     //Todo: Error notification when not able to like post.
                     console.log('Not able to add like to post.')
+                    promise.reject();
                 }
             } else {
                 //Todo: Error notification when not able to like post.
                 console.log('Not able to add like to post.')
+                promise.reject();
             }
         } else {
             console.log('Cannot like post twice.');
+            promise.reject();
         }
+
+        return promise.promise;
     }
 
     vm.unlike = function(post){
+        var promise = $q.defer();
+
         if(post._id){
             var unlike = {};
             unlike['postID'] = post._id;
@@ -257,7 +279,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             if(unlike['postID'] != ""){
                 if(unlike['likeID'] != ""){
 
-                    var promise = $q.defer();
                     likesResource.delete(unlike, function(result){
 
                         //Remove like from vm.posts
@@ -280,17 +301,21 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                         promise.reject();
                     });
 
-                    return promise.promise;
                 } else {
                     console.log('No like _id.')
+                    promise.reject();
                 }
             } else {
                 console.log('No post _id.')
+                promise.reject();
             }
         } else {
             //Todo: Error notification when not able to unlike post.
             console.log('Not able to unlike post.')
+            promise.reject();
         }
+
+        return promise.promise;
     }
 
     return vm;

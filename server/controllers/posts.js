@@ -74,6 +74,7 @@ exports.create = function(req, res){
  */
 exports.retrieve = function(req, res){
     var msgObj = req.query;
+    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error': 'POST body is required.'});
@@ -89,11 +90,12 @@ exports.retrieve = function(req, res){
             {path: 'author'}
         ];
 
-        Post.find({'owner': msgObj.churchID}).populate(options).sort({'createdAt': -1}).exec(function(error, posts){
+        Post.find({'owner': msgObj.churchID}).skip(msgObj.num_posts || 0).limit(50).populate(options).exec(function(error, posts){
             if(error){
                 console.log(error);
                 return res.json(500, {'error': 'Server Error', 'mongoError': error});
             } else {
+                console.log(posts);
                 return res.json(200, {'success': 'Successfully retrieved posts.', 'posts': posts});
             }
         })

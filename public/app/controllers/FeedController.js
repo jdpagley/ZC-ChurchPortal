@@ -22,7 +22,9 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
                     var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
                     promise.then(function(){
                         $scope.posts = FeedFactory.posts;
-                    }, function(error){});
+                    }, function(error){
+                        return displayError('Not able to load posts at this time. Please try again later.');
+                    });
                 }
             }, function(error){});
         } else {
@@ -33,8 +35,21 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
                 var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
                 promise.then(function(){
                     $scope.posts = FeedFactory.posts;
-                }, function(error){});
+                }, function(error){
+                    return displayError('Not able to load posts at this time. Please try again later.');
+                });
             }
+        }
+
+        /**
+         * Display Error Message
+         */
+        $scope.displayErrorMessagePopup = false;
+        $scope.errorMessage = "";
+
+        function displayError(message){
+            $scope.errorMessage = "Sorry! " + message;
+            $scope.displayErrorMessagePopup = true;
         }
 
         /**
@@ -53,16 +68,30 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
         }
 
         /**
+         * See more posts
+         */
+        $scope.seeMorePosts = function(){
+            var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
+            promise.then(function(){
+                $scope.posts = FeedFactory.posts;
+            }, function(){
+               return displayError('Not able to load any more posts at this time. Please try again later.');
+            });
+        }
+
+        /**
          * Create New Post
          */
         $scope.createPost = function(text){
-            FeedFactory.createPost(text);
+           var promise = FeedFactory.createPost(text);
+            promise.then(function(){}, function(){
+                return displayError('Not able to create a new post at this time. Please try again later.');
+            })
         }
 
         /**
          * Delete Post
          */
-
         var post = {};
 
         $scope.displayDeletePostConfirmationPopup = false;
@@ -74,7 +103,10 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
 
         $scope.deletePost = function(){
             if(post){
-                FeedFactory.deletePost(post);
+                var promise = FeedFactory.deletePost(post);
+                promise.then(function(){}, function(){
+                    displayError('Not able to delete post at this time. Please try again later.');
+                })
             }
             $scope.displayDeletePostConfirmationPopup = false;
         }
@@ -83,7 +115,10 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
          * Create New Comment
          */
         $scope.createComment = function(text, post, index){
-           FeedFactory.createComment(text, post, index);
+           var promise = FeedFactory.createComment(text, post, index);
+            promise.then(function(){}, function(){
+               return displayError('Not able to comment at this time. Please try again later.');
+            });
         };
 
         /**
@@ -101,7 +136,10 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
 
         $scope.deleteComment = function(){
             if(comment){
-                FeedFactory.deleteComment(comment);
+                var promise = FeedFactory.deleteComment(comment);
+                promise.then(function(){}, function(){
+                    return displayError('Not able to delete comment at this time. Please try again later.');
+                });
             }
             $scope.displayDeleteCommentConfirmationPopup = false;
         }
@@ -110,129 +148,30 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
          * Retrieve Comments
          */
         $scope.retrieveComments = function(post){
-            FeedFactory.retrieveComments(post);
+            var promise = FeedFactory.retrieveComments(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to retrieve the comments for this post at this time. Please try again later.')
+            })
         }
 
         /**
          * Like Post
          */
         $scope.like = function(post){
-            FeedFactory.like(post);
+            var promise = FeedFactory.like(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to like post at this time. Please try again later.');
+            })
         }
 
         /**
          * Unlike Post
          */
         $scope.unlike = function(post){
-            FeedFactory.unlike(post);
+            var promise = FeedFactory.unlike(post);
+            promise.then(function(){}, function(){
+                return displayError('Not able to unlike post at this time. Please try again later.');
+            });
         }
-
-
-
-
-//        //Current Posts
-//        $scope.posts = [];
-//
-//        if(!IdentityFactory.admin._id){
-//            /**
-//             * Get Identity from server and then retrieve posts.
-//             */
-//            var promise = IdentityFactory.getIdentity();
-//            promise.then(function(){
-//                //Retrieve Posts Associated With Current User ID.
-//                if(IdentityFactory.church._id && $scope.posts.length < 1){
-//                    console.log(IdentityFactory.church);
-//                    var promise;
-//                    promise = zcFeed.retrievePosts(IdentityFactory.church._id);
-//                    promise.then(function(result){
-//                        $scope.posts = result.posts;
-//                        console.log(result);
-//                    }, function(error){
-//                        console.log(error);
-//                    });
-//                }
-//            }, function(error){});
-//        } else {
-//            /**
-//             * Retrieve Posts With Church ID
-//             */
-//            if(IdentityFactory.church._id && $scope.posts.length < 1){
-//                console.log(IdentityFactory.church);
-//                var promise;
-//                promise = zcFeed.retrievePosts(IdentityFactory.church._id);
-//                promise.then(function(result){
-//                    $scope.posts = result.posts;
-//                    console.log(result);
-//                }, function(error){
-//                    console.log(error);
-//                });
-//            }
-//        }
-//
-//
-//
-//        /**
-//         * Create New Post
-//         */
-//        $scope.createPost = function(text){
-//            if(IdentityFactory.church._id){
-//                if(IdentityFactory.admin._id){
-//                    if(text != ""){
-//                        var newPost = {};
-//                        newPost['author'] = IdentityFactory.admin._id;
-//                        newPost['owner'] = IdentityFactory.church._id;
-//                        newPost['text'] = text;
-//
-//                        console.log(newPost)
-//
-//                        var promise = zcFeed.createPost(newPost);
-//
-//                        promise.then(function(result){
-//                            $scope.posts.unshift(result.post);
-//                            $scope.newPostObj = {};
-//                            newPost = {};
-//                        }, function(error){
-//                            console.log(error);
-//                        });
-//                    } else {
-//                        console.log('post text is empty.');
-//                    }
-//                } else {
-//                    console.log('IdentityFactory.admin._id is undefined.');
-//                }
-//            } else {
-//                console.log('IdentityFactory.church._id is undefined.');
-//            }
-//        }
-//
-//        /**
-//         * Create New Comment
-//         */
-//        $scope.newCommentObj = {};
-//
-//        $scope.createComment = function(postID, index){
-//            var newCommentObj = {};
-//            newCommentObj['author'] = IdentityFactory.admin._id;
-//            newCommentObj['post'] = $scope.posts[index];
-//            newCommentObj['authorName'] = IdentityFactory.admin.name;
-//            //The view puts the comment body in the the newCommentObj key under the posts id.
-//            newCommentObj['body'] = $scope.newCommentObj[postID];
-//
-//            var promise = zcFeed.createComment(newCommentObj);
-//
-//            promise.then(function(result){
-//                $scope.posts[index].comments.unshift(result.comment);
-//
-////                var newNotification = {};
-////                newNotification['sender'] = $scope.currentUser._id;
-////                newNotification['recipient'] = owner;
-////
-////                zcNotifications.createNotification()
-//
-//                $scope.newCommentObj = {};
-//            }, function(error){
-//                console.log(error);
-//            });
-//        }
 
     }]);
