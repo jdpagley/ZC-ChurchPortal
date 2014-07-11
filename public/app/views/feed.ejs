@@ -35,38 +35,27 @@
             <!--posting interaction links-->
             <div class="col-lg-12 col-md-12">
                 <ul class="list-inline post-link-list">
-                    <li><a href="" class="post-link" ng-click="likeComment(sermon._id, comment._id, $index)">Like</a></li><!--like link-->
+                    <li ng-show="alreadyLikedPost(post)"><a href="" class="post-link" ng-click="like(post)">Like</a></li><!--like link-->
+                    <li ng-show="!alreadyLikedPost(post)"><a href="" class="post-link" ng-click="unlike(post)">Unlike</a></li>
                 </ul>
             </div>
         </div>
         <!--posting all likes-->
-        <div class="col-lg-12 col-md-12 feed-main-posting-likes">
+        <div class="col-lg-12 col-md-12 feed-main-posting-likes" ng-show="post.likes.length > 0 || false">
             <div class="dropdown">
-                <a href="" class="dropdown-toggle post-link" id="dropdownMenu1" data-toggle="dropdown">4 people like this</a><!--posting all likes link-->
+                <a href="" class="dropdown-toggle post-link" id="dropdownMenu1" data-toggle="dropdown">{{post.likes.length || 0}} people like this</a><!--posting all likes link-->
                 <!--likes dropdown menu-->
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                     <!--likes dropdown single user-->
-                    <li>
-                        <h6 role="menuitem">John Doe</h6>
-                    </li>
-                    <!--likes dropdown single user-->
-                    <li>
-                        <h6 role="menuitem">Jane Peterson</h6>
-                    </li>
-                    <!--likes dropdown single user-->
-                    <li>
-                        <h6 role="menuitem">Larry Lee</h6>
-                    </li>
-                    <!--likes dropdown single user-->
-                    <li>
-                        <h6 role="menuitem">Nick Johnson</h6>
+                    <li ng-repeat="like in post.likes">
+                        <h6 role="menuitem"><a href="#/member/profile/{{like.author}}">{{like.name}}</a></h6>
                     </li>
                 </ul>
             </div>
         </div>
         <!--posting all comments-->
-        <div class="col-lg-12 col-md-12 feed-main-posting-all-comments">
-            <div><a href="" class="post-link">View all 3 comments</a></div><!--posting all comments link-->
+        <div class="col-lg-12 col-md-12 feed-main-posting-all-comments" ng-show="post.num_comments > 5">
+            <div><a href="" class="post-link" ng-click="retrieveComments(post)">View all {{post.num_comments}} comments</a></div><!--posting all comments link-->
         </div>
         <!--posting comments-->
         <div class="col-lg-12 col-md-12 feed-posting-comments ">

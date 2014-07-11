@@ -7,6 +7,7 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
 
     var postsResource = $resource('/api/zionconnect/v1/church/posts');
     var commentsResource = $resource('/api/zionconnect/v1/church/comments');
+    var likesResource = $resource('/api/zionconnect/v1/church/likes');
 
     var vm = {};
 
@@ -15,12 +16,13 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
     vm.retrievePosts = function(){
         if(IdentityFactory.church._id){
             var promise = $q.defer();
-            postsResource.get({'churchID': IdentityFactory.church._id}, function(result){
+            postsResource.get({'churchID': IdentityFactory.church._id, 'num_posts': vm.posts.length}, function(result){
                 vm.posts = result.posts;
                 promise.resolve();
             }, function(error){
                 //Todo: Create Error Notification for retrieving posts error.
                 console.log(error);
+                promise.reject();
             });
 
             return promise.promise;
@@ -46,6 +48,7 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                     }, function(error){
                         //todo: Error popup if they cant create a new post.
                         console.log(error);
+                        promise.reject();
                     });
 
                     return promise.promise;
@@ -77,6 +80,7 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             }, function(error){
                 //todo: Error popup if they cant create a new post.
                 console.log(error);
+                promise.reject();
             });
 
             return promise.promise;
@@ -102,7 +106,9 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
                         if(!result.updatedExistingCommentPage){
                             vm.posts[index].num_comment_pages = result.numCommentPages;
                         }
+                        vm.posts[index].num_comments += 1;
                         vm.posts[index].comments.push(result.comment);
+                        console.log(vm.posts[index].num_comments);
                     }
                 });
 
@@ -110,6 +116,7 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             }, function(error){
                 //todo: Error notification when not able to comment.
                 console.log(error);
+                promise.reject();
             });
 
             return promise.promise;
@@ -122,8 +129,6 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
     }
 
     vm.deleteComment = function(deleteComment, post){
-        console.log('vm.deleteComment hit.');
-        console.log(deleteComment);
         if(deleteComment._id){
             var commentObj = {
                 _id: deleteComment._id,
@@ -140,11 +145,12 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
 
                 vm.posts.forEach(function(post, postIndex){
                     if(post._id == deleteComment.postID){
-                        console.log('Post match.')
                         post.comments.forEach(function(comment, index){
                             if(comment._id == deleteComment._id){
-                                console.log('Comment match.')
                                 vm.posts[postIndex].comments.splice(index, 1);
+                                if(vm.posts[postIndex].num_comments > 0){
+                                    vm.posts[postIndex].num_comments -= 1;
+                                }
                                 return;
                             }
                         });
@@ -155,6 +161,7 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             }, function(error){
                 //todo: Error popup if they cant create a new post.
                 console.log(error);
+                promise.reject();
             });
 
             return promise.promise;
@@ -162,44 +169,131 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             //todo: Error notification when not able to delete post.
             console.log('No post _id. No able to delete post.');
         }
+    };
+
+    vm.retrieveComments = function(post){
+        if(post._id){
+            var promise = $q.defer();
+            commentsResource.get({'postID': post._id}, function(result){
+                vm.posts.forEach(function(element, index){
+                    if(element._id == post._id){
+                        vm.posts[index].comments = result.comments;
+                    }
+                });
+                promise.resolve();
+            }, function(error){
+                //Todo: Error notification when not able to retrieve comments.
+                console.log(error);
+                promise.reject();
+            });
+
+            return promise.promise;
+        } else {
+            //Todo: Error notification when not able to retrieve comments.
+            console.log('No able to retrieve comments for post.')
+        }
+    };
+
+    vm.like = function(post){
+        var firstTimeLike = post.likes.every(function(like){
+            if(like.by == IdentityFactory.admin._id){
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        if(firstTimeLike){
+            if(post._id){
+                if(IdentityFactory.admin._id){
+                    var newLike = {};
+                    newLike['postID'] = post._id;
+                    newLike['name'] = IdentityFactory.admin.name;
+                    newLike['by'] = IdentityFactory.admin._id;
+
+                    var promise = $q.defer();
+                    likesResource.save(newLike, function(result){
+
+                        vm.posts.forEach(function(element, index){
+                            if(element._id == post._id){
+                                if(result.like){
+                                    vm.posts[index].likes.push(result.like);
+                                }
+                            }
+                        });
+
+                        promise.resolve();
+                    }, function(error){
+                        //todo: Error notification when not able to comment.
+                        console.log(error);
+                        promise.reject();
+                    });
+
+                    return promise.promise;
+                } else {
+                    //Todo: Error notification when not able to like post.
+                    console.log('Not able to add like to post.')
+                }
+            } else {
+                //Todo: Error notification when not able to like post.
+                console.log('Not able to add like to post.')
+            }
+        } else {
+            console.log('Cannot like post twice.');
+        }
+    }
+
+    vm.unlike = function(post){
+        if(post._id){
+            var unlike = {};
+            unlike['postID'] = post._id;
+
+            post.likes.forEach(function(like, index){
+                if(like.by == IdentityFactory.admin._id){
+                    return unlike['likeID'] = like._id;
+                }
+            });
+
+            if(unlike['postID'] != ""){
+                if(unlike['likeID'] != ""){
+
+                    var promise = $q.defer();
+                    likesResource.delete(unlike, function(result){
+
+                        //Remove like from vm.posts
+                        vm.posts.forEach(function(post, postIndex){
+                            if(post._id == unlike.postID){
+                                post.likes.forEach(function(like, index){
+                                    if(like._id == unlike.likeID){
+                                        vm.posts[postIndex].likes.splice(index, 1);
+                                        return;
+                                    }
+                                });
+                                return;
+                            }
+                        });
+
+                        promise.resolve();
+
+                    }, function(error){
+                        console.log(error);
+                        promise.reject();
+                    });
+
+                    return promise.promise;
+                } else {
+                    console.log('No like _id.')
+                }
+            } else {
+                console.log('No post _id.')
+            }
+        } else {
+            //Todo: Error notification when not able to unlike post.
+            console.log('Not able to unlike post.')
+        }
     }
 
     return vm;
-
-   /* return {
-        // postsResource.save(...) makes a POST request back to the server.
-        // the post body is specified by the object past to updateChurchSettings.
-        createPost: function(postObj){
-            var promise = $q.defer();
-            postsResource.save(postObj, function(result){
-                promise.resolve(result);
-            }, function(error){
-                promise.reject(error);
-            });
-
-            return promise.promise;
-        },
-        retrievePosts: function(churchID){
-            var promise = $q.defer();
-            postsResource.get({'churchID': churchID}, function(result){
-                promise.resolve(result);
-            }, function(error){
-                promise.reject(error);
-            });
-
-            return promise.promise;
-        },
-        createComment: function(commentObj){
-            var promise = $q.defer();
-            commentsResource.save(commentObj, function(result){
-                promise.resolve(result);
-            }, function(error){
-                promise.reject(error);
-            });
-
-            return promise.promise;
-        }
-    }*/
 
 
 }]);

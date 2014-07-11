@@ -27,8 +27,6 @@ var CommentPage = require('../models/commentPage.js');
  */
 exports.create = function(req, res){
     var msgObj = req.body;
-    console.log('Create comment hit');
-    console.log(msgObj);
 
     if(!msgObj){
         return res.json(400, {'error': 'POST body is required.'});
@@ -65,12 +63,9 @@ exports.create = function(req, res){
         $inc: {'count': 1},
         $push: {'comments': comment}
     }, function(error, numberAffected, raw){
-        console.log(raw);
         if(error){
-            console.log(error);
             return res.json(500, {'error': 'Server Error.', 'mongoError': error});
         } else if (raw.updatedExisting){
-            console.log('Updated existing.');
             /**
              * If currently existing Comment Page can be updated instead of creating a new page.
              * raw.updatedExisting will return true it updated a document.
@@ -78,7 +73,8 @@ exports.create = function(req, res){
              * async.waterfall: (1) Find the most recent CommentPage and return the most
              *                  recent comment from that page.
              *                  (2) Update Post document. Push the comment that has been created inside the new
-             *                  commentPage into the comment cache on the post document.
+             *                  commentPage into the comment cache on the post document and increment num_comments
+             *                  by one.
              *                  The comments cache will only hold up to 5 comment documents.
              *                  It removes the oldest comment in the cache replacing it with the new one.
              *                  (3) Return the newly created comment back to the client.
@@ -104,6 +100,7 @@ exports.create = function(req, res){
                                 done(new Error('Not able to add most recent comment to comments array.'));
                             } else {
                                 if(post.comments.length >= 5){
+                                    post.num_comments += 1;
                                     post.comments.splice(post.comments.length - 1, 1);
                                     post.comments.unshift(newComment);
                                     post.save(function(error){
@@ -114,6 +111,7 @@ exports.create = function(req, res){
                                         }
                                     });
                                 } else {
+                                    post.num_comments += 1;
                                     post.comments.unshift(newComment);
                                     post.save(function(error){
                                         if(error){
@@ -127,10 +125,7 @@ exports.create = function(req, res){
                         });
                     }],
                 function(error, newComment){
-                    console.log('Updated existing comment page.');
-                    console.log(newComment);
                     if(error){
-                        console.log(error);
                         return res.json(500, {'error': error});
                     } else {
                         return res.json(200, {'success': 'Successfully added new comment.', 'updatedExistingCommentPage': true,  'comment': newComment});
@@ -182,6 +177,7 @@ exports.create = function(req, res){
                             } else {
                                 if(post.comments.length >= 5){
                                     post.num_comment_pages += 1;
+                                    post.num_comments += 1;
 
                                     post.comments.splice(post.comments.length - 1, 1);
                                     post.comments.unshift(newComment);
@@ -195,6 +191,7 @@ exports.create = function(req, res){
                                     });
                                 } else {
                                     post.num_comment_pages += 1;
+                                    post.num_comments += 1;
 
                                     post.comments.unshift(newComment);
 
@@ -210,13 +207,9 @@ exports.create = function(req, res){
                         });
                     }],
                 function(error, newComment, numCommentPages){
-                    console.log('created new comment page.');
                     if(error){
-                        console.log(error);
                         return res.json(500, {'error': error});
                     } else {
-                        console.log(newComment);
-                        console.log(numCommentPages);
                         return res.json(200, {'success': 'Successfully added new comment.', 'updatedExistingCommentPage': false, 'numCommentPages': numCommentPages, 'comment': newComment});
                     }
                 });
@@ -289,6 +282,10 @@ exports.delete = function(req, res){
                             } else if(!post){
                                 done(new Error('No post for that _id'));
                             } else {
+                                if(post.num_comments > 0){
+                                    post.num_comments -= 1;
+                                }
+
                                 async.series([
                                         function(done){
                                             post.comments.forEach(function(element, index){
@@ -329,6 +326,46 @@ exports.delete = function(req, res){
                                 return res.json(200, {'success': 'Successfully deleted comment.'});
                             }
                         });
+                    }
+                });
+        }
+    });
+}
+
+/**
+ * Retrieve Comments for post.
+ *
+ * req.query: {'postID': id}
+ */
+exports.retrieve = function(req, res){
+    var msgObj = req.query;
+
+    if(!msgObj){
+        return res.json(400, {'error': 'Query is required.'});
+    }
+
+    if(!msgObj.postID){
+        return res.json(400, {'error': 'Post _id is required.'});
+    }
+
+    CommentPage.find({'node_id': msgObj.postID}, 'comments', function(error, pages){
+        if(error){
+            return res.json(500, {'error': 'Server error.', 'mongoError': error});
+        } else if (!pages){
+            return res.json(200, {'success': 'No comments for that post.'});
+        } else {
+            async.concat(pages,
+                function(page, done){
+                    if(!page.comments){
+                        done(new Error('Page has no comment field.'));
+                    }
+                    done(null, page.comments);
+                },
+                function(error, comments){
+                    if(error){
+                        return res.json(500, {'error': error});
+                    } else {
+                        return res.json(200, {'success': 'Successfully retrieved comments.', 'comments': comments});
                     }
                 });
         }

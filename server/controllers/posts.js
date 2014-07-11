@@ -43,6 +43,7 @@ exports.create = function(req, res){
         'author': msgObj.author,
         'owner': msgObj.owner,
         'num_comment_pages': 0,
+        'num_comments': 0,
         'detail': {
             'text': msgObj.text
         }

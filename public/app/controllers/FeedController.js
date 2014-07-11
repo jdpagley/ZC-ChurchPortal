@@ -38,6 +38,21 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
         }
 
         /**
+         * Check is user has liked post already.
+         */
+        $scope.alreadyLikedPost = function(post){
+            var firstTimeLike = post.likes.every(function(like){
+                if(like.by == IdentityFactory.admin._id){
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
+            return firstTimeLike;
+        }
+
+        /**
          * Create New Post
          */
         $scope.createPost = function(text){
@@ -90,6 +105,29 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
             }
             $scope.displayDeleteCommentConfirmationPopup = false;
         }
+
+        /**
+         * Retrieve Comments
+         */
+        $scope.retrieveComments = function(post){
+            FeedFactory.retrieveComments(post);
+        }
+
+        /**
+         * Like Post
+         */
+        $scope.like = function(post){
+            FeedFactory.like(post);
+        }
+
+        /**
+         * Unlike Post
+         */
+        $scope.unlike = function(post){
+            FeedFactory.unlike(post);
+        }
+
+
 
 
 //        //Current Posts

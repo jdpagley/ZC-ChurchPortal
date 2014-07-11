@@ -23,12 +23,13 @@ var postTypes = ['status', 'sermon'];
 var postSchema = new Schema({
     author:                     {type: Schema.Types.ObjectId, ref: 'Member'},
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
-    comments:                   [commentSchema],
     num_comment_pages:          Number,
-    likes:                      [likeSchema],
+    num_comments:               Number,
     detail:                     {
         text:                   String
     },
+    comments:                   [commentSchema],
+    likes:                      [likeSchema],
     ts:                         Date
 });
 
