@@ -434,7 +434,7 @@ body {
 }
 
 
-/*portal sermon edit**************************************************/
+/*portal sermon add edit**************************************************/
 
 .sermon-edit .sermon-edit-label label {
     padding:5%;
@@ -443,6 +443,22 @@ body {
 .sermon-edit .sermon-upload-button {
     padding-left:1%;
 }
+
+.sermon-add-edit .sermon-info-area {
+    border-bottom:1px #ddd solid;
+    padding-bottom:20px;
+    margin-bottom:20px;
+}
+
+.sermon-add-edit .right-button {
+    padding-left:1%;
+}
+
+.sermon-add-edit h2 {
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
 
 /*portal checkins*****************************************************/
 
