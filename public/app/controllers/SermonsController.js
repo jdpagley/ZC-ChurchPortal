@@ -2,8 +2,27 @@
  * Created by Josh Pagley on 2/25/14.
  */
 
-angular.module('zcApp').controller('SermonsController', ['$scope', 'zcIdentity', 'zcSermons',
-    function($scope, zcIdentity, zcSermons){
+angular.module('zcApp').controller('SermonsController', ['$scope', 'IdentityFactory', 'SermonsFactory',
+    function($scope, IdentityFactory, SermonsFactory){
+
+        if(!IdentityFactory.admin._id){
+            /**
+             * Retrieve Identity from server and then retrieve posts.
+             */
+            var promise = IdentityFactory.getIdentity();
+            promise.then(function(){
+                //Retrieve Sermons From Server Here
+            }, function(error){});
+        } else {
+            /**
+             * Retrieve Posts With Church ID
+             */
+            if(IdentityFactory.church._id && SermonsFactory.sermons.length < 1){
+                //Retrieve Sermons From Server Here
+            }
+        }
+
+        //Old Code===================================
 
         //Sermon List
         $scope.sermons = [];

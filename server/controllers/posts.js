@@ -40,6 +40,7 @@ exports.create = function(req, res){
     }
 
     var newPost = {
+        'type': 'feed',
         'author': msgObj.author,
         'owner': msgObj.owner,
         'num_comment_pages': 0,

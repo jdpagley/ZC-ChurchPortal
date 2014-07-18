@@ -2,12 +2,42 @@
  * Created by Josh Pagley on 4/19/14.
  */
 
-angular.module('zcApp').factory('zcSermons', ['$resource','$http', '$q', function($resource, $http, $q){
+angular.module('zcApp').factory('SermonsFactory', ['$resource','$http', '$q', function($resource, $http, $q){
     var sermonsResource = $resource('/api/zionconnect/v1/church/sermon');
     var sermonsUpdateResource = $resource('/api/zionconnect/v1/church/sermon', {}, { update: {method: 'PUT'}});
     var retrieveAllSermonsResource = $resource('/api/zionconnect/v1/church/sermon/list');
     var sermonCommentResource = $resource('/api/zionconnect/v1/church/sermon/comment');
     var sermonCommentLikeResource = $resource('/api/zionconnect/v1/church/sermon/comment/like');
+
+    var vm = {};
+
+    /**
+     * vm.sermons contains a list of just the individual sermons.
+     * vm.series contains a list of the series objects. Each series object
+     * contains an array of the associated sermons in the sermons array.
+     *
+     * This strategy is used for quick display changing in the sermons list view.
+     */
+    vm.sermons = [];
+    vm.series = [];
+
+    vm.createSermon = function(sermonObj){
+        var promise = $q.defer();
+        sermonsResource.save(sermonObj, function(result){
+
+            promise.resolve(result);
+        }, function(error){
+            promise.reject(error);
+        });
+
+        return promise.promise;
+    }
+
+    return vm;
+
+    //================================================
+    //Old SermonsFActory code
+    //================================================
 
     var sermons = [];
 

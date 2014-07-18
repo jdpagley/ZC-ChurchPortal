@@ -18,9 +18,10 @@ var likeSchema = require('./like.js');
  body: the body of the post.
  */
 
-var postTypes = ['status', 'sermon'];
+var postTypes = ['feed', 'sermon'];
 
 var postSchema = new Schema({
+    type:                       {type: String, enum: postTypes},
     author:                     {type: Schema.Types.ObjectId, ref: 'Member'},
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
     num_comment_pages:          Number,
