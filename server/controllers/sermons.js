@@ -8,8 +8,31 @@ var _ = require('underscore');
 //Models
 var Sermon = require('../models/sermon.js');
 var Church = require('../models/church.js');
+var Series = require('../models/series.js')
 
-//{'owner': id, 'title': string, 'series': string, 'part': number, 'speaker': string, 'notes': string, 'audio': url, 'video':url, tags: [string]}
+/**
+ * Create New Sermon:
+ *
+ * New Series = True.
+ * async.waterfall():
+ *  (1) Create new series and pass on new series object to async callback.
+ *  (2) Create new sermon using the series _id passed to it. Pass on new
+ *      sermon object to async callback function.
+ *  (3) Push newly created sermon _id on to the sermons array of the
+ *      series object.
+ *
+ * req.body: {
+ *  owner: Church_id,
+ *  series: { _id: Existing_Series_ID, name: string, newSeries: boolean},
+ *  title: Series_title,
+ *  part: Series_Part,
+ *  speaker: Sermon_Speaker,
+ *  tags: [Array_of_string_tags],
+ *  video: video_file_for_sermon,
+ *  audio: audio_file_for_sermon,
+ *  notes: notes_for_sermon
+ * }
+ */
 exports.create = function(req, res){
     var msgObj = req.body;
     console.log(msgObj);
@@ -26,46 +49,136 @@ exports.create = function(req, res){
         return res.json(400, {"error": "Title required."});
     }
 
-    var newSermon = {};
+    if(!msgObj.series){
+        return res.json(400, {"error": "Series object is required."});
+    }
 
-    async.series([
-        function(callback){
-            Church.findOne({'_id': msgObj.owner}, function(error, sermon){
-                if(error){
-                    callback(error);
-                } else if (!sermon){
-                    callback(new Error('Owner does not exist.'));
-                } else {
-                    callback();
-                }
-            });
-        },
-        function(callback){
-            if(msgObj.owner){ newSermon.owner = msgObj.owner; }
-            if(msgObj.title){ newSermon.title = msgObj.title; }
-            if(msgObj.series){ newSermon.series = msgObj.series; }
-            if(msgObj.part){ newSermon.part = msgObj.part; }
-            if(msgObj.speaker){ newSermon.speaker = msgObj.speaker; }
-            if(msgObj.audio){ newSermon.audio = msgObj.audio; }
-            if(msgObj.notes){ newSermon.notes = msgObj.notes; }
-            if(msgObj.video){ newSermon.video = msgObj.video}
-            if(msgObj.tags){ newSermon.tags = msgObj.tags}
+    if(msgObj.series.newSeries){
+        console.log('New Series');
+        if(!msgObj.series.name){
+            return res.json(400, {"error": "New series name is required."});
+        }
 
-            callback();
-        }],
-        function(error){
-            if(error){
-                res.json(500, {'error': error});
-            } else {
-                Sermon.create(newSermon, function(error, sermon){
+        async.waterfall([
+            function(done){
+                console.log('Step 1');
+                var series = {};
+                series['name'] = msgObj.series.name;
+                series['owner'] = msgObj.owner;
+                series['ts'] = new Date();
+                Series.create(series, function(error, series){
                     if(error){
-                        return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                        done(error);
+                    } else if (!series){
+                        done(new Error('No new series object'));
                     } else {
-                        return res.json(200, {'success': 'Successfully created sermon.', 'sermon': sermon});
+                        done(null, series);
                     }
                 });
+            },
+            function(series, done){
+                console.log('Step 2');
+                var sermon = {};
+                sermon['owner'] = msgObj.owner;
+                sermon['series'] = series._id;
+                sermon['series_name'] = series.name;
+                sermon['title'] = msgObj.title;
+                sermon['part'] = msgObj.part || "";
+                sermon['speaker'] = msgObj.speaker || "";
+                sermon['tags']  = msgObj.tags;
+                sermon['ts'] = new Date();
+                sermon['content'] = {};
+                sermon['content']['audio'] = msgObj.audio;
+                sermon['content']['video'] = msgObj.video;
+                sermon['content']['notes'] = msgObj.notes;
+
+                Sermon.create(sermon, function(error, sermon){
+                    if(error){
+                        done(error);
+                    } else if (!sermon){
+                        done(new Error('No new series object.'));
+                    } else {
+                        done(null, sermon);
+                    }
+                });
+            },
+            function(sermon, done){
+                console.log('Step 3');
+                Series.findByIdAndUpdate(sermon.series, {$push: {sermons: sermon._id}}).populate('sermons').exec(function(error, series){
+                    if(error){
+                        done(error);
+                    } else if (!series){
+                        done(new Error('No new series object.'));
+                    } else {
+                        done(null, sermon, series);
+                    }
+                });
+            }],
+            function(error, sermon, series){
+                console.log('Final Step');
+                if(error){
+                    console.log(error);
+                    return res.json(500, {"error": error});
+                } else {
+                    return res.json(200, {'success': 'Successfully created new series and added new sermon.', 'sermon': sermon, 'series': series});
+                }
+            });
+    } else if(!msgObj.series.newSeries) {
+        if(msgObj.series._id){
+
+            if(!msgObj.series.name){
+                return res.json(400, {"error": 'Series name is required.'});
             }
-        });
+
+            async.waterfall([
+                function(done){
+                    var sermon = {};
+                    sermon['owner'] = msgObj.owner;
+                    sermon['series'] = msgObj.series._id;
+                    sermon['series_name'] = msgObj.series.name;
+                    sermon['title'] = msgObj.title;
+                    sermon['part'] = msgObj.part || "";
+                    sermon['speaker'] = msgObj.speaker || "";
+                    sermon['tags']  = msgObj.tags;
+                    sermon['ts'] = new Date();
+                    sermon['content'] = {};
+                    sermon['content']['audio'] = msgObj.audio;
+                    sermon['content']['video'] = msgObj.video;
+                    sermon['content']['notes'] = msgObj.notes;
+
+                    Sermon.create(sermon, function(error, sermon){
+                        if(error){
+                            done(error);
+                        } else if (!sermon){
+                            done(new Error('No new series object.'));
+                        } else {
+                            done(null, sermon);
+                        }
+                    });
+                },
+                function(sermon, done){
+                    Series.findByIdAndUpdate(sermon.series, {$push: {sermons: sermon._id}}).populate('sermons').exec(function(error, series){
+                        if(error){
+                            done(error);
+                        } else if (!series){
+                            done(new Error('No new series object.'));
+                        } else {
+                            done(null, sermon, series);
+                        }
+                    });
+                }],
+                function(error, sermon, series){
+                    if(error){
+                        console.log(error);
+                        return res.json(500, {"error": error});
+                    } else {
+                        return res.json(200, {'success': 'Successfully added new sermon to existing series.', 'sermon': sermon, 'series': series});
+                    }
+                });
+        } else {
+            return res.json(400, {'error': 'Existing series _id is required to add new sermon to series.'});
+        }
+    }
 
 }
 
@@ -81,21 +194,44 @@ exports.retrieveAllSermons = function(req, res){
         return res.json(400, {'error': 'churchID is required.'});
     }
 
-    if(msgObj.owner){
-
-        Sermon.find({'owner': msgObj.owner}).sort({'createdAt': -1}).exec(function(error, sermons){
-            if(error){
-                console.log(error);
-                return res.json(500, {'error': 'Server Error', 'mongoError': error});
-            } else if (!sermons){
-                return res.json(200, {'message': 'Owner has no sermons.'});
+    async.waterfall([
+        function(done){
+            Series.find({'owner': msgObj.owner}).populate('sermons').exec(function(error, series){
+                if(error){
+                    done(error);
+                } else if (!series){
+                    done(new Error('Owner has no series.'));
+                } else {
+                    done(null, series);
+                }
+            });
+        },
+        function(series, done){
+            var sermons = [];
+            if(series.length > 0){
+                async.series([
+                    function(done){
+                        series.forEach(function(element){
+                            sermons = sermons.concat(element.sermons);
+                        });
+                        done();
+                    }],
+                    function(){
+                        done(null, sermons, series);
+                    });
             } else {
-                //reverse the order of the comments in the array.
-                res.json(200, {'success': 'Successfully retrieved sermons.', 'sermons': sermons});
-                return;
+                done(null);
             }
-        });
-    }
+        }],
+        function(error, sermons, series){
+            if(error){
+                return res.json(500, {'error': error});
+            } else if(series){
+                return res.json(200, {'success': 'Successfully retrieved', 'sermons': sermons, 'series': series});
+            }
+        })
+
+
 }
 
 // {'id': sermonId}

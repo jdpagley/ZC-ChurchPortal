@@ -22,25 +22,25 @@ var likeSchema = require('./like.js');
 
 var sermonSchema = new Schema({
     owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
-    sermonImageURL:             String,
+    series:                     {type: Schema.Types.ObjectId, ref: 'Series'},
+    series_name:                String,
     title:                      String,
-    series:                     String,
     part:                       Number,
     speaker:                    String,
-    notes:                      String,
-    audio:                      String,
-    video:                      String,
-    likes:                      [likeSchema],
-    comments:                   [sermonCommentSchema],
     tags:                       [String],
-    createdAt:                  Date,
-    updatedAt:                  Date
+    content:                    {
+        notes:                      String,
+        audio:                      String,
+        video:                      String
+    },
+    ts:                          Date,
+    updated_at:                  Date
 });
 
 sermonSchema.pre('save', function(next){
-    this.updatedAt = new Date();
-    if (!this.createdAt){
-        this.createdAt = new Date();
+    this.updated_at = new Date();
+    if (!this.ts){
+        this.ts = new Date();
     }
     next();
 });

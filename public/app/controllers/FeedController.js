@@ -12,7 +12,7 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
         //Current Posts
         $scope.posts = [];
 
-        if(!IdentityFactory.admin._id){
+        if(!IdentityFactory.church._id){
             /**
              * Retrieve Identity from server and then retrieve posts.
              */
@@ -31,13 +31,16 @@ angular.module('zcApp').controller('FeedController', ['$scope','IdentityFactory'
             /**
              * Retrieve Posts With Church ID
              */
-            if(IdentityFactory.church._id && FeedFactory.posts.length < 1){
+            if(FeedFactory.posts.length < 1){
                 var promise = FeedFactory.retrievePosts(IdentityFactory.church._id);
                 promise.then(function(){
                     $scope.posts = FeedFactory.posts;
                 }, function(error){
                     return displayError('Not able to load posts at this time. Please try again later.');
                 });
+            } else if (FeedFactory.posts.length > 0){
+                //Todo:Check every so often to see if any new posts have been created.
+                $scope.posts = FeedFactory.posts;
             }
         }
 

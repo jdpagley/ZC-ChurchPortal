@@ -12,7 +12,7 @@ var Schema = mongoose.Schema;
  */
 
 var seriesSchema = new Schema({
-    owner:                      {type: Schema.Types.ObjectId, ref: 'Church'},
+    owner:                      {type: Schema.Types.ObjectId, ref: 'Church', required: true},
     series_pic:                 String,
     name:                       {type: String, required: true},
     sermons:                    [{type: Schema.Types.ObjectId, ref: 'Sermon'}],

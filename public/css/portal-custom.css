@@ -626,6 +626,7 @@ body {
     padding:10px;
 }
 
+/*Portal Popups***************************************************/
 .zion-connect-popup {
     display: block;
     position: fixed;
@@ -641,3 +642,24 @@ body {
     z-index:2002;
     overflow: auto;
 }
+
+.zion-connect-create-series-popup {
+    display: block;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    width: 400px;
+    height: 400px;
+    text-align: center;
+    z-index:2002;
+    overflow: auto;
+}
+
+.zion-connect-page-header {
+    color: rgb(68,64,97);;
+    /*color: #4a7c97;*/
+    position: absolute;
+    top: -8%;
+    left: 8%;
+}
+
