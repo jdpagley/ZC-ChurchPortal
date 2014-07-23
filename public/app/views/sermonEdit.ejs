@@ -1,114 +1,261 @@
 <!-- Created by John Pagley on 4/9/14 -->
 
+<h1 class="zion-connect-page-header">Edit Sermon</h1>
 <!--sermon edit container-->
 <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
     <!--update successful-->
-    <div class="alert alert-success alert-dismissable" data-ng-show="sermonCreatedSuccessfully">
-        <span>Successfully created new sermon.</span><!--update successful paragraph-->
+    <div class="alert alert-success alert-dismissable" data-ng-show="sermonEditedSuccessfully">
+        <span>Successfully updated sermon!</span><!--update successful paragraph-->
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update successful x icon-->
     </div>
     <!--update failed error-->
-    <div class="alert alert-danger alert-dismissable" data-ng-show="sermonCreationFailure">
-        <span>Oops! We are having trouble adding your sermon. Please try again later.</span><!--update failed error paragraph-->
+    <div class="alert alert-danger alert-dismissable" data-ng-show="sermonEditFailure">
+        <span>Oops! We are having trouble updating your sermon. Please try again later.</span><!--update failed error paragraph-->
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
     </div>
-
-    <div class="col-lg-12 col-md-12 sermon-edit">
-        <div class="col-lg-1 col-md-1"><img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" /></div><!--sermon edit logo-->
-        <!--sermon edit info-->
-        <div class="col-lg-11 col-md-11">
-            <div class="col-lg-12 col-md-12">
-                <!--sermon edit part number-->
-                <div class="col-lg-2 col-md-2 form-group">
-                    <div class="col-lg-6 col-md-6 sermon-edit-label text-right">
-                        <label class="control-label" for="sermonPart">Part</label>
-                    </div>
-                    <div class="col-lg-6 col-md-6 sermon-edit-field">
-                        <input type="text" class="form-control" id="sermonPart" name="sermonPart" title="{{sermon.part}}" data-ng-model="sermonObject.part"/><!--sermon edit part number field-->
-                    </div>
-                </div>
-                <!--sermon edit title-->
-                <div class="col-lg-10 col-md-10 form-group">
-                    <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
-                        <label class="control-label" for="sermonTitle">Title</label>
-                    </div>
-                    <div class="col-lg-11 col-md-11">
-                        <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" ng-model="sermonObject.title"/><!--sermon edit title field -->
-                    </div>
-                </div>
-            </div>
-            <!--sermon edit series-->
-            <div class="col-lg-12 col-md-12 form-group">
-                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
-                    <label class="control-label" for="sermonSeries">Series</label>
-                </div>
-                <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonSeries" name="sermonSeries" data-ng-model="sermonObject.series"/><!--sermon edit series field-->
-                </div>
-            </div>
-            <!--sermon edit speaker-->
-            <div class="col-lg-12 col-md-12 form-group">
-                <div class="col-lg-1 col-md-1 sermon-edit-label text-right">
-                    <label class="control-label" for="sermonSpeaker">Speaker</label>
-                </div>
-                <div class="col-lg-11 col-md-11">
-                    <input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" data-ng-model="sermonObject.speaker"/><!--sermon edit speaker field-->
-                </div>
-            </div>
-        </div>
-        <!--sermon edit upload video-->
-        <div class="col-lg-6 col-md-6 form-group padding-0-5-0-0">
-            <div class="col-lg-12 col-md-12 form-group">
-                <div class="col-lg-9 col-md-9">
-                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.video"/><!--sermon edit upload video field-->
-                </div>
-                <div class="col-lg-3 col-md-3 sermon-upload-button">
-                    <a href="" class="btn btn-grey btn-block">Upload Video</a><!--sermon edit upload video button-->
-                </div>
-            </div>
-            <!--sermon edit upload video player-->
-            <div class="col-lg-12 col-md-12">
-                <video controls class="col-lg-12 col-md-12">
-                    <source src="movie.mp4" type="video/mp4">
-                    <source src="movie.ogg" type="video/ogg">
-                    Your browser does not support this video player.
-                </video>
-            </div>
-        </div>
-        <!--sermon edit upload audio-->
-        <div class="col-lg-6 col-md-6 form-group padding-0-0-0-5">
-            <div class="col-lg-12 col-md-12 form-group">
-                <div class="col-lg-9 col-md-9">
-                    <input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.audio"/><!--sermon edit upload audio field-->
-                </div>
-                <div class="col-lg-3 col-md-3 sermon-upload-button">
-                    <a href="" class="btn btn-grey btn-block">Upload Audio</a><!--sermon edit upload audio button-->
-                </div>
-            </div>
-            <!--sermon edit upload audio player-->
-            <div class="col-lg-12 col-md-12">
-                <audio controls class="col-lg-12 col-md-12">
-                    <source src="horse.ogg" type="audio/ogg">
-                    <source src="horse.mp3" type="audio/mpeg">
-                    Your browser does not support this audio player.
-                </audio>
-            </div>
-        </div>
-        <!--sermon edit message notes-->
-        <div class="col-lg-12 col-md-12">
-            <div class="col-lg-12 col-md-12 form-group">
-                <label class="control-label" for="sermonMessageNotes">Message Notes</label>
-                <textarea class="form-control" id="sermonMessageNotes" name="sermonMessageNotes" rows="13" cols="100%" data-ng-model="sermonObject.notes"></textarea><!--sermon edit message text area-->
-            </div>
-            <!--sermon edit tags-->
-            <div class="col-lg-12 col-md-12 form-group">
-                <label class="control-label" for="sermonMessageNotes">Tags</label>
-                <input class="form-control" type="text" id="sermonTags" name="sermonTags" data-ng-model="sermonObject.tags"/><!--sermon edit tags area-->
-                <p class="text-muted font-11">Separate each tag with a comma (grave, risen, easter)</p>
-            </div>
-        </div>
-        <div class="col-lg-12 col-md-12">
-            <a href="" class="btn btn-purple pull-right" ng-click="updateSermon()">Update</a><!--sermon edit update button-->
-        </div>
+    <!--Deletion successful-->
+    <div class="alert alert-success alert-dismissable" data-ng-show="sermonDeletedSuccessfully">
+        <span>Successfully deleted sermon!</span><!--update successful paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update successful x icon-->
     </div>
+    <!--deletion failure-->
+    <div class="alert alert-danger alert-dismissable" data-ng-show="sermonDeletionFailure">
+        <span>Oops! We are having trouble deleting your sermon. Please try again later.</span><!--update failed error paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
+    </div>
+    <div class="col-lg-12 col-md-12 sermon-add-edit">
+        <form>
+            <div class="col-lg-8 col-md-8">
+                <!--edit sermon info-->
+                <div class="col-lg-12 col-md-12 sermon-info-area">
+                    <h2>Sermon Info</h2>
+                    <!--step 2 sermon title-->
+                    <div class="form-group">
+                        <label class="control-label" for="sermonTitle">Title</label>
+                        <input type="text" class="form-control" id="sermonTitle" name="sermonTitle" ng-model="sermonObject.title"/>
+                    </div>
+                    <!--step 2 sermon speaker-->
+                    <div class="form-group">
+                        <label class="control-label" for="sermonSpeaker">Speaker</label>
+                        <input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" data-ng-model="sermonObject.speaker"/>
+                    </div>
+                    <!--step 2 sermon part dropdown-->
+                    <div class="form-group">
+                        <label class="control-label" for="sermonPart">Part</label>
+                        <select class="form-control" id="sermonPart" name="sermonPart" data-ng-model="sermonObject.part">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                            <option>32</option>
+                            <option>33</option>
+                            <option>34</option>
+                            <option>35</option>
+                            <option>36</option>
+                            <option>37</option>
+                            <option>38</option>
+                            <option>39</option>
+                            <option>40</option>
+                            <option>41</option>
+                            <option>42</option>
+                            <option>43</option>
+                            <option>44</option>
+                            <option>45</option>
+                            <option>46</option>
+                            <option>47</option>
+                            <option>48</option>
+                            <option>49</option>
+                            <option>50</option>
+                        </select>
+                    </div>
+                    <!--step 2 sermon tags-->
+                    <div class="form-group">
+                        <label class="control-label" for="sermonTags">Tags</label>
+                        <input type="text" class="form-control" id="sermonTags" name="sermonTags" data-ng-model="sermonObject.tags"/>
+                        <p class="text-muted font-11">Separate each tag with a comma (grave, risen, easter)</p>
+                    </div>
+                </div>
+                <!--edit sermon content-->
+                <div class="col-lg-12 col-md-12 sermon-info-area">
+                    <h2>Sermon Content</h2>
+                    <!--step 3 sermon audio-->
+                    <div class="form-group">
+                        <div class="col-lg-5 col-md-5">
+                            <input type="text" class="form-control" name="sermonAudio" id="sermonAudio" name="sermonAudio" data-ng-model="sermonObject.content.audio"/>
+                        </div>
+                        <div class="col-lg-3 col-md-3 right-button"><a href="" class="btn btn-grey btn-block">Change Audio</a></div>
+                    </div>
+                    <!--step 3 sermon video-->
+                    <div class="form-group">
+                        <div class="col-lg-5 col-md-5">
+                            <input type="text" class="form-control" name="sermonVideo" id="sermonVideo" data-ng-model="sermonObject.content.video"/>
+                        </div>
+                        <div class="col-lg-3 col-md-3 right-button"><a href="" class="btn btn-grey btn-block">Change Video</a></div>
+                    </div>
+                    <!--step 3 sermon message notes-->
+                    <div class="form-group">
+                        <div class="col-lg-12 col-md-12">
+                            <label class="control-label" for="messageNotes">Message Notes</label>
+                            <textarea class="form-control" name="messageNotes" rows="20" cols="100%" data-ng-model="sermonObject.content.notes"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!--delete sermon container-->
+                        <div class="col-lg-7 col-md-7 single-settings-form">
+                            <a href="" class="text-danger" ng-click="displayDeleteSermonConfirmationPopup = true;"><span class="glyphicon glyphicon-trash"></span> Delete Sermon</a><!--delete sermon link-->
+                        </div>
+                        <!--step 3 sermon update button-->
+                        <div class="col-lg-5 col-md-5"><a href="" class="btn btn-md btn-purple pull-right" ng-click="updateSermon(sermonObject)">Update</a></div>
+                    </div>
+                </div>
+                <!--Delete sermon confirmation popup-->
+                <div id="sermonConfirmationPopup" class="zion-connect-popup" ng-show="displayDeleteSermonConfirmationPopup">
+                    <p>Are you sure you want to delete this sermon?</p>
+                    <br/>
+                    <button type="button" class="btn btn-success btn-sm" data-ng-click="deleteSermon(); displayDeleteSermonConfirmationPopup = false;"> Yes</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeleteSermonConfirmationPopup = false;">No</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+<!--sermon edit container-->
+<!--<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">-->
+    <!--&lt;!&ndash;update successful&ndash;&gt;-->
+    <!--<div class="alert alert-success alert-dismissable" data-ng-show="sermonCreatedSuccessfully">-->
+        <!--<span>Successfully created new sermon.</span>&lt;!&ndash;update successful paragraph&ndash;&gt;-->
+        <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>&lt;!&ndash;update successful x icon&ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash;update failed error&ndash;&gt;-->
+    <!--<div class="alert alert-danger alert-dismissable" data-ng-show="sermonCreationFailure">-->
+        <!--<span>Oops! We are having trouble adding your sermon. Please try again later.</span>&lt;!&ndash;update failed error paragraph&ndash;&gt;-->
+        <!--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>&lt;!&ndash;update failed error x icon&ndash;&gt;-->
+    <!--</div>-->
+
+    <!--<div class="col-lg-12 col-md-12 sermon-edit">-->
+        <!--<div class="col-lg-1 col-md-1"><img class="col-lg-12 col-md-12 img-responsive img-rounded" src="./images/meatowbrooklogo.jpg" /></div>&lt;!&ndash;sermon edit logo&ndash;&gt;-->
+        <!--&lt;!&ndash;sermon edit info&ndash;&gt;-->
+        <!--<div class="col-lg-11 col-md-11">-->
+            <!--<div class="col-lg-12 col-md-12">-->
+                <!--&lt;!&ndash;sermon edit part number&ndash;&gt;-->
+                <!--<div class="col-lg-2 col-md-2 form-group">-->
+                    <!--<div class="col-lg-6 col-md-6 sermon-edit-label text-right">-->
+                        <!--<label class="control-label" for="sermonPart">Part</label>-->
+                    <!--</div>-->
+                    <!--<div class="col-lg-6 col-md-6 sermon-edit-field">-->
+                        <!--<input type="text" class="form-control" id="sermonPart" name="sermonPart" title="{{sermon.part}}" data-ng-model="sermonObject.part"/>&lt;!&ndash;sermon edit part number field&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;sermon edit title&ndash;&gt;-->
+                <!--<div class="col-lg-10 col-md-10 form-group">-->
+                    <!--<div class="col-lg-1 col-md-1 sermon-edit-label text-right">-->
+                        <!--<label class="control-label" for="sermonTitle">Title</label>-->
+                    <!--</div>-->
+                    <!--<div class="col-lg-11 col-md-11">-->
+                        <!--<input type="text" class="form-control" id="sermonTitle" name="sermonTitle" ng-model="sermonObject.title"/>&lt;!&ndash;sermon edit title field &ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon edit series&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<div class="col-lg-1 col-md-1 sermon-edit-label text-right">-->
+                    <!--<label class="control-label" for="sermonSeries">Series</label>-->
+                <!--</div>-->
+                <!--<div class="col-lg-11 col-md-11">-->
+                    <!--<input type="text" class="form-control" id="sermonSeries" name="sermonSeries" data-ng-model="sermonObject.series"/>&lt;!&ndash;sermon edit series field&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon edit speaker&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<div class="col-lg-1 col-md-1 sermon-edit-label text-right">-->
+                    <!--<label class="control-label" for="sermonSpeaker">Speaker</label>-->
+                <!--</div>-->
+                <!--<div class="col-lg-11 col-md-11">-->
+                    <!--<input type="text" class="form-control" id="sermonSpeaker" name="sermonSpeaker" data-ng-model="sermonObject.speaker"/>&lt;!&ndash;sermon edit speaker field&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermon edit upload video&ndash;&gt;-->
+        <!--<div class="col-lg-6 col-md-6 form-group padding-0-5-0-0">-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<div class="col-lg-9 col-md-9">-->
+                    <!--<input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.video"/>&lt;!&ndash;sermon edit upload video field&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-3 col-md-3 sermon-upload-button">-->
+                    <!--<a href="" class="btn btn-grey btn-block">Upload Video</a>&lt;!&ndash;sermon edit upload video button&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon edit upload video player&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12">-->
+                <!--<video controls class="col-lg-12 col-md-12">-->
+                    <!--<source src="movie.mp4" type="video/mp4">-->
+                    <!--<source src="movie.ogg" type="video/ogg">-->
+                    <!--Your browser does not support this video player.-->
+                <!--</video>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermon edit upload audio&ndash;&gt;-->
+        <!--<div class="col-lg-6 col-md-6 form-group padding-0-0-0-5">-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<div class="col-lg-9 col-md-9">-->
+                    <!--<input type="text" class="form-control" id="sermonVideo" name="sermonVideo" data-ng-model="sermonObject.audio"/>&lt;!&ndash;sermon edit upload audio field&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="col-lg-3 col-md-3 sermon-upload-button">-->
+                    <!--<a href="" class="btn btn-grey btn-block">Upload Audio</a>&lt;!&ndash;sermon edit upload audio button&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon edit upload audio player&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12">-->
+                <!--<audio controls class="col-lg-12 col-md-12">-->
+                    <!--<source src="horse.ogg" type="audio/ogg">-->
+                    <!--<source src="horse.mp3" type="audio/mpeg">-->
+                    <!--Your browser does not support this audio player.-->
+                <!--</audio>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermon edit message notes&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12">-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<label class="control-label" for="sermonMessageNotes">Message Notes</label>-->
+                <!--<textarea class="form-control" id="sermonMessageNotes" name="sermonMessageNotes" rows="13" cols="100%" data-ng-model="sermonObject.notes"></textarea>&lt;!&ndash;sermon edit message text area&ndash;&gt;-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermon edit tags&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12 form-group">-->
+                <!--<label class="control-label" for="sermonMessageNotes">Tags</label>-->
+                <!--<input class="form-control" type="text" id="sermonTags" name="sermonTags" data-ng-model="sermonObject.tags"/>&lt;!&ndash;sermon edit tags area&ndash;&gt;-->
+                <!--<p class="text-muted font-11">Separate each tag with a comma (grave, risen, easter)</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-lg-12 col-md-12">-->
+            <!--<a href="" class="btn btn-purple pull-right" ng-click="updateSermon()">Update</a>&lt;!&ndash;sermon edit update button&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 </div>

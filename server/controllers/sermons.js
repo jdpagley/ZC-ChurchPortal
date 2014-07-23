@@ -286,12 +286,11 @@ exports.update = function(req, res){
             } else {
 
                 if(msgObj.title){ sermon.title = msgObj.title; }
-                if(msgObj.series){ sermon.series = msgObj.series; }
                 if(msgObj.part){ sermon.part = msgObj.part; }
                 if(msgObj.speaker){ sermon.speaker = msgObj.speaker; }
-                if(msgObj.audio){ sermon.audio = msgObj.audio; }
-                if(msgObj.notes){ sermon.notes = msgObj.notes; }
-                if(msgObj.video){ sermon.video = msgObj.video; }
+                if(msgObj.audio){ sermon.content.audio = msgObj.audio; }
+                if(msgObj.notes){ sermon.content.notes = msgObj.notes; }
+                if(msgObj.video){ sermon.content.video = msgObj.video; }
                 if(msgObj.tags){ sermon.tags = msgObj.tags; }
 
                 sermon.save(function(error, updatedSermon){
@@ -314,27 +313,60 @@ exports.delete = function(req, res){
         return res.json(400, {'error': 'DELETE query is required.'});
     }
 
-    if(!msgObj.id){
-        return res.json(400, {'error': 'id is required.'});
+    if(!msgObj._id){
+        return res.json(400, {'error': 'Sermon id is required.'});
     }
 
-    if(msgObj.id){
-        Sermon.findById(msgObj.id, function(error, sermon){
-            if(error){
-                return res.json(500, {'error': 'Server Error.', 'mongoError': error});
-            } else if (!sermon){
-                return res.json(400, {'error': 'Sermon with that id does not exist.'});
-            } else {
-                sermon.remove(function(error){
+    if(!msgObj.series){
+        return res.json(400, {'error': 'Sermon series is required.'});
+    }
+
+    async.series([
+        function(done){
+            Series.findById(msgObj.series, function(error, series){
+                if(error){
+                    done(error);
+                } else if(!series){
+                    done(new Error('No series object for that series ID.'));
+                } else {
+                    series.sermons.forEach(function(element, index){
+                        if(element == msgObj._id){
+                            series.sermons.splice(index, 1);
+                        }
+                    });
+
+                    series.save(function(error){
+                        if(error){
+                            done(error);
+                        } else {
+                            done();
+                        }
+                    })
+                }
+            })
+        },
+        function(done){
+            if(msgObj._id){
+                Sermon.findByIdAndRemove(msgObj._id, function(error){
                     if(error){
-                        return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                        done(error);
                     } else {
-                        return res.json(200, {'success': 'Sermon has been removed.'});
+                        done();
                     }
                 });
             }
+        },
+        function(done){
+            //Remove all posts associated with sermon.
+            done();
+        }],
+        function(error){
+            if(error){
+                return res.json(500, {'error': error});
+            } else {
+                return res.json(200, {'success': 'Successfully deleted sermon.'});
+            }
         });
-    }
 }
 
 // createComment function expects req.body to contain json object:

@@ -32,9 +32,9 @@
                 </div>
                 <div class="col-lg-11 col-md-11">
                     <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><a href="#/sermons/{{sermon._id}}"><h3 class="bold">{{sermon.title}}</h3></a></div><!--sermon series sermon name-->
-                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermon series name-->
+                    <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series_name}}</span></div><!--sermon series name-->
                     <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermon series speaker-->
-                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> {{sermon.createdAt | date:short}}</div><!--sermon series publish date-->
+                    <div class="col-lg-12 col-md-12"><span class="bold">Published</span> {{sermon.ts | date:short}}</div><!--sermon series publish date-->
                 </div>
             </div>
             <div class="col-lg-2 col-md-2">

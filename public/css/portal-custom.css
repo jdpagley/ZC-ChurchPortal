@@ -646,8 +646,8 @@ body {
 .zion-connect-create-series-popup {
     display: block;
     position: fixed;
-    top: 40%;
-    left: 40%;
+    top: 25%;
+    left: 25%;
     width: 400px;
     height: 400px;
     text-align: center;

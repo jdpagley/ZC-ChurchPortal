@@ -5,20 +5,28 @@
 angular.module('zcApp').controller('SermonsController', ['$scope', 'IdentityFactory', 'SermonsFactory',
     function($scope, IdentityFactory, SermonsFactory){
 
+        $scope.sermons = [];
+
         if(!IdentityFactory.admin._id){
-            /**
-             * Retrieve Identity from server and then retrieve posts.
-             */
             var promise = IdentityFactory.getIdentity();
             promise.then(function(){
-                //Retrieve Sermons From Server Here
+                if(SermonsFactory.sermons.length > 0){
+                    $scope.sermons = SermonsFactory.sermons;
+                } else {
+                    var promise = SermonsFactory.retrieveSermons(IdentityFactory.church._id);
+                    promise.then(function(){
+                        $scope.sermons = SermonsFactory.sermons;
+                    }, function(){});
+                }
             }, function(error){});
         } else {
-            /**
-             * Retrieve Posts With Church ID
-             */
-            if(IdentityFactory.church._id && SermonsFactory.sermons.length < 1){
-                //Retrieve Sermons From Server Here
+            if(SermonsFactory.sermons.length > 0){
+                $scope.sermons = SermonsFactory.sermons;
+            } else {
+                var promise = SermonsFactory.retrieveSermons(IdentityFactory.church._id);
+                promise.then(function(){
+                    $scope.sermons = SermonsFactory.sermons;
+                }, function(){});
             }
         }
 

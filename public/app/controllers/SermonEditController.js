@@ -1,55 +1,94 @@
 /**
  * Created by Josh Pagley on 4/24/14.
  */
-angular.module('zcApp').controller('SermonEditController', ['$scope', '$routeParams', 'zcIdentity', 'zcSermons',
-    function($scope, $routeParams, zcIdentity, zcSermons){
+angular.module('zcApp').controller('SermonEditController', ['$scope', '$routeParams', 'IdentityFactory', 'SermonsFactory',
+    function($scope, $routeParams, IdentityFactory, SermonsFactory){
 
-        //Sermon Object
-        var sermon = null;
+        $scope.sermonEditedSuccessfully = false;
+        $scope.sermonEditFailure = false;
+        $scope.sermonDeletedSuccessfully = false;
+        $scope.sermonDeletionFailure = false;
+        $scope.displayDeleteSermonConfirmationPopup = false;
 
-        //Retrieve Sermon Associated With Sermon ID In URL Parameters.
-        if(!sermon){
-            var promise;
-            promise = zcSermons.retrieveSermonById($routeParams.id);
-            promise.then(function(result){
-                sermon = result.sermon;
-                sermon.tags = result.sermon.tags.join(', ');
-                $scope.sermonObject = sermon;
-            }, function(error){
-                console.log(error);
-            });
+        if(!IdentityFactory.admin._id){
+            var promise = IdentityFactory.getIdentity();
+            promise.then(function(){
+                if(SermonsFactory.sermons.length > 0){
+                    /**
+                     * Retrieve sermon out of local SermonsFactory.sermons array if there are sermons locally.
+                     */
+                    var promise = SermonsFactory.retrieveLocalSermon($routeParams.id);
+                    promise.then(function(){
+                        $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                    }, function(){});
+                } else {
+                    /**
+                     * Retrieve sermon from server if SermonsFactory.sermons is empty.
+                     */
+                    var promise = SermonsFactory.retrieveSermonById($routeParams.id);
+                    promise.then(function(){
+                        $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                    }, function(){});
+                }
+            }, function(error){});
+        } else {
+            if(SermonsFactory.sermons.length > 0){
+                /**
+                 * Retrieve sermon out of local SermonsFactory.sermons array if there are sermons locally.
+                 */
+                var promise = SermonsFactory.retrieveSermonFromLocal($routeParams.id);
+                promise.then(function(){
+                    $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                }, function(){});
+            } else {
+                /**
+                 * Retrieve sermon from server if SermonsFactory.sermons is empty.
+                 */
+                var promise = SermonsFactory.retrieveSermonById($routeParams.id);
+                promise.then(function(){
+                    $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                }, function(){});
+            }
         }
 
-        //Update Sermon
-        $scope.sermonObject = {};
-        $scope.sermonCreatedSuccessfully = false;
-        $scope.sermonCreationFailure = false;
-        var newSermon = {};
+        $scope.updateSermon = function(sermon){
+            var updatedSermon = {};
+            updatedSermon['_id'] = sermon._id;
+            updatedSermon['owner'] = sermon.owner;
+            updatedSermon['part'] = sermon.part;
+            updatedSermon['title'] = sermon.title;
+            updatedSermon['speaker'] = sermon.speaker;
+            updatedSermon['notes'] = sermon.content.notes;
+            updatedSermon['video'] = sermon.content.video;
+            updatedSermon['audio'] = sermon.content.audio;
 
-        $scope.updateSermon = function(){
-
-            newSermon['_id'] = $scope.sermonObject._id;
-            newSermon['owner'] = $scope.sermonObject.owner;
-            newSermon['part'] = $scope.sermonObject.part;
-            newSermon['title'] = $scope.sermonObject.title;
-            newSermon['series'] = $scope.sermonObject.series;
-            newSermon['notes'] = $scope.sermonObject.notes;
-            newSermon['speaker'] = $scope.sermonObject.speaker;
-            newSermon['video'] = $scope.sermonObject.video;
-            newSermon['audio'] = $scope.sermonObject.audio;
-
-            var tagsArray = $scope.sermonObject.tags.split(',');
-            newSermon['tags'] = tagsArray;
-
-            var promise = zcSermons.updateSermon(newSermon);
-            promise.then(function(result){
-                if(result.sermon){
-                    $scope.sermonCreatedSuccessfully = true;
-                    $scope.sermonObject = result.sermon;
+            var tags = sermon.tags.split(',');
+            var filteredTags = [];
+            tags.forEach(function(element){
+                if(element !== undefined){
+                    filteredTags.push(element.trim());
                 }
-            }, function(error){
-                console.log(error);
-                $scope.sermonCreationFailure = true;
+            });
+            updatedSermon['tags'] = filteredTags;
+
+            var promise = SermonsFactory.updateSermon(updatedSermon);
+            promise.then(function(){
+                $scope.sermonEditedSuccessfully = true;
+                $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+            }, function(){
+                $scope.sermonEditFailure = true;
+            });
+        };
+
+        $scope.deleteSermon = function(){
+            $scope.displayDeleteSermonConfirmationPopup = false;
+
+            var promise = SermonsFactory.deleteSermon();
+            promise.then(function(){
+                $scope.sermonDeletedSuccessfully = true;
+                $scope.sermonObject = {};
+            }, function(){
+                $scope.sermonDeletionFailure = true;
             });
         }
     }]);

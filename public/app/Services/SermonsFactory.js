@@ -19,6 +19,7 @@ angular.module('zcApp').factory('SermonsFactory', ['$resource','$http', '$q', fu
     var vm = {};
     vm.sermons = [];
     vm.series = [];
+    vm.sermonBeingEdited = {};
 
     function addSermonToSeries(series, sermon){
         if(sermon && series){
@@ -37,6 +38,42 @@ angular.module('zcApp').factory('SermonsFactory', ['$resource','$http', '$q', fu
                 vm.series.push(series);
             }
         }
+    }
+
+    function replaceSermonLocallyWithUpdatedVersion(sermon){
+        vm.sermons.forEach(function(element, index){
+            if(element._id == sermon._id){
+                vm.sermons.splice(index, 1, sermon);
+            }
+        });
+
+        vm.series.forEach(function(series, seriesIndex){
+            if(series._id == sermon.series){
+                vm.series[seriesIndex].sermons.forEach(function(element, sermonIndex){
+                    if(element._id == sermon._id){
+                        vm.series[seriesIndex].sermons.splice(sermonIndex, 1, sermon);
+                    }
+                });
+            }
+        });
+    }
+
+    function removeDeletedSermonLocally(sermon){
+        vm.sermons.forEach(function(element, index){
+            if(element._id == sermon._id){
+                vm.sermons.splice(index, 1);
+            }
+        });
+
+        vm.series.forEach(function(series, seriesIndex){
+            if(series._id == sermon.series){
+                vm.series[seriesIndex].sermons.forEach(function(element, sermonIndex){
+                    if(element._id == sermon._id){
+                        vm.series[seriesIndex].sermons.splice(sermonIndex, 1);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -58,14 +95,61 @@ angular.module('zcApp').factory('SermonsFactory', ['$resource','$http', '$q', fu
         return promise.promise;
     };
 
+
+    /**
+     * Update Sermon
+     *
+     * Replaces local version of sermon with the new
+     * updated version from server.
+     */
+    vm.updateSermon = function(sermonObj){
+        var promise = $q.defer();
+        sermonsUpdateResource.update(sermonObj, function(result){
+            var updatedSermon = {};
+            updatedSermon = result.sermon;
+            updatedSermon['tags'] = result.sermon.tags.join(', ');
+            vm.sermonBeingEdited = updatedSermon;
+            replaceSermonLocallyWithUpdatedVersion(result.sermon);
+            promise.resolve();
+        }, function(error){
+            promise.reject();
+        });
+
+        return promise.promise;
+    };
+
+    /**
+     * Delete Sermon
+     *
+     * This will remove the sermon server side and locally from the
+     * vm.series and vm.sermons.
+     */
+    vm.deleteSermon = function(){
+        if(vm.sermonBeingEdited){
+            var promise = $q.defer();
+            sermonsResource.delete(vm.sermonBeingEdited, function(result){
+                removeDeletedSermonLocally(vm.sermonBeingEdited);
+                vm.sermonBeingEdited = {};
+                promise.resolve();
+            }, function(error){
+                promise.reject();
+            });
+
+            return promise.promise;
+        }
+    }
+
+    /**
+     * Retrieve List of Sermons
+     *
+     * Retrieves sermons and series from server and adds them
+     * to vm.series and vm.sermons.
+     */
     vm.retrieveSermons = function(churchID){
         var promise = $q.defer();
         retrieveAllSermonsResource.get({'owner': churchID}, function(result){
             vm.sermons = result.sermons || [];
             vm.series = result.series || [];
-
-            console.log(vm.sermons);
-            console.log(vm.series);
 
             promise.resolve();
         }, function(error){
@@ -73,6 +157,50 @@ angular.module('zcApp').factory('SermonsFactory', ['$resource','$http', '$q', fu
         });
 
         return promise.promise;
+    }
+
+    /**
+     * Retrieve Single Sermon by ID From Server.
+     */
+    vm.retrieveSermonById =  function(sermonID){
+        var promise = $q.defer();
+        sermonsResource.get({'id': sermonID}, function(result){
+            vm.sermonBeingEdited = result.sermon;
+            vm.sermonBeingEdited.tags = result.sermon.tags.join(', ');
+            promise.resolve();
+        }, function(error){
+            promise.reject(error);
+        });
+
+        return promise.promise;
+    }
+
+    /**
+     * Retrieve Single Sermon by ID From Local Sermons Array.
+     * If Sermon is not found locally then make request to
+     * the server for the sermon.
+     */
+    vm.retrieveSermonFromLocal = function(id){
+        vm.sermonBeingEdited = {};
+        var localSermonFound = false;
+
+        var promise = $q.defer();
+        vm.sermons.forEach(function(element){
+            if(element._id == id){
+                localSermonFound = true;
+                vm.sermonBeingEdited = element;
+                vm.sermonBeingEdited.tags = element.tags.join(', ');
+            }
+        });
+
+        if(localSermonFound){
+            promise.resolve();
+            return promise.promise;
+        }
+
+        if(!localSermonFound){
+           return vm.retrieveSermonById(id);
+        }
     }
 
     return vm;
