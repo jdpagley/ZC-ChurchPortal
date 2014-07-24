@@ -16,7 +16,7 @@
             </div>
             <div class="col-lg-11 col-md-11">
                 <div class="col-lg-12 col-md-12 padding-5-0 purple-header text"><a href="#/sermons/{{sermon._id}}"><h3 class="bold">{{sermon.title}}</h3></a></div><!--sermonhome series sermon name-->
-                <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series}}</span></div><!--sermonhome series name-->
+                <div class="col-lg-12 col-md-12">Series: <span class="color-aaa">{{sermon.series_name}}</span></div><!--sermonhome series name-->
                 <div class="col-lg-12 col-md-12">Speaker: <span class="color-aaa">{{sermon.speaker}}</span></div><!--sermonhome series speaker-->
             </div>
         </div>
@@ -24,69 +24,193 @@
             <a href="#/sermon/edit/{{sermon._id}}" class="btn btn-grey pull-right"><span class="glyphicon glyphicon-pencil"></span> Edit</a><!--sermon edit button-->
         </div>
     </div>
-    <!--sermonhome news feed post-->
+    <!--sermon feed post-->
     <div class="col-lg-12 col-md-12 well well-sm portal-news-feed-post">
-        <!--sermonhome post text box-->
+        <!--post text box-->
         <div class="col-lg-12 col-md-12 form-group">
-            <textarea class="form-control" rows="5" placeholder="Write something..." ng-model="newCommentObj.body"></textarea><!--sermonhome post text-->
+            <textarea class="form-control" rows="5" placeholder="Write something..." data-ng-model="newPost"></textarea><!--post text-->
         </div>
-        <!--sermonhome post button-->
+        <!--post action bar-->
         <div class="col-lg-12 col-md-12">
             <div class="col-lg-1 col-md-1"><a href="#"><span class="glyphicon glyphicon-picture glyphicon1"></span></a></div><!--post select image-->
-            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createComment(sermon._id)">Post</a></div><!--post button-->
+            <div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createPost(newPost); newPost = '';">Post</a></div><!--post button-->
         </div>
     </div>
-    <!--sermonhome news feed posting-->
-    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-sh-posting">
-        <!--sermonhome posting from church-->
-        <div class="col-lg-12 col-md-12 sh-main-posting">
-            <!--sermonhome church info-->
+    <!--portal news feed posting-->
+    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-news-feed-posting" data-ng-repeat="post in posts | orderBy:'ts':true">
+        <!--posting from church-->
+        <div class="col-lg-12 col-md-12 feed-main-posting">
+            <!--posting church info-->
             <div class="media">
                 <div class="pull-left">
-                    <img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/><!--sermonhome church posting image-->
+                    <img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/><!--church posting image-->
                 </div>
-                <div class="media-body sh-posting-body">
-                    <div class="media-heading"><h5 class="church-name">Church Name</h5></div><!--sermonhome church name-->
-                    <div><p class="church-date">June 10, 2014</p></div><!--sermonhome church posting date-->
+                <div class="media-body">
+                    <div class="col-lg-11 col-md-11 feed-posting-body">
+                        <div class="media-heading"><h5 class="church-name">{{post.author.name}}</h5></div><!--church name-->
+                        <div><p class="church-date">{{post.ts | date:'MMMM d, h:mma'}}</p></div><!--church posting date-->
+                    </div>
+                    <div class="col-lg-1 col-md-1 pull-right"><button class="close" ng-click="deletePostPopup(post); displayDeletePostConfirmationPopup = true;">&times;</button></div><!--church posting remove x-->
                 </div>
             </div>
-            <!--sermonhome posting text box-->
-            <div class="col-lg-12 col-md-12 church-text">This is the text text text.</div>
-            <!--sermonhome posting interation links-->
+            <!--posting text box-->
+            <div class="col-lg-12 col-md-12 church-text">{{post.detail.text}}</div>
+            <!--posting interaction links-->
             <div class="col-lg-12 col-md-12">
                 <ul class="list-inline post-link-list">
-                    <li><a href="" class="post-link">Like</a></li><!--like link-->
-                    <li><a href="" class="post-link">Dislike</a></li><!--dislike link-->
-                    <li><a href="" class="post-link">Comment</a> <span class="badge">1</span></li><!--comment link-->
+                    <li ng-show="alreadyLikedPost(post)"><a href="" class="post-link" ng-click="like(post)">Like</a></li><!--like link-->
+                    <li ng-show="!alreadyLikedPost(post)"><a href="" class="post-link" ng-click="unlike(post)">Unlike</a></li>
                 </ul>
             </div>
         </div>
-        <!--sermonhome posting comments-->
-        <div class="col-lg-12 col-md-12 sm-posting-comments">
-            <!--sermonhome comments from users-->
+        <!--posting all likes-->
+        <div class="col-lg-12 col-md-12 feed-main-posting-likes" ng-show="post.likes.length > 0 || false">
+            <div class="dropdown">
+                <a href="" class="dropdown-toggle post-link" id="dropdownMenu1" data-toggle="dropdown">{{post.likes.length || 0}} people like this</a><!--posting all likes link-->
+                <!--likes dropdown menu-->
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <!--likes dropdown single user-->
+                    <li ng-repeat="like in post.likes">
+                        <h6 role="menuitem"><a href="#/member/profile/{{like.author}}">{{like.name}}</a></h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--posting all comments-->
+        <div class="col-lg-12 col-md-12 feed-main-posting-all-comments" ng-show="post.num_comments > 5">
+            <div><a href="" class="post-link" ng-click="retrieveComments(post)">View all {{post.num_comments}} comments</a></div><!--posting all comments link-->
+        </div>
+        <!--posting comments-->
+        <div class="col-lg-12 col-md-12 feed-posting-comments ">
+            <!--comments from users-->
             <div class="col-lg-12 col-md-12">
-                <!--sermonhome comments all posted-->
-                <div class="col-lg-12 col-md-12 padding-5-0">
-                    <!--sermonhome single comment-->
+                <!--comments all posted-->
+                <div class="col-lg-12 col-md-12 padding-5-0" ng-repeat="comment in post.comments  | orderBy:'ts':false">
+                    <!--single comment-->
                     <div class="media">
                         <div class="media-body">
-                            <div class="media-heading"><h5 class="comment-name">John Doe</h5></div><!--sermonhome comments first name-->
-                            <div><p class="comment-date">June 11, 2014</p></div><!--sermonhome comments date-->
+                            <div class="col-lg-11 col-md-11">
+                                <div class="media-heading pull-left"><h5 class="comment-name">{{comment.author_name}}</h5></div><!--comments by name-->
+                                <div><p class="comment-date">{{comment.ts | date:short}}</p></div><!--comments date-->
+                            </div>
+                            <div class="col-lg-1 col-md-1 pull-right"><button class="close" ng-click="deleteCommentPopup(comment, post._id); displayDeleteCommentConfirmationPopup = true;">&times;</button></div><!--comment remove x-->
                         </div>
-                        <div class="comment-text"><p>This is a comment from the user.</p></div><!--sermonhome comments comment-->
+                        <div class="comment-text"><p>{{comment.body}}</p></div><!--comments comment-->
                     </div>
                 </div>
-                <!--sermonhome comments text box-->
+                <!--comments text box-->
                 <div class="col-lg-12 col-md-12 padding-5-0">
                     <div class="col-lg-11 col-md-11 padding-0-5-0-0">
-                        <input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." /><!--sermonhome comments textarea-->
+                        <input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." ng-model="commentText" /><!--comments textarea-->
                     </div>
                     <div class="col-lg-1 col-md-1">
-                        <a href="" class="btn btn-purple btn-block" type="submit">Post</a><!--sermonhome comments post button-->
+                        <a href="" class="btn btn-purple btn-block" type="submit" ng-click="createComment(commentText, post, $index); commentText = '';">Post</a><!--comments post button-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-lg-12 col-md-12 well well-sm well-inner portal-news-feed-more-link">
+        <a href="" class="see-all-link" ng-click="seeMorePosts()">See More...</a>
+    </div>
+    <!--Delete post confirmation popup-->
+    <div class="panel panel-default zion-connect-popup" ng-show="displayDeletePostConfirmationPopup">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-trash"></span> Delete Post</h3>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete this post?</p>
+            <br/>
+            <a href="" class="btn btn-success btn-sm" data-ng-click="deletePost(); displayDeletePostConfirmationPopup = false;"> Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeletePostConfirmationPopup = false;">No</button>
+        </div>
+    </div>
+    <!--Delete comment confirmation popup-->
+    <div class="panel panel-default zion-connect-popup" ng-show="displayDeleteCommentConfirmationPopup">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-trash"></span> Delete Comment</h3>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete this comment?</p>
+            <br/>
+            <a href="" class="btn btn-success btn-sm" data-ng-click="deleteComment(); displayDeleteCommentConfirmationPopup = false;"> Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeleteCommentConfirmationPopup = false;">No</button>
+        </div>
+    </div>
+    <!--Error Message-->
+    <div class="panel panel-default zion-connect-popup" ng-show="displayErrorMessagePopup">
+        <div class="panel-heading">
+            <h3 class="panel-title">Error Message</h3>
+        </div>
+        <div class="panel-body">
+            <p>{{errorMessage}}</p>
+            <br/>
+            <button type="button" class="btn btn-default btn-sm" data-ng-click="displayErrorMessagePopup = false;">Ok</button>
+        </div>
+    </div>
+    <!--&lt;!&ndash;sermonhome news feed post&ndash;&gt;-->
+    <!--<div class="col-lg-12 col-md-12 well well-sm portal-news-feed-post">-->
+        <!--&lt;!&ndash;sermonhome post text box&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 form-group">-->
+            <!--<textarea class="form-control" rows="5" placeholder="Write something..." ng-model="newCommentObj.body"></textarea>&lt;!&ndash;sermonhome post text&ndash;&gt;-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermonhome post button&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12">-->
+            <!--<div class="col-lg-1 col-md-1"><a href="#"><span class="glyphicon glyphicon-picture glyphicon1"></span></a></div>&lt;!&ndash;post select image&ndash;&gt;-->
+            <!--<div class="col-lg-11 col-md-11"><a href="" class="btn btn-purple pull-right" ng-click="createComment(sermon._id)">Post</a></div>&lt;!&ndash;post button&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;sermonhome news feed posting&ndash;&gt;-->
+    <!--<div class="col-lg-12 col-md-12 well well-sm well-inner portal-sh-posting">-->
+        <!--&lt;!&ndash;sermonhome posting from church&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 sh-main-posting">-->
+            <!--&lt;!&ndash;sermonhome church info&ndash;&gt;-->
+            <!--<div class="media">-->
+                <!--<div class="pull-left">-->
+                    <!--<img class="media-object img-rounded church-photo" src="./images/meatowbrooklogo.jpg"/>&lt;!&ndash;sermonhome church posting image&ndash;&gt;-->
+                <!--</div>-->
+                <!--<div class="media-body sh-posting-body">-->
+                    <!--<div class="media-heading"><h5 class="church-name">Church Name</h5></div>&lt;!&ndash;sermonhome church name&ndash;&gt;-->
+                    <!--<div><p class="church-date">June 10, 2014</p></div>&lt;!&ndash;sermonhome church posting date&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;sermonhome posting text box&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12 church-text">This is the text text text.</div>-->
+            <!--&lt;!&ndash;sermonhome posting interation links&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12">-->
+                <!--<ul class="list-inline post-link-list">-->
+                    <!--<li><a href="" class="post-link">Like</a></li>&lt;!&ndash;like link&ndash;&gt;-->
+                    <!--<li><a href="" class="post-link">Dislike</a></li>&lt;!&ndash;dislike link&ndash;&gt;-->
+                    <!--<li><a href="" class="post-link">Comment</a> <span class="badge">1</span></li>&lt;!&ndash;comment link&ndash;&gt;-->
+                <!--</ul>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;sermonhome posting comments&ndash;&gt;-->
+        <!--<div class="col-lg-12 col-md-12 sm-posting-comments">-->
+            <!--&lt;!&ndash;sermonhome comments from users&ndash;&gt;-->
+            <!--<div class="col-lg-12 col-md-12">-->
+                <!--&lt;!&ndash;sermonhome comments all posted&ndash;&gt;-->
+                <!--<div class="col-lg-12 col-md-12 padding-5-0">-->
+                    <!--&lt;!&ndash;sermonhome single comment&ndash;&gt;-->
+                    <!--<div class="media">-->
+                        <!--<div class="media-body">-->
+                            <!--<div class="media-heading"><h5 class="comment-name">John Doe</h5></div>&lt;!&ndash;sermonhome comments first name&ndash;&gt;-->
+                            <!--<div><p class="comment-date">June 11, 2014</p></div>&lt;!&ndash;sermonhome comments date&ndash;&gt;-->
+                        <!--</div>-->
+                        <!--<div class="comment-text"><p>This is a comment from the user.</p></div>&lt;!&ndash;sermonhome comments comment&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;sermonhome comments text box&ndash;&gt;-->
+                <!--<div class="col-lg-12 col-md-12 padding-5-0">-->
+                    <!--<div class="col-lg-11 col-md-11 padding-0-5-0-0">-->
+                        <!--<input class="form-control" type="text" id="commentText" name="commentText" placeholder="Write a comment..." />&lt;!&ndash;sermonhome comments textarea&ndash;&gt;-->
+                    <!--</div>-->
+                    <!--<div class="col-lg-1 col-md-1">-->
+                        <!--<a href="" class="btn btn-purple btn-block" type="submit">Post</a>&lt;!&ndash;sermonhome comments post button&ndash;&gt;-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
 </div>

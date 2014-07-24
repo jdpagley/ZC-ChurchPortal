@@ -3,7 +3,7 @@
  * Description: Service that handles webservice calls for the feed.
  */
 
-angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFactory', function($resource, $q, IdentityFactory) {
+angular.module('zcApp').factory('SermonsHomeFactory',['$resource', '$q', 'IdentityFactory', 'SermonsFactory', function($resource, $q, IdentityFactory, SermonsFactory) {
 
     var postsResource = $resource('/api/zionconnect/v1/church/posts');
     var commentsResource = $resource('/api/zionconnect/v1/church/comments');
@@ -15,8 +15,8 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
 
     vm.retrievePosts = function(){
         var promise = $q.defer();
-        if(IdentityFactory.church._id){
-            postsResource.get({'owner': IdentityFactory.church._id, 'num_posts': vm.posts.length}, function(result){
+        if(SermonsFactory.sermon._id){
+            postsResource.get({'owner': SermonsFactory.sermon._id, 'num_posts': vm.posts.length}, function(result){
                 if(vm.posts.length > 0){
                     console.log(result.posts);
                     vm.posts = vm.posts.concat(result.posts);
@@ -44,9 +44,9 @@ angular.module('zcApp').factory('FeedFactory',['$resource', '$q', 'IdentityFacto
             if(IdentityFactory.admin._id){
                 if(text != ""){
                     var newPost = {};
-                    newPost['type'] = "feed";
+                    newPost['type'] = "sermon";
                     newPost['author'] = IdentityFactory.admin._id;
-                    newPost['owner'] = IdentityFactory.church._id;
+                    newPost['owner'] = SermonsFactory.sermon._id;
                     newPost['text'] = text;
 
                     postsResource.save(newPost, function(result){

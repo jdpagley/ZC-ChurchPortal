@@ -10,45 +10,27 @@ angular.module('zcApp').controller('SermonEditController', ['$scope', '$routePar
         $scope.sermonDeletionFailure = false;
         $scope.displayDeleteSermonConfirmationPopup = false;
 
+        SermonsFactory.sermon = {};
+
         if(!IdentityFactory.admin._id){
             var promise = IdentityFactory.getIdentity();
             promise.then(function(){
-                if(SermonsFactory.sermons.length > 0){
-                    /**
-                     * Retrieve sermon out of local SermonsFactory.sermons array if there are sermons locally.
-                     */
-                    var promise = SermonsFactory.retrieveLocalSermon($routeParams.id);
-                    promise.then(function(){
-                        $scope.sermonObject = SermonsFactory.sermonBeingEdited;
-                    }, function(){});
-                } else {
-                    /**
-                     * Retrieve sermon from server if SermonsFactory.sermons is empty.
-                     */
-                    var promise = SermonsFactory.retrieveSermonById($routeParams.id);
-                    promise.then(function(){
-                        $scope.sermonObject = SermonsFactory.sermonBeingEdited;
-                    }, function(){});
-                }
-            }, function(error){});
-        } else {
-            if(SermonsFactory.sermons.length > 0){
-                /**
-                 * Retrieve sermon out of local SermonsFactory.sermons array if there are sermons locally.
-                 */
-                var promise = SermonsFactory.retrieveSermonFromLocal($routeParams.id);
-                promise.then(function(){
-                    $scope.sermonObject = SermonsFactory.sermonBeingEdited;
-                }, function(){});
-            } else {
                 /**
                  * Retrieve sermon from server if SermonsFactory.sermons is empty.
                  */
                 var promise = SermonsFactory.retrieveSermonById($routeParams.id);
                 promise.then(function(){
-                    $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                    $scope.sermonObject = SermonsFactory.sermon;
                 }, function(){});
-            }
+            }, function(error){});
+        } else {
+            /**
+             * Retrieve sermon from server if SermonsFactory.sermons is empty.
+             */
+            var promise = SermonsFactory.retrieveSermonById($routeParams.id);
+            promise.then(function(){
+                $scope.sermonObject = SermonsFactory.sermon;
+            }, function(){});
         }
 
         $scope.updateSermon = function(sermon){
@@ -74,7 +56,7 @@ angular.module('zcApp').controller('SermonEditController', ['$scope', '$routePar
             var promise = SermonsFactory.updateSermon(updatedSermon);
             promise.then(function(){
                 $scope.sermonEditedSuccessfully = true;
-                $scope.sermonObject = SermonsFactory.sermonBeingEdited;
+                $scope.sermonObject = SermonsFactory.sermon;
             }, function(){
                 $scope.sermonEditFailure = true;
             });

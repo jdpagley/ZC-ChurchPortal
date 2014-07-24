@@ -628,16 +628,16 @@ body {
 
 /*Portal Popups***************************************************/
 .zion-connect-popup {
-    display: block;
+    /*display: block;*/
     position: fixed;
     top: 40%;
     left: 40%;
     width: 400px;
-    height: 120px;
+    height: 150px;
     text-align: center;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #d3d3d3;
+    /*padding: 20px;*/
+    /*border-radius: 10px;*/
+    /*background-color: #d3d3d3;*/
     /*background-color: rgb(68,64,97);*/
     z-index:2002;
     overflow: auto;

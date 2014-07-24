@@ -92,24 +92,39 @@
         <a href="" class="see-all-link" ng-click="seeMorePosts()">See More...</a>
     </div>
     <!--Delete post confirmation popup-->
-    <div id="postConfirmationPopup" class="zion-connect-popup" ng-show="displayDeletePostConfirmationPopup">
-        <p>Are you sure you want to delete this post?</p>
-        <br/>
-        <a href="" class="btn btn-success btn-sm" data-ng-click="deletePost(); displayDeletePostConfirmationPopup = false;"> Yes</a>
-        <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeletePostConfirmationPopup = false;">No</button>
+    <div class="panel panel-default zion-connect-popup" ng-show="displayDeletePostConfirmationPopup">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-trash"></span> Delete Post</h3>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete this post?</p>
+            <br/>
+            <a href="" class="btn btn-success btn-sm" data-ng-click="deletePost(); displayDeletePostConfirmationPopup = false;"> Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeletePostConfirmationPopup = false;">No</button>
+        </div>
     </div>
     <!--Delete comment confirmation popup-->
-    <div id="postConfirmationPopup" class="zion-connect-popup" ng-show="displayDeleteCommentConfirmationPopup">
-        <p>Are you sure you want to delete this comment?</p>
-        <br/>
-        <a href="" class="btn btn-success btn-sm" data-ng-click="deleteComment(); displayDeleteCommentConfirmationPopup = false;"> Yes</a>
-        <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeleteCommentConfirmationPopup = false;">No</button>
+    <div class="panel panel-default zion-connect-popup" ng-show="displayDeleteCommentConfirmationPopup">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-trash"></span> Delete Comment</h3>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete this comment?</p>
+            <br/>
+            <a href="" class="btn btn-success btn-sm" data-ng-click="deleteComment(); displayDeleteCommentConfirmationPopup = false;"> Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="displayDeleteCommentConfirmationPopup = false;">No</button>
+        </div>
     </div>
-    <!--error message popup-->
-    <div id="postConfirmationPopup" class="zion-connect-popup" ng-show="displayErrorMessagePopup">
-        <p>{{errorMessage}}</p>
-        <br/>
-        <button type="button" class="btn btn-default btn-sm" data-ng-click="displayErrorMessagePopup = false;">Ok</button>
+    <!--Error Message-->
+    <div class="panel panel-default zion-connect-popup" ng-show="displayErrorMessagePopup">
+        <div class="panel-heading">
+            <h3 class="panel-title">Error Message</h3>
+        </div>
+        <div class="panel-body">
+            <p>{{errorMessage}}</p>
+            <br/>
+            <button type="button" class="btn btn-default btn-sm" data-ng-click="displayErrorMessagePopup = false;">Ok</button>
+        </div>
     </div>
 </div>
 

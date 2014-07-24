@@ -39,8 +39,12 @@ exports.create = function(req, res){
         return res.json(400, {'error': 'Post message required.'});
     }
 
+    if(!msgObj.type){
+        return res.json(400, {'error': 'Post type required.'});
+    }
+
     var newPost = {
-        'type': 'feed',
+        'type': msgObj.type,
         'author': msgObj.author,
         'owner': msgObj.owner,
         'num_comment_pages': 0,
@@ -81,17 +85,17 @@ exports.retrieve = function(req, res){
         return res.json(400, {'error': 'POST body is required.'});
     }
 
-    if(!msgObj.churchID){
-        return res.json(400, {'error': 'churchID is required.'});
+    if(!msgObj.owner){
+        return res.json(400, {'error': 'Owner _id is required.'});
     }
 
-    if(msgObj.churchID){
+    if(msgObj.owner){
 
         var options = [
             {path: 'author'}
         ];
 
-        Post.find({'owner': msgObj.churchID}).skip(msgObj.num_posts || 0).limit(50).populate(options).exec(function(error, posts){
+        Post.find({'owner': msgObj.owner}).skip(msgObj.num_posts || 0).limit(50).populate(options).exec(function(error, posts){
             if(error){
                 console.log(error);
                 return res.json(500, {'error': 'Server Error', 'mongoError': error});
