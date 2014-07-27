@@ -55,7 +55,7 @@ var memberSchema = new Schema({
             zip:                  String
         },
         phone:                    String,
-        birthday:                String,
+        birthday:                 String,
         gender:                   String,
         relationshipStatus:       String,
         bio:                      String,

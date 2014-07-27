@@ -45,7 +45,8 @@ exports.retrieve = function(req, res){
         return res.json(400, {'error': 'id is required.'});
     }
 
-    Member.find({'memberships': msgObj.id}, function(error, members){
+    Member.find({'metadata.memberships': msgObj.id}, function(error, members){
+        console.log(members);
         if(error){
             console.log(error);
             return res.json(500, {'error': 'Server Error.', 'mongoError': error});
@@ -111,24 +112,29 @@ exports.retrieve = function(req, res){
         }
     }); */
 
-   /* Member.create({
-        type: 'member',
+    /*Member.create({
         name: 'Josh Pagley',
         email: 'jdpagley@yahoo.com',
         password: 'josh',
-        address: {
-            street: '6312 SE 10th PL',
-            city: 'Ocala',
-            state: 'FL',
-            'zip': '34472'
+        profile: {
+            address: {
+                street: '6312 SE 10th PL',
+                city: 'Ocala',
+                state: 'FL',
+                'zip': '34472'
+            },
+            phone: '111-222-3333',
+            birthday: '1/16/95',
+            gender: 'male',
+            relationshipStatus: 'single',
+            interests: ['nodejs', 'ios', 'tech', 'programming', 'business'],
+            bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.'
         },
-        phone: '111-222-3333',
-        birthdate: '1/16/95',
-        gender: 'Male',
-        relationshipStatus: 'single',
-        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
-        interests: ['javascript', 'startups', 'software', 'tech', 'programming'],
-        memberships: ["53a2fe4b32a9281b1d2605bb"]
+        metadata: {
+            type: 'member',
+            memberships: ["53b1c48041f828d00312c2e4"],
+            createdAt: new Date()
+        }
     }, function(error){
         if(error){
             console.log(error);
@@ -137,23 +143,28 @@ exports.retrieve = function(req, res){
     });
 
     Member.create({
-        type: 'member',
         name: 'John Pagley',
-        email: 'pagleyjohn@yahoo.com',
+        email: 'japagley@yahoo.com',
         password: 'john',
-        address: {
-            street: '6312 SE 10th PL',
-            city: 'Ocala',
-            state: 'FL',
-            'zip': '34472'
+        profile: {
+            address: {
+                street: '6312 SE 10th PL',
+                city: 'Ocala',
+                state: 'FL',
+                'zip': '34472'
+            },
+            phone: '111-222-3333',
+            birthday: '1/16/95',
+            gender: 'male',
+            relationshipStatus: 'single',
+            interests: ['marketing', 'web development', 'design', 'programming', 'business'],
+            bio: 'I strive for excellence in everything I do. I am a marketer and entrepreneur.'
         },
-        phone: '111-222-3333',
-        birthdate: '1/16/95',
-        gender: 'Male',
-        relationshipStatus: 'single',
-        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
-        interests: ['marketing', 'startups', 'html', 'css', 'google', 'seo'],
-        memberships: ["53a2fe4b32a9281b1d2605bb"]
+        metadata: {
+            type: 'member',
+            memberships: ["53b1c48041f828d00312c2e4"],
+            createdAt: new Date()
+        }
     }, function(error){
         if(error){
             console.log(error);
@@ -162,23 +173,28 @@ exports.retrieve = function(req, res){
     });
 
     Member.create({
-        type: 'member',
         name: 'Jeremy Pagley',
         email: 'jkpagley@yahoo.com',
         password: 'jeremy',
-        address: {
-            street: '6312 SE 10th PL',
-            city: 'Ocala',
-            state: 'FL',
-            'zip': '34472'
+        profile: {
+            address: {
+                street: '6312 SE 10th PL',
+                city: 'Ocala',
+                state: 'FL',
+                'zip': '34472'
+            },
+            phone: '111-222-3333',
+            birthday: '1/16/95',
+            gender: 'male',
+            relationshipStatus: 'single',
+            interests: ['photoshop', 'ios', 'games', 'programming', 'business'],
+            bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.'
         },
-        phone: '111-222-3333',
-        birthdate: '1/16/95',
-        gender: 'Male',
-        relationshipStatus: 'single',
-        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
-        interests: ['photoshop', 'ios', 'games', 'programming', 'business'],
-        memberships: ["53a2fe4b32a9281b1d2605bb"]
+        metadata: {
+            type: 'member',
+            memberships: ["53b1c48041f828d00312c2e4"],
+            createdAt: new Date()
+        }
     }, function(error){
         if(error){
             console.log(error);
@@ -187,29 +203,34 @@ exports.retrieve = function(req, res){
     });
 
     Member.create({
-        type: 'member',
         name: 'Jeff Pagley',
-        email: 'jeffjr@jenkinscars.com',
+        email: 'jjpagley@yahoo.com',
         password: 'jeff',
-        address: {
-            street: '6312 SE 10th PL',
-            city: 'Ocala',
-            state: 'FL',
-            'zip': '34472'
+        profile: {
+            address: {
+                street: '6312 SE 10th PL',
+                city: 'Ocala',
+                state: 'FL',
+                'zip': '34472'
+            },
+            phone: '111-222-3333',
+            birthday: '1/16/95',
+            gender: 'male',
+            relationshipStatus: 'single',
+            interests: ['tech', 'being the best', 'girls', 'working out', 'microsoft'],
+            bio: 'I strive for excellence in everything I do. I am an it admin.'
         },
-        phone: '111-222-3333',
-        birthdate: '1/16/95',
-        gender: 'Male',
-        relationshipStatus: 'single',
-        bio: 'I strive for excellence in everything I do. I am a developer and entrepreneur.',
-        interests: ['information technology', 'microsoft', 'security', 'working out'],
-        memberships: ["53a2fe4b32a9281b1d2605bb"]
+        metadata: {
+            type: 'member',
+            memberships: ["53b1c48041f828d00312c2e4"],
+            createdAt: new Date()
+        }
     }, function(error){
         if(error){
             console.log(error);
         }
         console.log('success');
-    }); */
+    });*/
 
 }
 
