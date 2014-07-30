@@ -13,6 +13,7 @@ var Schema = mongoose.Schema;
  */
 
 var messageSchema = new Schema({
+    msg_num:         Number,
     name:            String,
     sender:          {type: Schema.Types.ObjectId, ref: 'Member'},
     msg:             String,

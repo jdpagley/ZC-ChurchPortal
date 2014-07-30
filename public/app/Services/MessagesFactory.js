@@ -2,7 +2,7 @@
  * Created by Josh Pagley on 5/28/14.
  */
 
-angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', function($resource, $q, zcIdentity) {
+angular.module('zcApp').factory('MessagesFactory', ['$resource', '$q', 'IdentityFactory', function($resource, $q, IdentityFactory) {
 
     var conversationsResource = $resource('/api/zionconnect/v1/church/conversation');
     var messagesResource = $resource('/api/zionconnect/v1/church/messages');
@@ -12,7 +12,8 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
 //        console.log(data);
 //    });
 
-    var conversations = [];
+    var vm = {};
+    vm.conversations = [];
 
    /* var testConversations = [{
         _id: 1,
@@ -152,10 +153,33 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
         }]
     }] */
 
+    /**
+     * Checks to see if there is already a conversation existing between two participants.
+     *
+     * (1) Loop through each of the local conversations
+     *     - Save the members of each conversation in members array
+     *     - Check to see if the recipient _ids passed into checkForPreExistingConversation
+     *       match the members ids that are inside the members array from one of the existing
+     *       conversation objects.
+     *     - Check to see if an existing conversation contains the specified recipients
+     *       and same amount of participants. If there is an existing conversation object
+     *       that matches those requirements then populate preExistingConversation with
+     *       the existing conversation object, along with the index of the conversation
+     *       object inside of the local conversations array.
+     *
+     * (2) If preExistingConversation is populated with conversation object and not false then
+     *     return the preExistingConversation.
+     *     If preExistingConversation is not populated then checkForPreExistingConversation
+     *     will return false.
+     *
+     *
+     * @param recipients
+     * @returns {*}
+     */
     function checkForPreExistingConversation(recipients){
         var preExistingConversation;
 
-        conversations.forEach(function(conversation, index){
+        vm.conversations.forEach(function(conversation, index){
             var members = [];
             conversation.members.forEach(function(member){
                 //Below where it says 'member.id' is where you can change
@@ -187,6 +211,38 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
         }
     }
 
+    /**
+     * Create Conversation Queries
+     *
+     * The conversation queries are arrays of the participants in the conversation.
+     * The conversation queries are used in checking if conversations already exist
+     * between two or more participants.
+     *
+     * Example between one conversation query between two members: [{owner: _id}, _id]
+     *
+     * The first element is an object and the following elements are ids of the participants.
+     * A conversation query will be generated for each participant in the conversation. Each
+     * member in the conversation will be placed inside of the owner object followed by the
+     * other participants. Example below.
+     *
+     * I.E.
+     * Participants:
+     * - ['josh', 'bill', 'joe']
+     *
+     * Conversation Queries:
+     * - [{owner: 'josh'}, 'bill', 'joe']
+     * - [{owner: 'joe'}, 'josh', 'bill']
+     * - [{owner: 'bill'}, 'joe', 'josh']
+     *
+     *
+     * (1) Add the sender _id to the list of recipients so that the conversation
+     *     queries can be created with all participating members.
+     * (2) Return all created conversation queries.
+     *
+     * @param sender - The admin object of the admin logged into the portal.
+     * @param recipients - Array of member _ids the church is sending the message to.
+     * @returns Array of conversation queries.
+     */
     function createConversationQueries(sender, recipients){
         var conversationQueries = [];
 
@@ -204,8 +260,23 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
         return conversationQueries;
     }
 
+    /**
+     * Create New Conversation
+     *
+     * (1) Get conversation queries by calling createConversationQueries function.
+     *
+     * (2) Create new conversation object to send to server.
+     *
+     * (3) Make request to server:
+     *     (Success) push new conversation onto local conversation array (vm.conversations).
+     *     (Failure) log out error message.
+     *
+     * @param sender - Admin object of admin currently logged into church portal.
+     * @param recipients - Array of member _ids the church is sending the message to.
+     * @param message - Text of the new message.
+     * @returns promise object from server call.
+     */
     function createConversation(sender, recipients, message){
-        //Populate conversationQueries.
         var conversationQueries = createConversationQueries(sender, recipients);
 
         var conversationObj = {
@@ -220,9 +291,9 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
 
         var promise = $q.defer();
         conversationsResource.save(conversationObj, function(result){
-            console.log(result);
-            conversations.push(result.conversation);
-            promise.resolve(result.conversation);
+            vm.conversations.push(result.conversation);
+            console.log(vm.conversations);
+            promise.resolve();
         }, function(error){
             console.log(error);
             promise.reject(error);
@@ -232,85 +303,186 @@ angular.module('zcApp').factory('zcMessages', ['$resource', '$q', 'zcIdentity', 
 
     }
 
-    return {
-        getConversations: function(adminID){
-            var promise = $q.defer();
-            //Check for local conversations first.
-            if(conversations.length > 0){
-                console.log('Returning local conversations.');
-                promise.resolve(conversations);
-            } else {
-                //Get conversations from server.
-                conversationsResource.get({'owner': adminID}, function(result){
-                    console.log('Getting conversations from server.');
-                    conversations = result.conversations;
-                    promise.resolve(conversations);
-                }, function(error){
-                    console.log(error);
-                    promise.reject(error);
-                });
+    vm.getConversations = function(adminID){
+        var promise = $q.defer();
+        conversationsResource.get({'owner': adminID}, function(result){
+            vm.conversations = result.conversations;
+            promise.resolve();
+        }, function(error){
+            console.log(error);
+            promise.reject(error);
+        });
+        return promise.promise;
+    };
+
+    vm.deleteConversation = function(conversation){
+        var promise = $q.defer();
+        conversationsResource.delete({'conversation': conversation._id}, function(result){
+            vm.conversations.splice(conversation.index, 1);
+            promise.resolve(result);
+        }, function(error){
+            console.log(error);
+            promise.reject(error);
+        });
+    };
+
+
+    /**
+     * Send Message
+     *
+     * (1) Check to see if pre-existing conversation already exists between the
+     * church and the participants the church is sending the message to.
+     *  - If a conversation exists then preExistingConversation will be populated
+     *    with the existing conversation.
+     *  - If a conversation does not exist then preExistingConversation will be
+     *    false.
+     *
+     * (2) If preExistingConversation is populated
+     *    - Get conversation queries by calling createConversationQueries
+     *    - Create new message object to send to the server.
+     *    - Make Request back to server:
+     *      (Success) push new message onto local conversation
+     *      (Failure) log out error
+     *
+     * (3) If preExistingConversation is false
+     *     - create new conversation by calling createConversation function.
+     *
+     * @param sender - The admin object of the current church admin logged in.
+     * @param recipients - Array of participant id's
+     * @param message - Text of the message being sent
+     */
+    vm.sendMessage = function(sender, recipients, message){
+        var preExistingConversation = checkForPreExistingConversation(recipients);
+
+        if(preExistingConversation){
+            console.log('pre existing conversation exists.');
+
+            var conversationQueries = createConversationQueries(sender, recipients);
+
+            var msgObj = {
+                "conversation": preExistingConversation._id,
+                "conversationQueries": conversationQueries,
+                "message": {
+                    "name": sender.name,
+                    "sender": sender._id,
+                    "msg": message
+                }
             }
-            return promise.promise;
-        },
-        deleteConversation: function(conversation){
+
             var promise = $q.defer();
-            conversationsResource.delete({'conversation': conversation._id}, function(result){
-                conversations.splice(conversation.index, 1);
-                promise.resolve(result);
+            messagesResource.save(msgObj, function(result){
+                console.log(result.message);
+                vm.conversations[preExistingConversation.index].messages.push(result.message);
+                promise.resolve();
             }, function(error){
                 console.log(error);
                 promise.reject(error);
             });
 
             return promise.promise;
-        },
-        sendMessage: function(sender, recipients, message){
-            var preExistingConversation = checkForPreExistingConversation(recipients);
-
-            if(preExistingConversation){
-                console.log('pre existing conversation exists.');
-
-                var conversationQueries = createConversationQueries(sender, recipients);
-
-                var msgObj = {
-                    "conversation": preExistingConversation._id,
-                    "conversationQueries": conversationQueries,
-                    "message": {
-                        "name": sender.name,
-                        "sender": sender._id,
-                        "msg": message
-                    }
-                }
-
-                var promise = $q.defer();
-                messagesResource.save(msgObj, function(result){
-                    console.log(result);
-                    conversations[preExistingConversation.index].messages.push(result.message);
-                    promise.resolve(result.message);
-                }, function(error){
-                    console.log(error);
-                    promise.reject(error);
-                });
-
-                return promise.promise;
-            } else {
-                console.log('Pre existing conversation does not exist.');
-                //Conversation does not exist
-                return createConversation(sender, recipients, message);
-            }
-        },
-        deleteMessage: function(conversation, messageIndex){
-           var message = conversations[conversation.index].messages[messageIndex];
-
-            var promise = $q.defer();
-            messagesResource.delete({'conversation': conversation._id, 'message': message._id}, function(result){
-                conversations[conversation.index].messages.splice(messageIndex, 1);
-                promise.resolve(result);
-            }, function(error){
-                promise.reject(error);
-            });
-
-            return promise.promise;
+        } else {
+            console.log('Pre existing conversation does not exist.');
+            //Conversation does not exist
+            return createConversation(sender, recipients, message);
         }
     }
+
+    vm.deleteMessage = function(conversation, messageIndex){
+        var message = vm.conversations[conversation.index].messages[messageIndex];
+
+        var promise = $q.defer();
+        messagesResource.delete({'conversation': conversation._id, 'message': message._id}, function(result){
+            vm.conversations[conversation.index].messages.splice(messageIndex, 1);
+            promise.resolve();
+        }, function(error){
+            promise.reject(error);
+        });
+
+        return promise.promise;
+    };
+
+    return vm;
+
+    //Old zcMessages Code
+//    return {
+//        getConversations: function(adminID){
+//            var promise = $q.defer();
+//            //Check for local conversations first.
+//            if(vm.conversations.length > 0){
+//                console.log('Returning local conversations.');
+//                promise.resolve(vm.conversations);
+//            } else {
+//                //Get conversations from server.
+//                conversationsResource.get({'owner': adminID}, function(result){
+//                    console.log('Getting conversations from server.');
+//                    vm.conversations = result.conversations;
+//                    promise.resolve(vm.conversations);
+//                }, function(error){
+//                    console.log(error);
+//                    promise.reject(error);
+//                });
+//            }
+//            return promise.promise;
+//        },
+//        deleteConversation: function(conversation){
+//            var promise = $q.defer();
+//            conversationsResource.delete({'conversation': conversation._id}, function(result){
+//                vm.conversations.splice(conversation.index, 1);
+//                promise.resolve(result);
+//            }, function(error){
+//                console.log(error);
+//                promise.reject(error);
+//            });
+//
+//            return promise.promise;
+//        },
+//        sendMessage: function(sender, recipients, message){
+//            var preExistingConversation = checkForPreExistingConversation(recipients);
+//
+//            if(preExistingConversation){
+//                console.log('pre existing conversation exists.');
+//
+//                var conversationQueries = createConversationQueries(sender, recipients);
+//
+//                var msgObj = {
+//                    "conversation": preExistingConversation._id,
+//                    "conversationQueries": conversationQueries,
+//                    "message": {
+//                        "name": sender.name,
+//                        "sender": sender._id,
+//                        "msg": message
+//                    }
+//                }
+//
+//                var promise = $q.defer();
+//                messagesResource.save(msgObj, function(result){
+//                    console.log(result);
+//                    vm.conversations[preExistingConversation.index].messages.push(result.message);
+//                    promise.resolve(result.message);
+//                }, function(error){
+//                    console.log(error);
+//                    promise.reject(error);
+//                });
+//
+//                return promise.promise;
+//            } else {
+//                console.log('Pre existing conversation does not exist.');
+//                //Conversation does not exist
+//                return createConversation(sender, recipients, message);
+//            }
+//        },
+//        deleteMessage: function(conversation, messageIndex){
+//           var message = vm.conversations[conversation.index].messages[messageIndex];
+//
+//            var promise = $q.defer();
+//            messagesResource.delete({'conversation': conversation._id, 'message': message._id}, function(result){
+//                vm.conversations[conversation.index].messages.splice(messageIndex, 1);
+//                promise.resolve(result);
+//            }, function(error){
+//                promise.reject(error);
+//            });
+//
+//            return promise.promise;
+//        }
+//    }
 }]);

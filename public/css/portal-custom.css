@@ -39,7 +39,8 @@ body {
 }
 
 .list-group-item a:hover {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #767778;
     -moz-transition: color .15s ease-in-out;
     -webkit-transition: color .15s ease-in-out;
     -o-transition: color .15s ease-in-out;
@@ -48,7 +49,8 @@ body {
 }
 
 .list-group-item a:active {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #767778;
 }
 
 .dropdown-menu > li > a {
@@ -117,7 +119,8 @@ body {
 }
 
 .portal-content .top-icon .glyphicon:hover {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
 }
 
 .portal-shell-left {
@@ -137,7 +140,8 @@ body {
 }
 
 .portal-shell-top h2 {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     font-weight:bold;
 }
 
@@ -164,13 +168,15 @@ body {
 }
 
 .portal-shell-top .dropdown-container .see-all-messages-area .see-all-link {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     font-size:12px;
     font-weight:bold;
 }
 
 .portal-shell-top .dropdown-container .see-all-messages-area .see-all-link:hover {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     font-size:12px;
     text-decoration:underline;
     font-weight:bold;
@@ -255,13 +261,15 @@ body {
 }
 
 .portal-news-feed-more-link .see-all-link {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     font-size:12px;
     font-weight:bold;
 }
 
 .portal-news-feed-more-link .see-all-link:hover {
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     font-size:12px;
     text-decoration:underline;
     font-weight:bold;
@@ -577,7 +585,8 @@ body {
 .live-conversation .live-conversation-members .conversation-member {
     font-weight:bold;
     font-size:11px;
-    color:mediumpurple;
+    /*color:mediumpurple;*/
+    color: #44425E;
     float:left;
     margin-right:5px;
 }
@@ -656,10 +665,30 @@ body {
 }
 
 .zion-connect-page-header {
-    color: rgb(68,64,97);;
+    color: #44425E;
     /*color: #4a7c97;*/
     position: absolute;
     top: -8%;
     left: 8%;
+}
+
+.zion-connect-success-message {
+    border: 2px solid #006600;
+    color: #006600;
+    border-radius: 7px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.zion-connect-failure-message {
+    border: 2px solid #850d0b;
+    color: #850d0b;
+    border-radius: 7px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
 }
 

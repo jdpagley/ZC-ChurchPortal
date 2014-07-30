@@ -17,6 +17,8 @@ var conversationSchema = new Schema({
     owner:                Schema.Types.ObjectId,
     members:              [Schema.Types.ObjectId],
     messages:             [messageSchema],
+    num_message_pages:    Number,
+    num_messages:         Number,
     createdAt:            Date,
     updatedAt:            Date
 });

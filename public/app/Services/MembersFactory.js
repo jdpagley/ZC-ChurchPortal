@@ -46,28 +46,4 @@ angular.module('zcApp').factory('MembersFactory', ['$resource', '$q', function($
     };
 
     return vm;
-
-//    return {
-//        retrieveMembers: function(churchID){
-//            console.log('retrieving posts from server.')
-//            var promise = $q.defer();
-//            retrieveAllMembersResource.get({'id': churchID}, function(result){
-//                promise.resolve(result);
-//            }, function(error){
-//                promise.reject(error);
-//            });
-//
-//            return promise.promise;
-//        },
-//        retrieveMemberById: function(memberID){
-//            var promise = $q.defer();
-//            membersResource.get({'id': memberID}, function(result){
-//                promise.resolve(result);
-//            }, function(error){
-//                promise.reject(error);
-//            });
-//
-//            return promise.promise;
-//        }
-//    }
 }]);
