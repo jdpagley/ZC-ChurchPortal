@@ -303,6 +303,14 @@ angular.module('zcApp').factory('MessagesFactory', ['$resource', '$q', 'Identity
 
     }
 
+    /**
+     * Retrieve Conversations
+     *
+     * (1) Make request to server to retrieve all conversations for
+     *     the current church admin using admin _id.
+     *     (Success) Assign returned conversations to vm.conversations.
+     *     (Failure) Log error message.
+     */
     vm.getConversations = function(adminID){
         var promise = $q.defer();
         conversationsResource.get({'owner': adminID}, function(result){
@@ -315,6 +323,14 @@ angular.module('zcApp').factory('MessagesFactory', ['$resource', '$q', 'Identity
         return promise.promise;
     };
 
+    /**
+     * Delete Conversations
+     *
+     * (1) Make request to server to delete conversation.
+     *     (Success) Remove conversation locally form
+     *               vm.conversations.
+     *     (Failure) Log error message.
+     */
     vm.deleteConversation = function(conversation){
         var promise = $q.defer();
         conversationsResource.delete({'conversation': conversation._id}, function(result){
@@ -324,6 +340,8 @@ angular.module('zcApp').factory('MessagesFactory', ['$resource', '$q', 'Identity
             console.log(error);
             promise.reject(error);
         });
+
+        return promise.promise;
     };
 
 

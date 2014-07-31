@@ -2,22 +2,37 @@
 
 <!--messages container-->
 <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1">
-    <!--Delete conversation confirmation popup-->
-    <div class="alert alert-info" data-ng-show="deleteConversationConfirmationMessage">
-        Are you sure you want to delete this conversation?
-        <br/>
-        <a href="" class="btn btn-success btn-sm" data-ng-click="deleteConversation()">Yes</a>
-        <button type="button" class="btn btn-danger btn-sm" data-ng-click="deleteConversationConfirmationMessage = false">No</button>
+    <!--retrieve messages failure error-->
+    <div class="zion-connect-failure-message" data-ng-show="retrieveMessagesFailure">
+        <span><span class="glyphicon glyphicon-asterisk"></span> <strong>NOT ABLE TO RETRIEVE MESSAGES. PLEASE TRY AGAIN LATER.</strong></span><!--update failed error paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
     </div>
     <!--conversation deletion successful-->
-    <div class="alert alert-success alert-dismissable" data-ng-show="deleteConversationSuccessMessage">
-        <span>Successful! Conversation deleted.</span><!--update successful paragraph-->
+    <div class="zion-connect-success-message" data-ng-show="deleteConversationSuccessMessage">
+        <span><span class="glyphicon glyphicon-ok"></span> <strong>CONVERSATION DELETED.</strong></span><!--update successful paragraph-->
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update successful x icon-->
     </div>
-    <!--update failed error-->
-    <div class="alert alert-danger alert-dismissable" data-ng-show="deleteConversationFailureMessage">
-        <span>Oops! We were unable to delete conversation. Please try again later.</span><!--update failed error paragraph-->
+    <!--delete conversation failed error-->
+    <div class="zion-connect-failure-message" data-ng-show="deleteConversationFailureMessage">
+        <span><span class="glyphicon glyphicon-asterisk"></span> <strong>NOT ABLE TO DELETE CONVERSATION. PLEASE TRY AGAIN LATER.</strong></span><!--update failed error paragraph-->
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
+    </div>
+    <!--message sent failure error-->
+    <div class="zion-connect-failure-message" data-ng-show="messageSentFailure">
+        <span><span class="glyphicon glyphicon-asterisk"></span> <strong>MESSAGE DID NOT SEND. PLEASE TRY AGAIN LATER.</strong></span><!--update failed error paragraph-->
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><!--update failed error x icon-->
+    </div>
+    <!--Delete conversation confirmation popup-->
+    <div class="panel panel-default zion-connect-popup" ng-show="deleteConversationConfirmationMessage">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-trash"></span> Delete Conversation</h3>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete this conversation?</p>
+            <br/>
+            <a href="" class="btn btn-success btn-sm" data-ng-click="deleteConversation()">Yes</a>
+            <button type="button" class="btn btn-danger btn-sm" data-ng-click="deleteConversationConfirmationMessage = false">No</button>
+        </div>
     </div>
     <!--messages search-->
     <div class="col-lg-12 col-md-12 form-group">
@@ -86,7 +101,7 @@
             <!--conversation live messages area-->
             <div class="col-lg-12 col-mg-12 live-conversation-messages">
                 <!--conversation single message-->
-                <div class="media single-conversation-message" ng-repeat="message in selectedConversation.messages">
+                <div class="media single-conversation-message" ng-repeat="message in selectedConversation.messages | orderBy:'ts':false">
                     <div class="pull-left">
                         <img class="media-object img-rounded person-photo" src="./images/user.jpg" /><!--conversation person photo-->
                     </div>

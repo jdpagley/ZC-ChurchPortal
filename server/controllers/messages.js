@@ -343,7 +343,17 @@ exports.createConversation = function(req, res){
 
 }
 
-//{'conversation': id}
+/**
+ * Delete Conversation
+ *
+ * (1) Delete Conversation
+ *
+ * (2) Delete All message pages associated with conversation.
+ *
+ * req.query: {
+ *      conversation: conversationID
+ * }
+ */
 exports.deleteConversation = function(req, res){
     var msgObj = req.query;
 
@@ -359,12 +369,49 @@ exports.deleteConversation = function(req, res){
         if(error){
             return res.json(500, {'error': 'Server Error.', 'mongoError': error});
         } else {
-            return res.json(200, {'success': 'Successfully removed conversation.'});
+            MessagePage.find({'node_id': msgObj.conversation}, function(error, messagePages){
+                if(error){
+                    return res.json(500, {'error': 'Server Error.', 'mongoError': error});
+                } else if (!messagePages){
+                    return res.json(200, {'success': 'Successfully removed conversation.'});
+                } else {
+                    async.each(messagePages,
+                        function(page, done){
+                            page.remove(function(error){
+                                if(error){
+                                    done(error);
+                                } else {
+                                    done();
+                                }
+                            });
+                        },
+                        function(error){
+                            if(error){
+                                return res.json(500, {'error': error});
+                            } else {
+                                return res.json(200, {'success': 'Successfully removed conversation.'});
+                            }
+                        });
+                }
+            });
         }
     });
 }
 
-//{'owner': id}
+/**
+ * Retrieve Conversations
+ *
+ * (1) Find all conversations for church.
+ *
+ * (2) Loop through each conversation populating its members
+ *     array with the member objects.
+ *
+ * (3) Return populated conversations array.
+ *
+ * req.query: {
+ *      owner: adminID
+ * }
+ */
 exports.retrieveConversations = function(req, res){
     var msgObj = req.query;
 
@@ -564,7 +611,7 @@ exports.createMessage = function(req, res){
                                 MessagePage.update({
                                     'node_id': conversation._id,
                                     'page': conversation.num_message_pages,
-                                    'count': {$lt: 50}}, {
+                                    'count': {$lt: 3}}, {
                                     $inc: {'count': 1},
                                     $push: {'messages': message}
                                 }, function(error, numberAffected, raw){
