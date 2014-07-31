@@ -4,13 +4,19 @@
 angular.module('zcApp').controller('MemberProfileController', ['$scope', '$routeParams', 'IdentityFactory', 'MembersFactory', 'MessagesFactory',
     function($scope, $routeParams, IdentityFactory, MembersFactory, MessagesFactory){
         $scope.member = null;
+        $scope.messageSentSuccessfully = false;
+        $scope.messageSentFailure = false;
 
-        //Retrieve User Profile From Server On Page Refresh
+        /**
+         * Retrieve church admin profile on page refresh.
+         */
         if(!IdentityFactory.church._id){
             IdentityFactory.getIdentity();
         }
 
-        //Retrieve Member Associated With Member ID In URL Parameters.
+        /**
+         * Retrieve member associated with member ID in URL parameters.
+         */
         var promise = MembersFactory.retrieveMemberById($routeParams.id);
         promise.then(function(result){
             $scope.member = MembersFactory.member;
@@ -18,11 +24,22 @@ angular.module('zcApp').controller('MemberProfileController', ['$scope', '$route
             console.log(error);
         });
 
-        //Send a message to member
+        /**
+         * Send message to member.
+         *
+         * @param message - message text.
+         */
         $scope.sendMessage = function(message){
             if(message){
                 var members = [MembersFactory.member._id];
-                MessagesFactory.sendMessage(IdentityFactory.admin, members, message);
+
+                var promise = MessagesFactory.sendMessage(IdentityFactory.admin, members, message);
+                promise.then(function(){
+                    $scope.messageSentSuccessfully = true;
+                }, function(){
+                    $scope.messageSentFailure = false;
+                });
+
                 $scope.message = "";
             }
         }

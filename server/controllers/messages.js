@@ -684,86 +684,84 @@ exports.createMessage = function(req, res){
                                 }
                             });
 
-                } //else {
-//                    /**
-//                     * Conversation Does not exist.
-//                     */
-//
-//                    var message = {
-//                        "name": msgObj.message.name,
-//                        "sender": msgObj.message.sender,
-//                        "msg": msgObj.message.msg,
-//                        "ts": new Date()
-//                    };
-//
-//                    async.waterfall([
-//                            function(done){
-//                                /**
-//                                 * Create New Conversation
-//                                 */
-//
-//                                var conversationObj = {
-//                                    owner: element[0].owner,
-//                                    members: element.slice(1),
-//                                    messages: [message],
-//                                    num_message_pages: 1,
-//                                    num_messages: 1,
-//                                    createdAt: new Date(),
-//                                    updatedAt: new Date()
-//                                };
-//
-//                                Conversation.create(conversationObj, function(error, newConversation){
-//                                    if(error){
-//                                        done(error);
-//                                    } else {
-//                                        if(element[0].owner == msgObj.sender){
-//                                            ownerConversation['createdAt'] = conversation.createdAt;
-//                                            ownerConversation['updatedAt'] = conversation.updatedAt;
-//                                            ownerConversation['owner'] = conversation.owner;
-//                                            ownerConversation['_id'] = conversation._id;
-//                                            ownerConversation['num_message_pages'] = conversation.num_message_pages;
-//                                            ownerConversation['num_messages'] = conversation.num_messages;
-//                                            ownerConversation['messages'] = conversation.messages;
-//                                            ownerConversation['members'] = conversation.members;
-//                                            ownerConversation['memberObjects'] = [];
-//                                        }
-//
-//                                        done(null, newConversation);
-//                                    }
-//                                });
-//
-//                            },
-//                            function(newConversation, done){
-//                                /**
-//                                 * Create New Message Page or New Conversation
-//                                 */
-//
-//                                var newMessagesPage = {
-//                                    'node_id': newConversation._id,
-//                                    'page': newConversation.num_message_pages,
-//                                    'count': 1,
-//                                    'messages': [message]
-//                                };
-//
-//                                MessagePage.create(newMessagesPage, function(error, messagePage){
-//                                    if(error){
-//                                        done(error);
-//                                    } else if (!messagePage){
-//                                        done(new Error('Error adding new messages page.'));
-//                                    } else {
-//                                        done();
-//                                    }
-//                                });
-//
-//                            }],
-//                        function(error){
-//                            if(error){
-//                                done(error);
-//                            } else {
-//                                done();
-//                            }
-//                        });
-//                }
+                } else {
+                    /**
+                     * Conversation Does not exist.
+                     */
+
+                    var message = {
+                        "msg_num": 1,
+                        "name": msgObj.message.name,
+                        "sender": msgObj.message.sender,
+                        "msg": msgObj.message.msg,
+                        "ts": new Date()
+                    };
+
+                    async.waterfall([
+                            function(done){
+                                /**
+                                 * Create New Conversation
+                                 *
+                                 * (1) Populate conversation object with the necessary fields.
+                                 *
+                                 * (2) Make request to db to create new conversation. Pass newly
+                                 *     created conversation object to callback function.
+                                 */
+
+                                var conversation = {
+                                    owner: element[0].owner,
+                                    members: element.slice(1),
+                                    messages: [message],
+                                    num_message_pages: 1,
+                                    num_messages: 1,
+                                    createdAt: new Date(),
+                                    updatedAt: new Date()
+                                };
+
+                                Conversation.create(conversation, function(error, newConversation){
+                                    if(error){
+                                        done(error);
+                                    } else {
+                                        done(null, newConversation);
+                                    }
+                                });
+
+                            },
+                            function(newConversation, done){
+                                /**
+                                 * Create New Message Page or New Conversation
+                                 *
+                                 * (1) Populate message page document with necessary fields.
+                                 *
+                                 * (2) Make request to db to create new message page.
+                                 */
+
+                                var messagesPage = {
+                                    'node_id': newConversation._id,
+                                    'page': newConversation.num_message_pages,
+                                    'count': 1,
+                                    'messages': [message]
+                                };
+
+                                MessagePage.create(messagesPage, function(error, newMessagePage){
+                                    if(error){
+                                        done(error);
+                                    } else if (!newMessagePage){
+                                        done(new Error('Error adding new messages page.'));
+                                    } else {
+                                        done();
+                                    }
+                                });
+
+                            }],
+                        function(error){
+                            if(error){
+                                done(error);
+                            } else {
+                                done();
+                            }
+                        });
+                }
             });
         },
         function(error){
